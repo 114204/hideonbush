@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>環保回收兌換系統 - 主頁</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      color: #333;
+      margin: 0;
+      background-color: #f9f9f9;
+      overflow-x: hidden;
+    }
+    
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 5%;
+      position: fixed;
+      width: 100%;
+      z-index: 1000;
+      background-color: rgba(255, 255, 255, 0.95);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .logo {
+      font-weight: 700;
+      font-size: 24px;
+      color: #1a5653;
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 30px;
+    }
+    
+    .nav-links a {
+      text-decoration: none;
+      color: #333;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+    
+    .nav-links a:hover {
+      color: #1a5653;
+    }
+    
+    .hero {
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      background-color: #f0f7f6;
+    }
+    
+    .hero-content {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 80px;
+    }
+    
+    .hero-text {
+      flex: 1;
+      padding-right: 30px;
+    }
+    
+    .hero-text h1 {
+      font-size: 3.5rem;
+      line-height: 1.1;
+      margin-bottom: 20px;
+      color: #1a5653;
+    }
+    
+    .hero-text p {
+      font-size: 1.2rem;
+      line-height: 1.6;
+      color: #555;
+      margin-bottom: 30px;
+    }
+    
+    .hero-image {
+      flex: 1;
+      position: relative;
+      height: 500px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .blob {
+      position: absolute;
+      width: 480px;
+      height: 480px;
+      background-color: #2c7a7b;
+      border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%;
+      animation: blob-animation 8s linear infinite;
+      opacity: 0.8;
+    }
+    
+    .hero-image img {
+      position: relative;
+      z-index: 5;
+      max-width: 100%;
+      max-height: 100%;
+    }
+    
+    @keyframes blob-animation {
+      0% { border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%; }
+      25% { border-radius: 45% 55% 65% 35% / 50% 50% 50% 50%; }
+      50% { border-radius: 50% 50% 55% 45% / 55% 45% 45% 55%; }
+      75% { border-radius: 55% 45% 45% 55% / 40% 60% 60% 40%; }
+      100% { border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%; }
+    }
+    
+    .button {
+      display: inline-block;
+      background-color: #2c7a7b;
+      color: white;
+      padding: 15px 35px;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(44, 122, 123, 0.2);
+    }
+    
+    .button:hover {
+      background-color: #1a5653;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(44, 122, 123, 0.3);
+    }
+    
+    .button.secondary {
+      background-color: transparent;
+      border: 2px solid #2c7a7b;
+      color: #2c7a7b;
+      margin-left: 15px;
+    }
+    
+    .button.secondary:hover {
+      background-color: rgba(44, 122, 123, 0.1);
+    }
+    
+    .features {
+      padding: 100px 5%;
+      background-color: white;
+    }
+    
+    .section-title {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+    
+    .section-title h2 {
+      font-size: 2.5rem;
+      color: #1a5653;
+      margin-bottom: 15px;
+    }
+    
+    .section-title p {
+      font-size: 1.1rem;
+      color: #666;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .feature-card {
+      background-color: #f9f9f9;
+      padding: 40px 30px;
+      border-radius: 10px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+    }
+    
+    .feature-icon {
+      width: 70px;
+      height: 70px;
+      background-color: rgba(44, 122, 123, 0.15);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 25px;
+    }
+    
+    .feature-icon svg {
+      width: 35px;
+      height: 35px;
+      stroke: #2c7a7b;
+    }
+    
+    .feature-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+      color: #1a5653;
+    }
+    
+    .feature-card p {
+      color: #666;
+      line-height: 1.6;
+    }
+    
+    .cta-section {
+      background-color: #f0f7f6;
+      padding: 100px 5%;
+      text-align: center;
+    }
+    
+    .cta-content {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    .cta-content h2 {
+      font-size: 2.5rem;
+      color: #1a5653;
+      margin-bottom: 20px;
+    }
+    
+    .cta-content p {
+      font-size: 1.2rem;
+      color: #555;
+      margin-bottom: 40px;
+    }
+    
+    .footer {
+      background-color: #1a5653;
+      color: white;
+      padding: 60px 5% 40px;
+    }
+    
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+    
+    .footer-logo {
+      margin-bottom: 15px;
+      font-size: 1.8rem;
+      font-weight: 700;
+    }
+    
+    .footer-info {
+      flex: 1;
+      min-width: 250px;
+      margin-bottom: 30px;
+    }
+    
+    .footer-info p {
+      margin-bottom: 15px;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.8);
+    }
+    
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 40px;
+    }
+    
+    .footer-links-column {
+      min-width: 160px;
+    }
+    
+    .footer-links-column h3 {
+      margin-bottom: 20px;
+      font-size: 1.2rem;
+    }
+    
+    .footer-links-column ul {
+      list-style: none;
+    }
+    
+    .footer-links-column li {
+      margin-bottom: 10px;
+    }
+    
+    .footer-links-column a {
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    
+    .footer-links-column a:hover {
+      color: white;
+    }
+    
+    .footer-bottom {
+      margin-top: 60px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 0.9rem;
+    }
+    
+    .social-links {
+      display: flex;
+      gap: 15px;
+    }
+    
+    .social-links a {
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+    }
+    
+    @media (max-width: 992px) {
+      .hero-content {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .hero-text {
+        padding-right: 0;
+        margin-bottom: 40px;
+      }
+      
+      .hero-text h1 {
+        font-size: 3rem;
+      }
+      
+      .hero-image {
+        height: 400px;
+      }
+      
+      .blob {
+        width: 400px;
+        height: 400px;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 15px 5%;
+      }
+      
+      .hero-text h1 {
+        font-size: 2.5rem;
+      }
+      
+      .hero-image {
+        height: 350px;
+      }
+      
+      .blob {
+        width: 350px;
+        height: 350px;
+      }
+      
+      .button {
+        padding: 12px 30px;
+      }
+      
+      .features {
+        padding: 70px 5%;
+      }
+      
+      .section-title h2 {
+        font-size: 2rem;
+      }
+      
+      .footer-content {
+        flex-direction: column;
+      }
+      
+      .footer-info {
+        margin-bottom: 40px;
+      }
+      
+      .footer-bottom {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+      }
+      
+      .social-links {
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <a href="#" class="logo">環保回收兌換系統</a>
+    <div class="nav-links">
+      <a href="{{ url_for('index') }}">首頁</a>
+      <a href="#">如何使用</a>
+      <a href="#">關於我們</a>
+      <a href="#">聯絡我們</a>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-text">
+        <h1>共創永續環境的未來</h1>
+        <p>環保回收兌換系統是一個激勵民眾參與資源回收的創新平台。回收物品獲取點數，兌換環保商品，一起為地球盡一份心力！</p>
+        <div class="hero-buttons">
+          <a href="/register-page" class="button">立即註冊</a>
+          <a href="/login-page" class="button secondary">會員登入</a>
+        </div>
+      </div>
+      <div class="hero-image">
+        <div class="blob"></div>
+        <img src="/static/chill_guy-removebg-preview.png" alt="環保回收示意圖" />
+      </div>
+    </div>
+  </section>
+
+  <section class="features">
+    <div class="section-title">
+      <h2>我們的特色</h2>
+      <p>簡單幾個步驟，參與永續循環，讓環保變得更有趣、更有意義</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"></path>
+            <line x1="12" x2="12" y1="8" y2="16"></line>
+            <line x1="8" x2="16" y1="12" y2="12"></line>
+          </svg>
+        </div>
+        <h3>回收換點數</h3>
+        <p>將塑膠瓶、紙類、金屬等回收物送至回收站，經過系統掃描與計重，立即獲得相應的環保點數。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+          </svg>
+        </div>
+        <h3>兌換好禮</h3>
+        <p>累積的點數可兌換各式環保商品，從生活用品到環保配件應有盡有，讓環保行動獲得實質回饋。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 20h9"></path>
+            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+          </svg>
+        </div>
+        <h3>追蹤成就</h3>
+        <p>記錄您的回收歷程，透過數據視覺化呈現您為環境保護做出的貢獻，並獲得成就徽章作為肯定。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <div class="cta-content">
+      <h2>加入我們，為地球盡一份心力</h2>
+      <p>現在註冊環保回收兌換系統，開始您的環保之旅。每一個小小的行動，都能為地球帶來巨大的改變。</p>
+      <a href="/register-page" class="button">立即開始</a>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-info">
+        <div class="footer-logo">環保回收兌換系統</div>
+        <p>透過創新的點數回饋機制，鼓勵全民參與環保回收行動，共同建立永續發展的美好未來。</p>
+        <p>聯絡我們：eco@recycling.com</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-links-column">
+          <h3>快速連結</h3>
+          <ul>
+            <li><a href="/index-page">首頁</a></li>
+            <li><a href="#">如何使用</a></li>
+            <li><a href="#">回收站地點</a></li>
+            <li><a href="#">兌換商城</a></li>
+          </ul>
+        </div>
+        <div class="footer-links-column">
+          <h3>關於我們</h3>
+          <ul>
+            <li><a href="#">公司簡介</a></li>
+            <li><a href="#">聯絡我們</a></li>
+            <li><a href="#">合作夥伴</a></li>
+            <li><a href="#">最新消息</a></li>
+          </ul>
+        </div>
+        <div class="footer-links-column">
+          <h3>幫助中心</h3>
+          <ul>
+            <li><a href="#">常見問題</a></li>
+            <li><a href="#">使用指南</a></li>
+            <li><a href="#">隱私政策</a></li>
+            <li><a href="#">服務條款</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="copyright">環保回收兌換系統 © 2025 版權所有</div>
+      <div class="social-links">
+        <a href="#">Facebook</a>
+        <a href="#">Instagram</a>
+        <a href="#">LinkedIn</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    
+    document.addEventListener('DOMContentLoaded', function() {
+      // 滾動時改變導航欄樣式
+      window.addEventListener('scroll', function() {
+        const navbar = document.querySelector('.navbar');
+        if (window.scrollY > 50) {
+          navbar.style.boxShadow = '0 2px 15px rgba(0, 0, 0, 0.1)';
+          navbar.style.padding = '15px 5%';
+        } else {
+          navbar.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1)';
+          navbar.style.padding = '20px 5%';
+        }
+      });
+    });
+    async function login() {
+    const username = document.getElementById('login_username').value.trim();
+    const password = document.getElementById('login_password').value;
+    const msg = document.getElementById('login_message');
+
+    if (!username || !password) {
+        msg.innerHTML = '<i class="fas fa-exclamation-circle"></i> 請輸入使用者名稱與密碼！';
+        msg.className = 'message error';
+        return;
+    }
+
+    try {
+        msg.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 登入中...';
+        msg.className = 'message';
+
+        const formData = new URLSearchParams();
+        formData.append('username', username);
+        formData.append('password', password);
+
+        const res = await fetch(`${API_BASE}/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: formData
+        });
+
+        if (res.redirected) {
+            window.location.href = res.url;
+        } else {
+            const text = await res.text();
+            msg.innerHTML = '<i class="fas fa-exclamation-circle"></i> ' + text;
+            msg.className = 'message error';
+        }
+    } catch (err) {
+        msg.innerHTML = '<i class="fas fa-exclamation-circle"></i> 登入失敗，請稍後再試';
+        msg.className = 'message error';
+    }
+}
+
+  </script>
+  
+</body>
+</html>
