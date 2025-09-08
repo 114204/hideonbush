@@ -1,0 +1,158 @@
+2025-04-21 01:36:02,097 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.0.143:5000
+2025-04-21 01:36:02,200 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-04-21 01:36:02,459 - werkzeug - INFO -  * Restarting with stat
+2025-04-21 01:36:35,391 - werkzeug - WARNING -  * Debugger is active!
+2025-04-21 01:36:35,486 - werkzeug - INFO -  * Debugger PIN: 984-389-258
+2025-04-21 01:36:36,529 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:36:36] "GET / HTTP/1.1" 200 -
+2025-04-21 01:36:37,846 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:36:37] "[36mGET /static/chill_guy-removebg-preview.png HTTP/1.1[0m" 304 -
+2025-04-21 01:36:41,944 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:36:41] "GET /login-page HTTP/1.1" 200 -
+2025-04-21 01:36:43,575 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:36:43] "OPTIONS /api/check-auth HTTP/1.1" 200 -
+2025-04-21 01:36:44,042 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:36:44] "GET /api/check-auth HTTP/1.1" 200 -
+2025-04-21 01:36:49,907 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:36:49] "OPTIONS /login HTTP/1.1" 200 -
+2025-04-21 01:36:50,120 - __main__ - INFO - ±µ¦¬¨ìJSONµn¤J½Ð¨D
+2025-04-21 01:36:50,233 - __main__ - INFO - ¹Á¸Õµn¤J¥Î¤á: 001
+2025-04-21 01:36:51,355 - __main__ - DEBUG - ¦sÀxªº±K½XÂø´ê: pbkdf2:sha... (ªø«×: 102)
+2025-04-21 01:36:51,356 - __main__ - ERROR - BCrypt¿ù»~(­È¿ù»~): Invalid salt
+2025-04-21 01:36:51,358 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:36:51] "[35m[1mPOST /login HTTP/1.1[0m" 500 -
+2025-04-21 01:37:12,216 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:37:12] "OPTIONS /login HTTP/1.1" 200 -
+2025-04-21 01:37:12,559 - __main__ - INFO - ±µ¦¬¨ìJSONµn¤J½Ð¨D
+2025-04-21 01:37:12,560 - __main__ - INFO - ¹Á¸Õµn¤J¥Î¤á: wei
+2025-04-21 01:37:12,622 - __main__ - DEBUG - ¦sÀxªº±K½XÂø´ê: pbkdf2:sha... (ªø«×: 102)
+2025-04-21 01:37:12,623 - __main__ - ERROR - BCrypt¿ù»~(­È¿ù»~): Invalid salt
+2025-04-21 01:37:12,626 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:37:12] "[35m[1mPOST /login HTTP/1.1[0m" 500 -
+2025-04-21 01:38:54,451 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:38:54] "OPTIONS /login HTTP/1.1" 200 -
+2025-04-21 01:38:54,843 - __main__ - INFO - ±µ¦¬¨ìJSONµn¤J½Ð¨D
+2025-04-21 01:38:54,848 - __main__ - INFO - ¹Á¸Õµn¤J¥Î¤á: user_id
+2025-04-21 01:38:54,978 - __main__ - WARNING - ¨Ï¥ÎªÌ¤£¦s¦b: user_id
+2025-04-21 01:38:55,032 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:38:55] "[31m[1mPOST /login HTTP/1.1[0m" 401 -
+2025-04-21 01:38:55,393 - __main__ - INFO - ±µ¦¬¨ìJSONµn¤J½Ð¨D
+2025-04-21 01:38:55,477 - __main__ - INFO - ¹Á¸Õµn¤J¥Î¤á: user_id
+2025-04-21 01:38:55,839 - __main__ - WARNING - ¨Ï¥ÎªÌ¤£¦s¦b: user_id
+2025-04-21 01:38:56,083 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:38:56] "[31m[1mPOST /login HTTP/1.1[0m" 401 -
+2025-04-21 01:39:07,308 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:39:07] "OPTIONS /login HTTP/1.1" 200 -
+2025-04-21 01:39:07,543 - __main__ - INFO - ±µ¦¬¨ìJSONµn¤J½Ð¨D
+2025-04-21 01:39:07,711 - __main__ - INFO - ¹Á¸Õµn¤J¥Î¤á: user_id
+2025-04-21 01:39:07,878 - __main__ - WARNING - ¨Ï¥ÎªÌ¤£¦s¦b: user_id
+2025-04-21 01:39:07,881 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:39:07] "[31m[1mPOST /login HTTP/1.1[0m" 401 -
+2025-04-21 01:39:18,884 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:39:18] "OPTIONS /login HTTP/1.1" 200 -
+2025-04-21 01:39:19,628 - __main__ - INFO - ±µ¦¬¨ìJSONµn¤J½Ð¨D
+2025-04-21 01:39:19,629 - __main__ - INFO - ¹Á¸Õµn¤J¥Î¤á: id
+2025-04-21 01:39:19,832 - __main__ - WARNING - ¨Ï¥ÎªÌ¤£¦s¦b: id
+2025-04-21 01:39:19,839 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:39:19] "[31m[1mPOST /login HTTP/1.1[0m" 401 -
+2025-04-21 01:39:22,192 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:39:22] "GET /register-page HTTP/1.1" 200 -
+2025-04-21 01:39:37,215 - __main__ - INFO - ¦¬¨ìµù¥U¼Æ¾Ú: {'username': '003', 'email': 'evaluyiwei@gmail.com', 'phone': '0932899099', 'password': '003', 'address': 'kh', 'birthday': '2025-04-08'}
+2025-04-21 01:39:37,629 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:39:37] "[31m[1mPOST /register HTTP/1.1[0m" 409 -
+2025-04-21 01:39:55,117 - __main__ - INFO - ¦¬¨ìµù¥U¼Æ¾Ú: {'username': '003', 'email': '10856034@ntub.edu.tw', 'phone': '0932899099', 'password': '003', 'address': 'kh', 'birthday': '2025-04-08'}
+2025-04-21 01:39:58,077 - __main__ - DEBUG - ¥Í¦¨ªº±K½XÂø´ê: $2b$12$yfS... (ªø«×: 60)
+2025-04-21 01:39:58,671 - __main__ - INFO - ¥Î¤á 003 µù¥U¦¨¥\
+2025-04-21 01:39:58,675 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:39:58] "POST /register HTTP/1.1" 200 -
+2025-04-21 01:40:01,599 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:40:01] "GET /login-page HTTP/1.1" 200 -
+2025-04-21 01:40:01,650 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:40:01] "GET /dashboard HTTP/1.1" 200 -
+2025-04-21 01:40:02,205 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:40:02] "OPTIONS /api/check-auth HTTP/1.1" 200 -
+2025-04-21 01:40:02,695 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:40:02] "GET /api/check-auth HTTP/1.1" 200 -
+2025-04-21 01:40:07,719 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:40:07] "OPTIONS /login HTTP/1.1" 200 -
+2025-04-21 01:40:08,064 - __main__ - INFO - ±µ¦¬¨ìJSONµn¤J½Ð¨D
+2025-04-21 01:40:08,065 - __main__ - INFO - ¹Á¸Õµn¤J¥Î¤á: 003
+2025-04-21 01:40:08,090 - __main__ - DEBUG - ¦sÀxªº±K½XÂø´ê: $2b$12$yfS... (ªø«×: 60)
+2025-04-21 01:40:12,278 - __main__ - INFO - ±µ¦¬¨ìJSONµn¤J½Ð¨D
+2025-04-21 01:40:12,322 - __main__ - INFO - ¹Á¸Õµn¤J¥Î¤á: 003
+2025-04-21 01:40:12,907 - __main__ - DEBUG - ¦sÀxªº±K½XÂø´ê: $2b$12$yfS... (ªø«×: 60)
+2025-04-21 01:40:13,518 - __main__ - INFO - ¥Î¤á 003 µn¤J¦¨¥\
+2025-04-21 01:40:13,537 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:40:13] "POST /login HTTP/1.1" 200 -
+2025-04-21 01:40:15,126 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:40:15] "GET /dashboard HTTP/1.1" 200 -
+2025-04-21 01:40:20,545 - __main__ - INFO - ¥Î¤á 003 µn¤J¦¨¥\
+2025-04-21 01:40:20,549 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:40:20] "POST /login HTTP/1.1" 200 -
+2025-04-21 01:42:45,824 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.0.143:5000
+2025-04-21 01:42:45,851 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-04-21 01:42:45,930 - werkzeug - INFO -  * Restarting with stat
+2025-04-21 01:43:12,542 - werkzeug - WARNING -  * Debugger is active!
+2025-04-21 01:43:12,663 - werkzeug - INFO -  * Debugger PIN: 984-389-258
+2025-04-21 01:43:48,839 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:43:48] "GET / HTTP/1.1" 200 -
+2025-04-21 01:43:54,780 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:43:54] "[36mGET /static/chill_guy-removebg-preview.png HTTP/1.1[0m" 304 -
+2025-04-21 01:43:58,544 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:43:58] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-04-21 01:44:00,507 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:44:00] "GET /login-page HTTP/1.1" 200 -
+2025-04-21 01:44:01,044 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:44:01] "GET /login-page HTTP/1.1" 200 -
+2025-04-21 01:44:07,314 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:44:07] "OPTIONS /api/check-auth HTTP/1.1" 200 -
+2025-04-21 01:44:09,018 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:44:09] "GET /api/check-auth HTTP/1.1" 200 -
+2025-04-21 01:44:20,121 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:44:20] "OPTIONS /login HTTP/1.1" 200 -
+2025-04-21 01:44:20,449 - __main__ - INFO - ±µ¦¬¨ìJSONµn¤J½Ð¨D
+2025-04-21 01:44:20,509 - __main__ - INFO - ¹Á¸Õµn¤J¥Î¤á: wei
+2025-04-21 01:44:20,884 - __main__ - DEBUG - ¦sÀxªº±K½XÂø´ê: pbkdf2:sha... (ªø«×: 102)
+2025-04-21 01:44:20,916 - __main__ - ERROR - BCrypt¿ù»~(­È¿ù»~): Invalid salt
+2025-04-21 01:44:20,993 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:44:20] "[35m[1mPOST /login HTTP/1.1[0m" 500 -
+2025-04-21 01:44:33,889 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:44:33] "OPTIONS /login HTTP/1.1" 200 -
+2025-04-21 01:44:34,104 - __main__ - INFO - ±µ¦¬¨ìJSONµn¤J½Ð¨D
+2025-04-21 01:44:34,211 - __main__ - INFO - ¹Á¸Õµn¤J¥Î¤á: 001
+2025-04-21 01:44:34,221 - __main__ - DEBUG - ¦sÀxªº±K½XÂø´ê: pbkdf2:sha... (ªø«×: 102)
+2025-04-21 01:44:34,231 - __main__ - ERROR - BCrypt¿ù»~(­È¿ù»~): Invalid salt
+2025-04-21 01:44:34,236 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:44:34] "[35m[1mPOST /login HTTP/1.1[0m" 500 -
+2025-04-21 01:44:40,327 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:44:40] "OPTIONS /login HTTP/1.1" 200 -
+2025-04-21 01:44:40,527 - __main__ - INFO - ±µ¦¬¨ìJSONµn¤J½Ð¨D
+2025-04-21 01:44:40,684 - __main__ - INFO - ¹Á¸Õµn¤J¥Î¤á: 003
+2025-04-21 01:44:40,963 - __main__ - DEBUG - ¦sÀxªº±K½XÂø´ê: $2b$12$yfS... (ªø«×: 60)
+2025-04-21 01:44:43,348 - __main__ - INFO - ±µ¦¬¨ìJSONµn¤J½Ð¨D
+2025-04-21 01:44:43,475 - __main__ - INFO - ¹Á¸Õµn¤J¥Î¤á: 003
+2025-04-21 01:44:43,773 - __main__ - DEBUG - ¦sÀxªº±K½XÂø´ê: $2b$12$yfS... (ªø«×: 60)
+2025-04-21 01:44:47,470 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:44:47] "OPTIONS /login HTTP/1.1" 200 -
+2025-04-21 01:44:48,591 - __main__ - INFO - ±µ¦¬¨ìJSONµn¤J½Ð¨D
+2025-04-21 01:44:48,597 - __main__ - INFO - ¹Á¸Õµn¤J¥Î¤á: 003
+2025-04-21 01:44:48,844 - __main__ - INFO - ±µ¦¬¨ìJSONµn¤J½Ð¨D
+2025-04-21 01:44:48,935 - __main__ - INFO - ¹Á¸Õµn¤J¥Î¤á: 003
+2025-04-21 01:44:49,096 - __main__ - DEBUG - ¦sÀxªº±K½XÂø´ê: $2b$12$yfS... (ªø«×: 60)
+2025-04-21 01:44:49,263 - __main__ - DEBUG - ¦sÀxªº±K½XÂø´ê: $2b$12$yfS... (ªø«×: 60)
+2025-04-21 01:44:52,390 - __main__ - INFO - ±µ¦¬¨ìJSONµn¤J½Ð¨D
+2025-04-21 01:44:52,391 - __main__ - INFO - ¹Á¸Õµn¤J¥Î¤á: 003
+2025-04-21 01:44:52,624 - __main__ - DEBUG - ¦sÀxªº±K½XÂø´ê: $2b$12$yfS... (ªø«×: 60)
+2025-04-21 01:44:59,632 - __main__ - INFO - ¥Î¤á 003 µn¤J¦¨¥\
+2025-04-21 01:44:59,708 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:44:59] "POST /login HTTP/1.1" 200 -
+2025-04-21 01:45:01,798 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:45:01] "[32mGET /dashboard HTTP/1.1[0m" 302 -
+2025-04-21 01:45:02,030 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:45:02] "GET /login-page HTTP/1.1" 200 -
+2025-04-21 01:45:03,313 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:45:03] "OPTIONS /api/check-auth HTTP/1.1" 200 -
+2025-04-21 01:45:03,579 - __main__ - INFO - ¥Î¤á 003 µn¤J¦¨¥\
+2025-04-21 01:45:03,623 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:45:03] "GET /api/check-auth HTTP/1.1" 200 -
+2025-04-21 01:45:03,756 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:45:03] "POST /login HTTP/1.1" 200 -
+2025-04-21 01:45:06,741 - __main__ - INFO - ¥Î¤á 003 µn¤J¦¨¥\
+2025-04-21 01:45:07,330 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:45:07] "POST /login HTTP/1.1" 200 -
+2025-04-21 01:45:10,538 - __main__ - INFO - ¥Î¤á 003 µn¤J¦¨¥\
+2025-04-21 01:45:10,652 - __main__ - INFO - ¥Î¤á 003 µn¤J¦¨¥\
+2025-04-21 01:45:10,729 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:45:10] "POST /login HTTP/1.1" 200 -
+2025-04-21 01:45:10,775 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:45:10] "POST /login HTTP/1.1" 200 -
+2025-04-21 01:45:22,061 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:45:22] "OPTIONS /login HTTP/1.1" 200 -
+2025-04-21 01:45:22,418 - __main__ - INFO - ±µ¦¬¨ìJSONµn¤J½Ð¨D
+2025-04-21 01:45:22,631 - __main__ - INFO - ¹Á¸Õµn¤J¥Î¤á: 003
+2025-04-21 01:45:23,080 - __main__ - DEBUG - ¦sÀxªº±K½XÂø´ê: $2b$12$yfS... (ªø«×: 60)
+2025-04-21 01:45:30,382 - __main__ - INFO - ¥Î¤á 003 µn¤J¦¨¥\
+2025-04-21 01:45:30,396 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:45:30] "POST /login HTTP/1.1" 200 -
+2025-04-21 01:45:31,983 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:45:31] "[32mGET /dashboard HTTP/1.1[0m" 302 -
+2025-04-21 01:45:32,073 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:45:32] "GET /login-page HTTP/1.1" 200 -
+2025-04-21 01:45:32,637 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:45:32] "OPTIONS /api/check-auth HTTP/1.1" 200 -
+2025-04-21 01:45:32,902 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:45:32] "GET /api/check-auth HTTP/1.1" 200 -
+2025-04-21 01:45:37,781 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:45:37] "GET /register-page HTTP/1.1" 200 -
+2025-04-21 01:46:07,007 - __main__ - INFO - ¦¬¨ìµù¥U¼Æ¾Ú: {'username': '004', 'email': 'eva@gmail.com', 'phone': '0932899099', 'password': '004', 'address': 'kh', 'birthday': '2025-04-17'}
+2025-04-21 01:46:12,175 - __main__ - DEBUG - ¥Í¦¨ªº±K½XÂø´ê: $2b$12$410... (ªø«×: 60)
+2025-04-21 01:46:12,571 - __main__ - INFO - ¥Î¤á 004 µù¥U¦¨¥\
+2025-04-21 01:46:12,601 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:46:12] "POST /register HTTP/1.1" 200 -
+2025-04-21 01:46:14,800 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:46:14] "GET /dashboard HTTP/1.1" 200 -
+2025-04-21 01:46:53,421 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:46:53] "[33mGET /login.html HTTP/1.1[0m" 404 -
+2025-04-21 01:47:00,799 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:47:00] "GET /login-page HTTP/1.1" 200 -
+2025-04-21 01:47:01,645 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:47:01] "OPTIONS /api/check-auth HTTP/1.1" 200 -
+2025-04-21 01:47:01,744 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:47:01] "GET /api/check-auth HTTP/1.1" 200 -
+2025-04-21 01:47:07,474 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:47:07] "OPTIONS /login HTTP/1.1" 200 -
+2025-04-21 01:47:07,718 - __main__ - INFO - ±µ¦¬¨ìJSONµn¤J½Ð¨D
+2025-04-21 01:47:07,734 - __main__ - INFO - ¹Á¸Õµn¤J¥Î¤á: 004
+2025-04-21 01:47:07,806 - __main__ - DEBUG - ¦sÀxªº±K½XÂø´ê: $2b$12$410... (ªø«×: 60)
+2025-04-21 01:47:20,067 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:47:20] "OPTIONS /login HTTP/1.1" 200 -
+2025-04-21 01:47:20,808 - __main__ - INFO - ±µ¦¬¨ìJSONµn¤J½Ð¨D
+2025-04-21 01:47:20,957 - __main__ - INFO - ¹Á¸Õµn¤J¥Î¤á: 004
+2025-04-21 01:47:21,324 - __main__ - DEBUG - ¦sÀxªº±K½XÂø´ê: $2b$12$410... (ªø«×: 60)
+2025-04-21 01:47:23,603 - __main__ - INFO - ¥Î¤á 004 µn¤J¦¨¥\
+2025-04-21 01:47:23,630 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:47:23] "POST /login HTTP/1.1" 200 -
+2025-04-21 01:47:25,272 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:47:25] "GET /dashboard HTTP/1.1" 200 -
+2025-04-21 01:47:31,056 - __main__ - INFO - ¥Î¤á 004 µn¤J¦¨¥\
+2025-04-21 01:47:31,093 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 01:47:31] "POST /login HTTP/1.1" 200 -
