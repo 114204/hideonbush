@@ -4,17 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>會員帳號管理 - 回收管理後台</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary-color: #2c5282;
-            --secondary-color: #3182ce;
-            --success-color: #38a169;
-            --warning-color: #d69e2e;
-            --danger-color: #e53e3e;
-            --light-gray: #f7fafc;
-            --dark-gray: #2d3748;
-            --border-color: #e2e8f0;
+            --background: #0a0a0a;
+            --foreground: #fafafa;
+            --card: #1a1a1a;
+            --card-foreground: #fafafa;
+            --popover: #1a1a1a;
+            --popover-foreground: #fafafa;
+            --primary: #8b5cf6;
+            --primary-foreground: #fafafa;
+            --secondary: #262626;
+            --secondary-foreground: #fafafa;
+            --muted: #262626;
+            --muted-foreground: #a1a1aa;
+            --accent: #262626;
+            --accent-foreground: #fafafa;
+            --destructive: #ef4444;
+            --destructive-foreground: #fafafa;
+            --success: #22c55e;
+            --success-foreground: #fafafa;
+            --warning: #f59e0b;
+            --warning-foreground: #fafafa;
+            --border: #262626;
+            --input: #262626;
+            --ring: #8b5cf6;
+            --radius: 0.5rem;
         }
 
         * {
@@ -24,10 +40,11 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--light-gray);
-            color: var(--dark-gray);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background-color: var(--background);
+            color: var(--foreground);
             line-height: 1.6;
+            font-size: 14px;
         }
 
         .container-fluid {
@@ -37,90 +54,108 @@
 
         /* 側邊欄樣式 */
         .sidebar {
-            width: 250px;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
+            width: 280px;
+            background: var(--card);
+            border-right: 1px solid var(--border);
             display: flex;
             flex-direction: column;
             position: fixed;
             height: 100vh;
             overflow-y: auto;
             z-index: 1000;
+            transition: transform 0.3s ease;
         }
 
         .sidebar-header {
-            padding: 20px;
-            text-align: center;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding: 24px 20px;
+            border-bottom: 1px solid var(--border);
         }
 
         .sidebar-header h3 {
-            font-size: 1.2rem;
+            font-size: 1.25rem;
             font-weight: 600;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .sidebar-header h3::before {
+            content: "♻";
+            font-size: 1.5rem;
         }
 
         .sidebar-menu {
             flex: 1;
-            padding: 10px 0;
+            padding: 16px 0;
         }
 
         .menu-item {
             display: flex;
             align-items: center;
             padding: 12px 20px;
-            color: rgba(255,255,255,0.8);
+            color: var(--muted-foreground);
             text-decoration: none;
-            transition: all 0.3s ease;
-            border-left: 3px solid transparent;
+            transition: all 0.2s ease;
+            border-radius: 0;
+            margin: 2px 12px;
+            border-radius: var(--radius);
+            position: relative;
         }
 
         .menu-item:hover {
-            background-color: rgba(255,255,255,0.1);
-            color: white;
-            border-left-color: white;
+            background-color: var(--accent);
+            color: var(--accent-foreground);
         }
 
         .menu-item.active {
-            background-color: rgba(255,255,255,0.15);
-            color: white;
-            border-left-color: white;
+            background-color: var(--primary);
+            color: var(--primary-foreground);
         }
 
         .menu-item i {
             width: 20px;
-            margin-right: 10px;
+            margin-right: 12px;
+            font-size: 16px;
         }
 
         .badge {
             margin-left: auto;
+            background-color: var(--warning);
+            color: var(--warning-foreground);
+            border-radius: 10px;
+            padding: 2px 8px;
+            font-size: 0.75rem;
+            font-weight: 500;
         }
 
         .sidebar-footer {
             padding: 20px;
             text-align: center;
-            font-size: 0.8rem;
-            color: rgba(255,255,255,0.6);
-            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.75rem;
+            color: var(--muted-foreground);
+            border-top: 1px solid var(--border);
         }
 
         /* 主要內容區域 */
         .content {
             flex: 1;
-            margin-left: 250px;
-            padding: 0;
+            margin-left: 280px;
+            background-color: var(--background);
         }
 
         /* 頁首樣式 */
         .header {
-            background: white;
-            padding: 15px 30px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            background: var(--card);
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
             justify-content: space-between;
             position: sticky;
             top: 0;
             z-index: 999;
+            backdrop-filter: blur(8px);
         }
 
         .menu-toggle {
@@ -129,24 +164,36 @@
             border: none;
             font-size: 1.2rem;
             cursor: pointer;
-            color: var(--dark-gray);
+            color: var(--foreground);
+            padding: 8px;
+            border-radius: var(--radius);
+        }
+
+        .menu-toggle:hover {
+            background-color: var(--accent);
         }
 
         .header h1 {
             font-size: 1.5rem;
-            color: var(--primary-color);
+            color: var(--foreground);
             font-weight: 600;
         }
 
         .search-box {
             display: flex;
             align-items: center;
-            background: var(--light-gray);
-            border-radius: 25px;
-            padding: 8px 15px;
+            background: var(--input);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 8px 12px;
             margin: 0 20px;
             flex: 1;
             max-width: 400px;
+            transition: border-color 0.2s ease;
+        }
+
+        .search-box:focus-within {
+            border-color: var(--ring);
         }
 
         .search-box input {
@@ -154,15 +201,25 @@
             background: none;
             outline: none;
             flex: 1;
-            padding: 5px;
+            padding: 4px;
+            color: var(--foreground);
+        }
+
+        .search-box input::placeholder {
+            color: var(--muted-foreground);
         }
 
         .search-box button {
             background: none;
             border: none;
-            color: var(--dark-gray);
+            color: var(--muted-foreground);
             cursor: pointer;
-            padding: 5px;
+            padding: 4px;
+            border-radius: 4px;
+        }
+
+        .search-box button:hover {
+            color: var(--foreground);
         }
 
         .user-info {
@@ -171,10 +228,10 @@
         }
 
         .user-info img {
-            width: 40px;
-            height: 40px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
-            margin-right: 10px;
+            margin-right: 8px;
         }
 
         .dropdown {
@@ -186,12 +243,13 @@
             display: flex;
             align-items: center;
             padding: 8px 12px;
-            border-radius: 5px;
-            transition: background-color 0.3s;
+            border-radius: var(--radius);
+            transition: background-color 0.2s ease;
+            color: var(--foreground);
         }
 
         .dropdown-toggle:hover {
-            background-color: var(--light-gray);
+            background-color: var(--accent);
         }
 
         .dropdown-content {
@@ -199,11 +257,13 @@
             position: absolute;
             right: 0;
             top: 100%;
-            background: white;
-            min-width: 160px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-            border-radius: 5px;
-            z-index: 1;
+            background: var(--popover);
+            min-width: 180px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            z-index: 1000;
+            margin-top: 4px;
         }
 
         .dropdown:hover .dropdown-content {
@@ -211,200 +271,256 @@
         }
 
         .dropdown-content a {
-            color: var(--dark-gray);
+            color: var(--popover-foreground);
             padding: 12px 16px;
             text-decoration: none;
             display: flex;
             align-items: center;
+            transition: background-color 0.2s ease;
         }
 
         .dropdown-content a:hover {
-            background-color: var(--light-gray);
+            background-color: var(--accent);
         }
 
         .dropdown-content a i {
             margin-right: 8px;
+            width: 16px;
         }
 
         /* 統計卡片 */
         .stats-cards {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            padding: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            padding: 24px;
         }
 
         .card {
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
             overflow: hidden;
+            transition: all 0.2s ease;
+        }
+
+        .card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.1);
         }
 
         .stat-card {
-            padding: 25px;
+            padding: 24px;
             display: flex;
             align-items: center;
         }
 
         .stat-card-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-right: 20px;
-            font-size: 1.5rem;
-            color: white;
+            margin-right: 16px;
+            font-size: 1.25rem;
+            color: var(--primary-foreground);
         }
 
-        .stat-card-icon.users { background: var(--primary-color); }
-        .stat-card-icon.orders { background: var(--success-color); }
-        .stat-card-icon.products { background: var(--warning-color); }
-        .stat-card-icon.income { background: var(--danger-color); }
+        .stat-card-icon.users { background: var(--primary); }
+        .stat-card-icon.orders { background: var(--success); }
+        .stat-card-icon.products { background: var(--warning); }
+        .stat-card-icon.income { background: var(--destructive); }
 
         .stat-info {
             flex: 1;
         }
 
         .stat-value {
-            font-size: 2rem;
-            font-weight: bold;
-            color: var(--dark-gray);
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: var(--foreground);
+            line-height: 1;
         }
 
         .stat-label {
-            color: #666;
-            font-size: 0.9rem;
+            color: var(--muted-foreground);
+            font-size: 0.875rem;
+            margin-top: 4px;
         }
 
         /* 表格容器 */
         .table-container {
-            margin: 0 30px 30px;
-            padding: 25px;
+            margin: 0 24px 24px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .table-header h2 {
+            margin: 0;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--foreground);
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .table-wrapper {
             overflow-x: auto;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            background: white;
         }
 
         th, td {
-            padding: 12px;
+            padding: 16px;
             text-align: left;
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border);
         }
 
         th {
-            background-color: var(--light-gray);
+            background-color: var(--muted);
             font-weight: 600;
-            color: var(--dark-gray);
+            color: var(--foreground);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+        }
+
+        td {
+            color: var(--card-foreground);
         }
 
         tr:hover {
-            background-color: rgba(44, 82, 130, 0.05);
+            background-color: var(--accent);
         }
 
         .status {
-            padding: 5px 10px;
-            border-radius: 15px;
-            font-size: 0.8rem;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
             font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
         }
 
         .status-active {
-            background-color: rgba(56, 161, 105, 0.1);
-            color: var(--success-color);
+            background-color: rgba(34, 197, 94, 0.1);
+            color: var(--success);
+            border: 1px solid rgba(34, 197, 94, 0.2);
         }
 
         .status-inactive {
-            background-color: rgba(229, 62, 62, 0.1);
-            color: var(--danger-color);
+            background-color: rgba(239, 68, 68, 0.1);
+            color: var(--destructive);
+            border: 1px solid rgba(239, 68, 68, 0.2);
         }
 
         .status-pending {
-            background-color: rgba(214, 158, 46, 0.1);
-            color: var(--warning-color);
+            background-color: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+            border: 1px solid rgba(245, 158, 11, 0.2);
         }
 
         .action-buttons {
             display: flex;
-            gap: 5px;
+            gap: 8px;
         }
 
-        .edit-btn, .delete-btn, .save-btn, .cancel-btn, .approve-btn, .reject-btn {
-            padding: 6px 12px;
+        .btn {
+            padding: 8px 16px;
             border: none;
-            border-radius: 5px;
+            border-radius: var(--radius);
             cursor: pointer;
-            font-size: 0.8rem;
-            display: flex;
+            font-size: 0.875rem;
+            font-weight: 500;
+            display: inline-flex;
             align-items: center;
-            gap: 5px;
-            transition: all 0.3s;
+            gap: 6px;
+            transition: all 0.2s ease;
+            text-decoration: none;
         }
 
-        .edit-btn {
-            background-color: var(--warning-color);
-            color: white;
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--primary-foreground);
         }
 
-        .edit-btn:hover {
-            background-color: #b7791f;
+        .btn-primary:hover {
+            background-color: #7c3aed;
         }
 
-        .delete-btn, .reject-btn {
-            background-color: var(--danger-color);
-            color: white;
+        .btn-secondary {
+            background-color: var(--secondary);
+            color: var(--secondary-foreground);
+            border: 1px solid var(--border);
         }
 
-        .delete-btn:hover, .reject-btn:hover {
-            background-color: #c53030;
+        .btn-secondary:hover {
+            background-color: var(--accent);
         }
 
-        .save-btn, .approve-btn {
-            background-color: var(--success-color);
-            color: white;
+        .btn-destructive {
+            background-color: var(--destructive);
+            color: var(--destructive-foreground);
         }
 
-        .save-btn:hover, .approve-btn:hover {
-            background-color: #2f855a;
+        .btn-destructive:hover {
+            background-color: #dc2626;
         }
 
-        .cancel-btn {
-            background-color: #718096;
-            color: white;
+        .btn-success {
+            background-color: var(--success);
+            color: var(--success-foreground);
         }
 
-        .cancel-btn:hover {
-            background-color: #4a5568;
+        .btn-success:hover {
+            background-color: #16a34a;
         }
 
         /* 分頁 */
         .pagination {
             display: flex;
             justify-content: center;
-            margin: 20px 0;
+            align-items: center;
+            margin: 24px 0;
+            gap: 8px;
         }
 
         .pagination a {
-            color: var(--primary-color);
-            padding: 8px 16px;
+            color: var(--muted-foreground);
+            padding: 8px 12px;
             text-decoration: none;
-            border: 1px solid var(--border-color);
-            margin: 0 2px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            transition: all 0.2s ease;
+            font-size: 0.875rem;
         }
 
         .pagination a:hover {
-            background-color: var(--light-gray);
+            background-color: var(--accent);
+            color: var(--foreground);
         }
 
         .pagination a.active {
-            background-color: var(--primary-color);
-            color: white;
+            background-color: var(--primary);
+            color: var(--primary-foreground);
+            border-color: var(--primary);
         }
 
         /* 模態框樣式 */
@@ -416,7 +532,8 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.5);
+            background-color: rgba(0,0,0,0.8);
+            backdrop-filter: blur(4px);
         }
 
         .modal.show {
@@ -426,17 +543,19 @@
         }
 
         .modal-content {
-            background-color: white;
-            border-radius: 10px;
+            background-color: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
             width: 90%;
             max-width: 500px;
             max-height: 90vh;
             overflow-y: auto;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
         }
 
         .modal-header {
-            padding: 20px;
-            border-bottom: 1px solid var(--border-color);
+            padding: 24px;
+            border-bottom: 1px solid var(--border);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -444,7 +563,9 @@
 
         .modal-header h2 {
             margin: 0;
-            color: var(--primary-color);
+            color: var(--foreground);
+            font-size: 1.25rem;
+            font-weight: 600;
         }
 
         .close-btn {
@@ -452,11 +573,15 @@
             border: none;
             font-size: 1.5rem;
             cursor: pointer;
-            color: #999;
+            color: var(--muted-foreground);
+            padding: 4px;
+            border-radius: var(--radius);
+            transition: all 0.2s ease;
         }
 
         .close-btn:hover {
-            color: var(--danger-color);
+            color: var(--foreground);
+            background-color: var(--accent);
         }
 
         .form-group {
@@ -465,34 +590,43 @@
 
         .form-group label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
             font-weight: 500;
-            color: var(--dark-gray);
+            color: var(--foreground);
+            font-size: 0.875rem;
         }
 
         .form-group input, .form-group select {
             width: 100%;
-            padding: 10px;
-            border: 1px solid var(--border-color);
-            border-radius: 5px;
-            font-size: 1rem;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 0.875rem;
+            background-color: var(--input);
+            color: var(--foreground);
+            transition: border-color 0.2s ease;
         }
 
         .form-group input:focus, .form-group select:focus {
             outline: none;
-            border-color: var(--primary-color);
+            border-color: var(--ring);
+            box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.1);
+        }
+
+        .form-group input::placeholder {
+            color: var(--muted-foreground);
         }
 
         .form-buttons {
             display: flex;
             justify-content: flex-end;
-            gap: 10px;
-            padding: 20px;
-            border-top: 1px solid var(--border-color);
+            gap: 12px;
+            padding: 24px;
+            border-top: 1px solid var(--border);
         }
 
         form {
-            padding: 20px;
+            padding: 24px;
         }
 
         /* 登出確認對話框樣式 */
@@ -504,7 +638,8 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.5);
+            background-color: rgba(0,0,0,0.8);
+            backdrop-filter: blur(4px);
         }
 
         .logout-confirm.show {
@@ -514,119 +649,32 @@
         }
 
         .logout-confirm-content {
-            background-color: white;
-            border-radius: 10px;
-            padding: 30px;
+            background-color: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 32px;
             max-width: 400px;
             text-align: center;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
         }
 
         .logout-confirm-content h3 {
-            color: var(--primary-color);
-            margin-bottom: 15px;
-            font-size: 1.3rem;
+            color: var(--foreground);
+            margin-bottom: 16px;
+            font-size: 1.25rem;
+            font-weight: 600;
         }
 
         .logout-confirm-content p {
-            color: #666;
-            margin-bottom: 25px;
+            color: var(--muted-foreground);
+            margin-bottom: 24px;
             line-height: 1.5;
         }
 
         .logout-confirm-buttons {
             display: flex;
-            gap: 15px;
+            gap: 12px;
             justify-content: center;
-        }
-
-        .logout-confirm-cancel, .logout-confirm-proceed {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: all 0.3s;
-        }
-
-        .logout-confirm-cancel {
-            background-color: #718096;
-            color: white;
-        }
-
-        .logout-confirm-cancel:hover {
-            background-color: #4a5568;
-        }
-
-        .logout-confirm-proceed {
-            background-color: var(--danger-color);
-            color: white;
-        }
-
-        .logout-confirm-proceed:hover {
-            background-color: #c53030;
-        }
-
-        /* 回收審核樣式 */
-        .review-item {
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            margin-bottom: 20px;
-            overflow: hidden;
-        }
-
-        .review-item-header {
-            background-color: var(--light-gray);
-            padding: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .review-item-title {
-            font-weight: 600;
-            color: var(--primary-color);
-        }
-
-        .review-item-date {
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        .review-item-content {
-            padding: 20px;
-            display: flex;
-            gap: 20px;
-        }
-
-        .review-item-image {
-            width: 150px;
-            height: 100px;
-            object-fit: cover;
-            border-radius: 5px;
-        }
-
-        .review-item-details {
-            flex: 1;
-        }
-
-        .review-item-detail {
-            margin-bottom: 8px;
-            display: flex;
-        }
-
-        .review-item-label {
-            font-weight: 500;
-            min-width: 80px;
-            color: var(--dark-gray);
-        }
-
-        .review-item-actions {
-            padding: 15px 20px;
-            background-color: #f8f9fa;
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
         }
 
         /* 響應式設計 */
@@ -650,21 +698,70 @@
 
             .stats-cards {
                 grid-template-columns: 1fr;
-                padding: 15px;
+                padding: 16px;
             }
 
             .table-container {
-                margin: 0 15px 15px;
-                padding: 15px;
+                margin: 0 16px 16px;
             }
 
             .header {
-                padding: 15px;
+                padding: 16px;
             }
 
             .search-box {
                 max-width: 200px;
             }
+
+            .table-actions {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+
+        /* 載入動畫 */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--muted);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* 通知樣式 */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 16px 20px;
+            border-radius: var(--radius);
+            color: white;
+            font-weight: 500;
+            z-index: 3000;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background-color: var(--success);
+        }
+
+        .notification.error {
+            background-color: var(--destructive);
         }
     </style>
 </head>
@@ -694,7 +791,7 @@
                 <a href="#" class="menu-item" id="recycleReviewLink">
                     <i class="fas fa-recycle"></i>
                     <span>回收瓶審核</span>
-                    <span class="badge" id="pendingReviewCount" style="background-color: var(--warning-color); color: white; border-radius: 10px; padding: 2px 6px; font-size: 0.7rem; margin-left: auto; display: none;">0</span>
+                    <span class="badge" id="pendingReviewCount" style="display: none;">0</span>
                 </a>
                 <a href="/db-management-page" class="menu-item">
                     <i class="fas fa-database"></i>
@@ -706,7 +803,7 @@
                 </a>
             </nav>
             <div class="sidebar-footer">
-                &copy; 2025回收系統
+                &copy; 2025 回收系統
             </div>
         </aside>
 
@@ -721,10 +818,1335 @@
                     <button type="submit"><i class="fas fa-search"></i></button>
                 </div>
                 <div class="user-info">
-                    <img src="https://via.placeholder.com/40" alt="User Avatar"> 
+                    <img src="https://via.placeholder.com/32" alt="User Avatar"> 
                     <div class="dropdown">
                         <div class="dropdown-toggle">
-                           <span>管理員</span> <i class="fas fa-chevron-down" style="font-size: 0.8em; margin-left: 5px;"></i>
+                           <span>管理員</span> <i class="fas fa-chevron-down" style="font-size: 0.75em; margin-left: 6px;"></i>
+                        </div>
+                        <div class="dropdown-content">
+                            <a href="#"><i class="fas fa-user-circle"></i> 個人資料</a>
+                            <a href="#"><i class="fas fa-cog"></i> 設定</a>
+                            <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> 登出</a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <section class="table-container">
+                <div class="table-header">
+                    <h2>會員列表</h2>
+                    <div class="table-actions">
+                        <button class="btn btn-secondary" onclick="window.location.href='/create-account-page'">
+                            <i class="fas fa-user-plus"></i> 建立帳號
+                        </button>
+                        <button class="btn btn-secondary" onclick="window.location.href='/db-management-page'">
+                            <i class="fas fa-database"></i> 資料庫管理
+                        </button>
+                        <button class="btn btn-primary" onclick="openModal('addMemberModal', '新增會員')">
+                            <i class="fas fa-plus"></i> 新增會員
+                        </button>
+                    </div>
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>會員ID</th>
+                                <th>姓名</th>
+                                <th>Email</th>
+                                <th>電話</th>
+                                <th>註冊日期</th>
+                                <th>狀態</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="memberTableBody">
+                            <tr><td colspan="7" style="text-align:center; padding: 40px;"><div class="loading"></div> 載入中...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <nav class="pagination" id="paginationNav">
+                <a href="#" onclick="loadMembers(1, 'prev')">&laquo; 上一頁</a>
+                <a href="#" class="active" onclick="loadMembers(1)">1</a>
+                <a href="#" onclick="loadMembers(2)">2</a>
+                <a href="#" onclick="loadMembers(3)">3</a>
+                <a href="#" onclick="loadMembers(1, 'next')">下一頁 &raquo;</a>
+            </nav>
+        </main>
+    </div>
+
+     新增/編輯會員模態框 
+    <div id="addMemberModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">新增會員</h2>
+                <button class="close-btn" onclick="closeModal('addMemberModal')">&times;</button>
+            </div>
+            <form id="memberForm">
+                <input type="hidden" id="memberId" name="memberId">
+                <div class="form-group">
+                    <label for="memberName">姓名</label>
+                    <input type="text" id="memberName" name="memberName" placeholder="請輸入會員姓名" required>
+                </div>
+                <div class="form-group">
+                    <label for="memberEmail">Email</label>
+                    <input type="email" id="memberEmail" name="memberEmail" placeholder="請輸入電子郵件" required>
+                </div>
+                <div class="form-group">
+                    <label for="memberPhone">電話</label>
+                    <input type="tel" id="memberPhone" name="memberPhone" placeholder="請輸入電話號碼">
+                </div>
+                <div class="form-group">
+                    <label for="memberStatus">狀態</label>
+                    <select id="memberStatus" name="memberStatus">
+                        <option value="active">活躍</option>
+                        <option value="inactive">停用</option>
+                    </select>
+                </div>
+                <div class="form-buttons">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('addMemberModal')">取消</button>
+                    <button type="submit" class="btn btn-primary">儲存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+     回收物品審核模態框 
+    <div id="recycleReviewModal" class="modal">
+        <div class="modal-content" style="max-width: 700px;">
+            <div class="modal-header">
+                <h2>回收物品審核</h2>
+                <button class="close-btn" onclick="closeModal('recycleReviewModal')">&times;</button>
+            </div>
+            <div style="padding: 24px;">
+                <div style="border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden;">
+                    <div style="background: var(--muted); padding: 16px; display: flex; justify-content: space-between; align-items: center;">
+                        <div style="font-weight: 600; color: var(--foreground);">回收記錄 #REC001</div>
+                        <div style="color: var(--muted-foreground); font-size: 0.875rem;">2025-05-06 14:30</div>
+                    </div>
+                    <div style="padding: 20px; display: flex; gap: 20px;">
+                        <div>
+                            <img src="https://via.placeholder.com/200x150?text=回收物品照片" alt="回收物品" style="width: 200px; height: 150px; object-fit: cover; border-radius: var(--radius);">
+                        </div>
+                        <div style="flex: 1;">
+                            <div style="margin-bottom: 12px; display: flex;">
+                                <span style="font-weight: 500; min-width: 80px; color: var(--muted-foreground);">會員ID:</span>
+                                <span>MEM001</span>
+                            </div>
+                            <div style="margin-bottom: 12px; display: flex;">
+                                <span style="font-weight: 500; min-width: 80px; color: var(--muted-foreground);">會員姓名:</span>
+                                <span>陳大文</span>
+                            </div>
+                            <div style="margin-bottom: 12px; display: flex;">
+                                <span style="font-weight: 500; min-width: 80px; color: var(--muted-foreground);">AI辨識:</span>
+                                <span>寶特瓶 (500ml)</span>
+                            </div>
+                            <div style="margin-bottom: 12px; display: flex;">
+                                <span style="font-weight: 500; min-width: 80px; color: var(--muted-foreground);">數量:</span>
+                                <span>3</span>
+                            </div>
+                            <div style="display: flex;">
+                                <span style="font-weight: 500; min-width: 80px; color: var(--muted-foreground);">預估點數:</span>
+                                <span style="color: var(--primary); font-weight: 600;">15</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="padding: 16px 20px; background: var(--muted); display: flex; justify-content: flex-end; gap: 12px;">
+                        <button class="btn btn-destructive"><i class="fas fa-times"></i> 拒絕</button>
+                        <button class="btn btn-success"><i class="fas fa-check"></i> 核准</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+     登出確認對話框 
+    <div id="logoutConfirm" class="logout-confirm">
+        <div class="logout-confirm-content">
+            <h3>確認登出</h3>
+            <p>您確定要登出管理後台嗎？請確認您已保存所有變更。</p>
+            <div class="logout-confirm-buttons">
+                <button class="btn btn-secondary" onclick="closeModal('logoutConfirm')">取消</button>
+                <button class="btn btn-destructive" onclick="performLogout()">確認登出</button>
+            </div>
+        </div>
+    </div>
+
+     通知元素 
+    <div id="notification" class="notification"></div>
+
+    <script>
+        let currentPage = 1;
+        const pageSize = 10;
+        const API = '/api/members';
+
+        // 頁面載入
+        window.onload = () => {
+            loadMembers(currentPage);
+            initializeNotifications();
+        };
+
+        // 通知系統
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        function initializeNotifications() {
+            // 模擬待審核數量
+            setTimeout(() => {
+                const pendingCount = 3;
+                const badge = document.getElementById('pendingReviewCount');
+                badge.textContent = pendingCount;
+                badge.style.display = 'inline-block';
+            }, 1000);
+        }
+
+        // 載入會員數據
+        async function loadMembers(page, action = '') {
+            if (action === 'prev' && currentPage > 1) currentPage--;
+            else if (action === 'next') currentPage++;
+            else if (page) currentPage = page;
+
+            try {
+                const res = await fetch(`${API}?page=${currentPage}&pageSize=${pageSize}`, {
+                    method: 'GET',
+                    credentials: 'include'
+                });
+                
+                if (!res.ok) throw new Error('載入失敗');
+                const result = await res.json();
+
+                const tbody = document.getElementById('memberTableBody');
+                tbody.innerHTML = '';
+
+                if (!result.members || result.members.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 40px; color: var(--muted-foreground);">沒有會員數據</td></tr>';
+                } else {
+                    result.members.forEach(m => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td style="font-family: monospace; color: var(--muted-foreground);">${m.id}</td>
+                            <td style="font-weight: 500;">${m.username ?? ''}</td>
+                            <td style="color: var(--muted-foreground);">${m.email ?? ''}</td>
+                            <td style="color: var(--muted-foreground);">${m.phone ?? ''}</td>
+                            <td style="color: var(--muted-foreground);">${m.created_at ?? ''}</td>
+                            <td>
+                                <span class="status status-${m.status}">
+                                    ${m.status === 'active' ? '活躍' : '停用'}
+                                </span>
+                            </td>
+                            <td class="action-buttons">
+                                <button class="btn btn-secondary" onclick="openModal('addMemberModal','編輯會員', ${encodeDataForAttr(m)})">
+                                    <i class="fas fa-edit"></i> 編輯
+                                </button>
+                                <button class="btn btn-destructive" onclick="deleteMember('${encodeURIComponent(m.id)}')">
+                                    <i class="fas fa-trash"></i> 刪除
+                                </button>
+                            </td>
+                        `;
+                        tbody.appendChild(row);
+                    });
+                }
+
+                updatePagination(result.totalPages || 1);
+            } catch (err) {
+                console.error('載入會員失敗：', err);
+                document.getElementById('memberTableBody').innerHTML =
+                    '<tr><td colspan="7" style="text-align:center; padding: 40px; color: var(--destructive);">載入失敗，請重試</td></tr>';
+                showNotification('載入會員數據失敗', 'error');
+            }
+        }
+
+        // 安全編碼數據
+        function encodeDataForAttr(obj) {
+            const safe = {
+                id: obj.id,
+                username: obj.username || '',
+                email: obj.email || '',
+                phone: obj.phone || '',
+                status: obj.status || 'active'
+            };
+            return JSON.stringify(safe).replace(/"/g, '&quot;');
+        }
+
+        // 更新分頁
+        function updatePagination(totalPages) {
+            const pagination = document.getElementById('paginationNav');
+            const pages = Array.from({ length: totalPages }, (_, i) => i + 1)
+                .map(p => `
+                    <a href="#" onclick="loadMembers(${p})" class="${p === currentPage ? 'active' : ''}">
+                        ${p}
+                    </a>
+                `).join('');
+
+            pagination.innerHTML = `
+                <a href="#" onclick="loadMembers(${currentPage}, 'prev')">&laquo; 上一頁</a>
+                ${pages}
+                <a href="#" onclick="loadMembers(${currentPage}, 'next')">下一頁 &raquo;</a>
+            `;
+        }
+
+        // 模態框操作
+        function openModal(modalId, title, data = null) {
+            document.getElementById('modalTitle').textContent = title;
+            const form = document.getElementById('memberForm');
+
+            if (data) {
+                document.getElementById('memberId').value = data.id;
+                document.getElementById('memberName').value = data.username;
+                document.getElementById('memberEmail').value = data.email;
+                document.getElementById('memberPhone').value = data.phone;
+                document.getElementById('memberStatus').value = data.status;
+            } else {
+                form.reset();
+                document.getElementById('memberId').value = '';
+            }
+            document.getElementById(modalId).classList.add('show');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('show');
+        }
+
+        // 表單提交
+        document.getElementById('memberForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const memberId = document.getElementById('memberId').value.trim();
+
+            const payload = {
+                username: document.getElementById('memberName').value.trim(),
+                email: document.getElementById('memberEmail').value.trim(),
+                phone: document.getElementById('memberPhone').value.trim(),
+                status: document.getElementById('memberStatus').value
+            };
+
+            try {
+                const url = memberId ? `${API}/${encodeURIComponent(memberId)}` : API;
+                const method = memberId ? 'PUT' : 'POST';
+
+                const res = await fetch(url, {
+                    method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload),
+                    credentials: 'include'
+                });
+                const result = await res.json();
+
+                if (result.status === 'success') {
+                    closeModal('addMemberModal');
+                    await loadMembers(currentPage);
+                    showNotification(memberId ? '編輯成功' : '新增成功');
+                } else {
+                    showNotification(result.message || '操作失敗', 'error');
+                }
+            } catch (err) {
+                console.error('保存失敗：', err);
+                showNotification('操作失敗，請重試', 'error');
+            }
+        });
+
+        // 刪除會員
+        async function deleteMember(memberId) {
+            if (!confirm('確定要刪除這個會員嗎？此操作無法復原。')) return;
+            
+            try {
+                const res = await fetch(`${API}/${memberId}`, {
+                    method: 'DELETE',
+                    credentials: 'include'
+                });
+                const result = await res.json();
+                
+                if (result.status === 'success') {
+                    await loadMembers(currentPage);
+                    showNotification('刪除成功');
+                } else {
+                    showNotification(result.message || '刪除失敗', 'error');
+                }
+            } catch (err) {
+                console.error('刪除失敗：', err);
+                showNotification('刪除失敗，請重試', 'error');
+            }
+        }
+
+        // 側邊欄切換
+        document.getElementById('menuToggle').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('show');
+        });
+
+        // 登出功能
+        document.getElementById('logoutBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            openModal('logoutConfirm');
+        });
+
+        function performLogout() {
+            localStorage.removeItem('loggedIn');
+            showNotification('已成功登出');
+            setTimeout(() => {
+                window.location.href = '/admin_login-page';
+            }, 1000);
+        }
+
+        // 回收審核
+        document.getElementById('recycleReviewLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            openModal('recycleReviewModal');
+        });
+
+        // 點擊外部關閉模態框
+        window.addEventListener('click', function(e) {
+            const modals = document.querySelectorAll('.modal.show');
+            modals.forEach(modal => {
+                if (e.target === modal) {
+                    modal.classList.remove('show');
+                }
+            });
+        });
+
+        // 檢查登入狀態
+        if (localStorage.getItem('loggedIn') !== 'true') {
+            window.location.href = '/admin_login-page';
+        }
+    </script>
+</body>
+</html>
+
+<!-- <!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>會員帳號管理 - 回收管理後台</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #8b5cf6;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --light-gray: #f8fafc;
+            --dark-gray: #1e293b;
+            --border-color: #e2e8f0;
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+            color: var(--dark-gray);
+            line-height: 1.6;
+        }
+
+        .container-fluid {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* 側邊欄樣式 */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1000;
+            box-shadow: 4px 0 20px rgba(0,0,0,0.1);
+        }
+
+        .sidebar-header {
+            padding: 25px 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar-header h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .sidebar-header p {
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+
+        .sidebar-menu {
+            flex: 1;
+            padding: 15px 0;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 25px;
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+            position: relative;
+        }
+
+        .menu-item:hover {
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+            border-left-color: white;
+            transform: translateX(5px);
+        }
+
+        .menu-item.active {
+            background-color: rgba(255,255,255,0.15);
+            color: white;
+            border-left-color: white;
+        }
+
+        .menu-item i {
+            width: 24px;
+            margin-right: 15px;
+            font-size: 1.1rem;
+        }
+
+        .badge {
+            margin-left: auto;
+            background-color: var(--warning-color);
+            color: white;
+            border-radius: 12px;
+            padding: 3px 8px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .sidebar-footer {
+            padding: 20px;
+            text-align: center;
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.6);
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* 主要內容區域 */
+        .content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 0;
+        }
+
+        /* 頁首樣式 */
+        .header {
+            background: white;
+            padding: 20px 30px;
+            box-shadow: var(--card-shadow);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 999;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.3rem;
+            cursor: pointer;
+            color: var(--dark-gray);
+            padding: 8px;
+            border-radius: 6px;
+            transition: background-color 0.3s;
+        }
+
+        .menu-toggle:hover {
+            background-color: var(--light-gray);
+        }
+
+        .header h1 {
+            font-size: 1.6rem;
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: var(--light-gray);
+            border-radius: 25px;
+            padding: 10px 20px;
+            margin: 0 20px;
+            flex: 1;
+            max-width: 400px;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .search-box:focus-within {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .search-box input {
+            border: none;
+            background: none;
+            outline: none;
+            flex: 1;
+            padding: 5px;
+            font-size: 0.95rem;
+        }
+
+        .search-box button {
+            background: none;
+            border: none;
+            color: var(--dark-gray);
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 4px;
+            transition: color 0.3s;
+        }
+
+        .search-box button:hover {
+            color: var(--primary-color);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-info img {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            margin-right: 12px;
+            border: 2px solid var(--border-color);
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-toggle {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+            font-weight: 500;
+        }
+
+        .dropdown-toggle:hover {
+            background-color: var(--light-gray);
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background: white;
+            min-width: 180px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            border-radius: 8px;
+            z-index: 1;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown-content a {
+            color: var(--dark-gray);
+            padding: 12px 16px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            transition: background-color 0.3s;
+        }
+
+        .dropdown-content a:hover {
+            background-color: var(--light-gray);
+        }
+
+        .dropdown-content a i {
+            margin-right: 10px;
+            width: 16px;
+        }
+
+        /* 統計卡片 */
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            padding: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .stat-card {
+            padding: 30px;
+            display: flex;
+            align-items: center;
+        }
+
+        .stat-card-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            font-size: 1.6rem;
+            color: white;
+        }
+
+        .stat-card-icon.users { background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); }
+        .stat-card-icon.orders { background: linear-gradient(135deg, var(--success-color), #059669); }
+        .stat-card-icon.products { background: linear-gradient(135deg, var(--warning-color), #d97706); }
+        .stat-card-icon.income { background: linear-gradient(135deg, var(--danger-color), #dc2626); }
+
+        .stat-info {
+            flex: 1;
+        }
+
+        .stat-value {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--dark-gray);
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #64748b;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        /* 表格容器 */
+        .table-container {
+            margin: 0 30px 30px;
+            padding: 30px;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .table-header h2 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--dark-gray);
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 16px 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            font-weight: 600;
+            color: var(--dark-gray);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        tr:hover {
+            background-color: rgba(99, 102, 241, 0.05);
+        }
+
+        .status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-active {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+        }
+
+        .status-inactive {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: var(--danger-color);
+        }
+
+        .status-pending {
+            background-color: rgba(245, 158, 11, 0.1);
+            color: var(--warning-color);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .edit-btn, .delete-btn, .save-btn, .cancel-btn, .approve-btn, .reject-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .edit-btn {
+            background-color: var(--warning-color);
+            color: white;
+        }
+
+        .edit-btn:hover {
+            background-color: #d97706;
+            transform: translateY(-1px);
+        }
+
+        .delete-btn, .reject-btn {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        .delete-btn:hover, .reject-btn:hover {
+            background-color: #dc2626;
+            transform: translateY(-1px);
+        }
+
+        .save-btn, .approve-btn {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .save-btn:hover, .approve-btn:hover {
+            background-color: #059669;
+            transform: translateY(-1px);
+        }
+
+        .cancel-btn {
+            background-color: #64748b;
+            color: white;
+        }
+
+        .cancel-btn:hover {
+            background-color: #475569;
+            transform: translateY(-1px);
+        }
+
+        /* 分頁 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+            gap: 5px;
+        }
+
+        .pagination a {
+            color: var(--primary-color);
+            padding: 10px 16px;
+            text-decoration: none;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .pagination a:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        .pagination a.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        /* 模態框樣式 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background-color: white;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            padding: 25px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #64748b;
+            padding: 5px;
+            border-radius: 6px;
+            transition: all 0.3s;
+        }
+
+        .close-btn:hover {
+            color: var(--danger-color);
+            background-color: rgba(239, 68, 68, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark-gray);
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .form-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            padding: 25px;
+            border-top: 1px solid var(--border-color);
+            background: #f8fafc;
+        }
+
+        form {
+            padding: 25px;
+        }
+
+        /* 通知系統 */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            z-index: 3000;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background-color: var(--success-color);
+        }
+
+        .notification.error {
+            background-color: var(--danger-color);
+        }
+
+        .notification.warning {
+            background-color: var(--warning-color);
+        }
+
+        /* 載入動畫 */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* 登出確認對話框樣式 */
+        .logout-confirm {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+        }
+
+        .logout-confirm.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .logout-confirm-content {
+            background-color: white;
+            border-radius: 16px;
+            padding: 40px;
+            max-width: 450px;
+            text-align: center;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            animation: slideIn 0.3s ease;
+        }
+
+        .logout-confirm-content h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .logout-confirm-content p {
+            color: #64748b;
+            margin-bottom: 30px;
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+
+        .logout-confirm-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .logout-confirm-cancel, .logout-confirm-proceed {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .logout-confirm-cancel {
+            background-color: #64748b;
+            color: white;
+        }
+
+        .logout-confirm-cancel:hover {
+            background-color: #475569;
+            transform: translateY(-1px);
+        }
+
+        .logout-confirm-proceed {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        .logout-confirm-proceed:hover {
+            background-color: #dc2626;
+            transform: translateY(-1px);
+        }
+
+        /* 回收審核樣式 */
+        .review-item {
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            background: white;
+        }
+
+        .review-item-header {
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .review-item-title {
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+        }
+
+        .review-item-date {
+            color: #64748b;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .review-item-content {
+            padding: 25px;
+            display: flex;
+            gap: 25px;
+        }
+
+        .review-item-image {
+            width: 180px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .review-item-details {
+            flex: 1;
+        }
+
+        .review-item-detail {
+            margin-bottom: 12px;
+            display: flex;
+        }
+
+        .review-item-label {
+            font-weight: 600;
+            min-width: 100px;
+            color: var(--dark-gray);
+        }
+
+        .review-item-actions {
+            padding: 20px 25px;
+            background-color: #f8fafc;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* 響應式設計 */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+                width: 280px;
+            }
+
+            .sidebar.show {
+                transform: translateX(0);
+            }
+
+            .content {
+                margin-left: 0;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .stats-cards {
+                grid-template-columns: 1fr;
+                padding: 20px;
+                gap: 20px;
+            }
+
+            .table-container {
+                margin: 0 20px 20px;
+                padding: 20px;
+            }
+
+            .header {
+                padding: 15px 20px;
+            }
+
+            .search-box {
+                max-width: 200px;
+                margin: 0 10px;
+            }
+
+            .table-header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+
+            .table-actions {
+                width: 100%;
+                justify-content: flex-start;
+                flex-wrap: wrap;
+            }
+
+            .modal-content {
+                width: 95%;
+                margin: 20px;
+            }
+
+            .review-item-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .review-item-image {
+                width: 100%;
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h3>回收管理後台</h3>
+                <p>EcoVision System</p>
+            </div>
+            <nav class="sidebar-menu">
+                <a href="dashboard-home.html" class="menu-item">
+                    <i class="fas fa-home"></i>
+                    <span>主控台</span>
+                </a>
+                <a href="member-management.html" class="menu-item active">
+                    <i class="fas fa-users"></i>
+                    <span>會員帳號管理</span>
+                </a>
+                <a href="#" class="menu-item">
+                    <i class="fas fa-box-open"></i>
+                    <span>會員訂單管理</span>
+                </a>
+                <a href="#" class="menu-item">
+                    <i class="fas fa-coins"></i>
+                    <span>點數管理</span>
+                </a>
+                <a href="#" class="menu-item" id="recycleReviewLink">
+                    <i class="fas fa-recycle"></i>
+                    <span>回收瓶審核</span>
+                    <span class="badge" id="pendingReviewCount" style="display: none;">0</span>
+                </a>
+                <a href="/db-management-page" class="menu-item">
+                    <i class="fas fa-database"></i>
+                    <span>資料庫管理</span>
+                </a>
+                <a href="#" class="menu-item">
+                    <i class="fas fa-cogs"></i>
+                    <span>系統設定</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                &copy; 2025 EcoVision 回收系統
+            </div>
+        </aside>
+
+        <main class="content">
+            <header class="header">
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1>會員帳號管理</h1>
+                <div class="search-box">
+                    <input type="text" placeholder="搜尋會員..." id="searchInput">
+                    <button type="button" onclick="searchMembers()"><i class="fas fa-search"></i></button>
+                </div>
+                <div class="user-info">
+                    <img src="https://via.placeholder.com/45" alt="User Avatar"> 
+                    <div class="dropdown">
+                        <div class="dropdown-toggle">
+                           <span>管理員</span> <i class="fas fa-chevron-down" style="font-size: 0.8em; margin-left: 8px;"></i>
                         </div>
                         <div class="dropdown-content">
                             <a href="#"><i class="fas fa-user-circle"></i> 個人資料</a>
@@ -736,12 +2158,18 @@
             </header>
 
             <section class="table-container card">
-                <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding: 5px;">
-                    <h2 style="margin:0; font-size: 1.3rem;">會員列表</h2>
-                    <div style="display: flex; gap: 10px;">
-                        <button class="save-btn" onclick="window.location.href='/create-account-page'"><i class="fas fa-user-plus"></i> 建立帳號</button>
-                        <button class="edit-btn" onclick="window.location.href='/db-management-page'"><i class="fas fa-database"></i> 資料庫管理</button>
-                        <button class="save-btn" onclick="openModal('addMemberModal', '新增會員')"><i class="fas fa-plus"></i> 新增會員</button>
+                <div class="table-header">
+                    <h2>會員列表</h2>
+                    <div class="table-actions">
+                        <button class="save-btn" onclick="window.location.href='/create-account-page'">
+                            <i class="fas fa-user-plus"></i> 建立帳號
+                        </button>
+                        <button class="edit-btn" onclick="window.location.href='/db-management-page'">
+                            <i class="fas fa-database"></i> 資料庫管理
+                        </button>
+                        <button class="save-btn" onclick="openModal('addMemberModal', '新增會員')">
+                            <i class="fas fa-plus"></i> 新增會員
+                        </button>
                     </div>
                 </div>
                 <table>
@@ -752,62 +2180,31 @@
                             <th>Email</th>
                             <th>電話</th>
                             <th>註冊日期</th>
+                            <th>點數</th>
                             <th>狀態</th>
                             <th>操作</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>MEM001</td>
-                            <td>陳大文</td>
-                            <td>davidchen@example.com</td>
-                            <td>0912-345-678</td>
-                            <td>2025-01-15</td>
-                            <td><span class="status status-active">活躍</span></td>
-                            <td class="action-buttons">
-                                <button class="edit-btn" onclick="openModal('addMemberModal', '編輯會員', {id: 'MEM001', name: '陳大文', email: 'davidchen@example.com', phone: '0912-345-678', status: 'active'})"><i class="fas fa-edit"></i> 編輯</button>
-                                <button class="delete-btn"><i class="fas fa-trash"></i> 刪除</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>MEM002</td>
-                            <td>林小美</td>
-                            <td>meilin@example.com</td>
-                            <td>0922-123-456</td>
-                            <td>2025-02-20</td>
-                            <td><span class="status status-active">活躍</span></td>
-                            <td class="action-buttons">
-                               <button class="edit-btn" onclick="openModal('addMemberModal', '編輯會員', {id: 'MEM002', name: '林小美', email: 'meilin@example.com', phone: '0922-123-456', status: 'active'})"><i class="fas fa-edit"></i> 編輯</button>
-                                <button class="delete-btn"><i class="fas fa-trash"></i> 刪除</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>MEM003</td>
-                            <td>張三</td>
-                            <td>chang.san@example.com</td>
-                            <td>0988-765-432</td>
-                            <td>2025-04-05</td>
-                            <td><span class="status status-inactive">停用</span></td>
-                            <td class="action-buttons">
-                                <button class="edit-btn" onclick="openModal('addMemberModal', '編輯會員', {id: 'MEM003', name: '張三', email: 'chang.san@example.com', phone: '0988-765-432', status: 'inactive'})"><i class="fas fa-edit"></i> 編輯</button>
-                                <button class="delete-btn"><i class="fas fa-trash"></i> 刪除</button>
-                            </td>
-                        </tr>
+                    <tbody id="memberTableBody">
+                        <tr><td colspan="8" style="text-align:center; padding: 40px;">
+                            <div class="loading"></div> 載入中...
+                        </td></tr>
                     </tbody>
                 </table>
             </section>
 
-            <nav class="pagination">
-                <a href="#">&laquo; 上一頁</a>
-                <a href="#" class="active">1</a>
-                <a href="#">2</a>
-                <a href="#">3</a>
-                <a href="#">下一頁 &raquo;</a>
+             分頁導航 
+            <nav class="pagination" id="paginationNav">
+                <a href="#" onclick="loadMembers(1, 'prev')">&laquo; 上一頁</a>
+                <a href="#" class="active" onclick="loadMembers(1)">1</a>
+                <a href="#" onclick="loadMembers(2)">2</a>
+                <a href="#" onclick="loadMembers(3)">3</a>
+                <a href="#" onclick="loadMembers(1, 'next')">下一頁 &raquo;</a>
             </nav>
         </main>
     </div>
 
-    <!-- 新增/編輯會員模態框 -->
+     新增/編輯會員模態框 
     <div id="addMemberModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -817,16 +2214,32 @@
             <form id="memberForm">
                 <input type="hidden" id="memberId" name="memberId">
                 <div class="form-group">
-                    <label for="memberName">姓名:</label>
+                    <label for="memberName">姓名 *:</label>
                     <input type="text" id="memberName" name="memberName" required>
                 </div>
                 <div class="form-group">
-                    <label for="memberEmail">Email:</label>
+                    <label for="memberEmail">Email *:</label>
                     <input type="email" id="memberEmail" name="memberEmail" required>
                 </div>
                 <div class="form-group">
                     <label for="memberPhone">電話:</label>
                     <input type="tel" id="memberPhone" name="memberPhone">
+                </div>
+                <div class="form-group">
+                    <label for="memberAddress">地址:</label>
+                    <input type="text" id="memberAddress" name="memberAddress">
+                </div>
+                <div class="form-group">
+                    <label for="memberBirthday">生日:</label>
+                    <input type="date" id="memberBirthday" name="memberBirthday">
+                </div>
+                <div class="form-group">
+                    <label for="memberPoints">點數:</label>
+                    <input type="number" id="memberPoints" name="memberPoints" min="0" value="0">
+                </div>
+                <div class="form-group">
+                    <label for="memberPassword">密碼 (編輯時留空表示不修改):</label>
+                    <input type="password" id="memberPassword" name="memberPassword">
                 </div>
                 <div class="form-group">
                     <label for="memberStatus">狀態:</label>
@@ -837,15 +2250,17 @@
                 </div>
                 <div class="form-buttons">
                     <button type="button" class="cancel-btn" onclick="closeModal('addMemberModal')">取消</button>
-                    <button type="submit" class="save-btn">儲存</button>
+                    <button type="submit" class="save-btn" id="submitBtn">
+                        <span class="btn-text">儲存</span>
+                    </button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- 回收物品審核模態框 -->
+     回收物品審核模態框 
     <div id="recycleReviewModal" class="modal">
-        <div class="modal-content" style="width: 700px;">
+        <div class="modal-content" style="max-width: 700px;">
             <div class="modal-header">
                 <h2>回收物品審核</h2>
                 <button class="close-btn" onclick="closeModal('recycleReviewModal')">&times;</button>
@@ -892,10 +2307,10 @@
         </div>
     </div>
 
-    <!-- 新增登出確認對話框 -->
+     登出確認對話框 
     <div id="logoutConfirm" class="logout-confirm">
         <div class="logout-confirm-content">
-            <h3>確認登出</h3>
+            <h3><i class="fas fa-sign-out-alt" style="margin-right: 10px; color: var(--danger-color);"></i>確認登出</h3>
             <p>您確定要登出管理後台嗎？請確認您已保存所有變更。</p>
             <div class="logout-confirm-buttons">
                 <button class="logout-confirm-cancel" onclick="closeModal('logoutConfirm')">取消</button>
@@ -905,69 +2320,422 @@
     </div>
 
     <script>
-        if (localStorage.getItem('loggedIn') !== 'true') {
-            window.location.href = '/admin_login-page';
+        let currentPage = 1;
+        const pageSize = 10;
+        let totalPages = 1;
+        let searchQuery = '';
+
+        // 模擬資料庫數據
+        const mockDatabase = {
+            members: [
+                {
+                    id: 'MEM001',
+                    username: '陳大文',
+                    email: 'davidchen@example.com',
+                    phone: '0912-345-678',
+                    address: '台北市信義區信義路五段7號',
+                    birthday: '1990-05-15',
+                    points: 1250,
+                    status: 'active',
+                    created_at: '2025-01-15',
+                    password: 'hashed_password_1'
+                },
+                {
+                    id: 'MEM002',
+                    username: '林小美',
+                    email: 'meilin@example.com',
+                    phone: '0922-123-456',
+                    address: '新北市板橋區中山路一段161號',
+                    birthday: '1985-08-22',
+                    points: 890,
+                    status: 'active',
+                    created_at: '2025-02-20',
+                    password: 'hashed_password_2'
+                },
+                {
+                    id: 'MEM003',
+                    username: '張三',
+                    email: 'chang.san@example.com',
+                    phone: '0988-765-432',
+                    address: '台中市西屯區台灣大道三段99號',
+                    birthday: '1992-12-03',
+                    points: 0,
+                    status: 'inactive',
+                    created_at: '2025-04-05',
+                    password: 'hashed_password_3'
+                },
+                {
+                    id: 'MEM004',
+                    username: '王小明',
+                    email: 'xiaoming@example.com',
+                    phone: '0933-888-999',
+                    address: '高雄市前金區中正四路211號',
+                    birthday: '1988-03-18',
+                    points: 2100,
+                    status: 'active',
+                    created_at: '2025-03-10',
+                    password: 'hashed_password_4'
+                },
+                {
+                    id: 'MEM005',
+                    username: '李美華',
+                    email: 'meihua.li@example.com',
+                    phone: '0955-777-666',
+                    address: '台南市中西區民族路二段76號',
+                    birthday: '1995-07-25',
+                    points: 650,
+                    status: 'active',
+                    created_at: '2025-04-22',
+                    password: 'hashed_password_5'
+                }
+            ]
+        };
+
+        // 頁面載入時檢查登入狀態並載入數據
+        window.onload = function() {
+            console.log('[v0] 頁面載入，檢查登入狀態');
+            checkLoginStatus();
+            loadMembers(currentPage);
+            updatePendingReviewCount();
+        };
+
+        function checkLoginStatus() {
+            const isLoggedIn = localStorage.getItem('loggedIn');
+            console.log('[v0] 登入狀態:', isLoggedIn);
+            
+            if (isLoggedIn !== 'true') {
+                console.log('[v0] 未登入，重定向到登入頁面');
+                showNotification('請先登入管理後台', 'warning');
+                setTimeout(() => {
+                    window.location.href = '/admin_login-page';
+                }, 1500);
+                return false;
+            }
+            return true;
         }
 
-        // 側邊欄切換
-        document.getElementById('menuToggle').addEventListener('click', function() {
-            document.querySelector('.sidebar').classList.toggle('show');
-        });
-
-        function openModal(modalId, title, data = null) {
-            const modal = document.getElementById(modalId);
-            modal.classList.add('show');
+        async function loadMembers(page, action = '') {
+            console.log('[v0] 載入會員數據，頁面:', page, '動作:', action);
             
-            if (title && modalId === 'addMemberModal') {
-                document.getElementById('modalTitle').textContent = title;
-                
-                if (data) {
-                    document.getElementById('memberId').value = data.id || '';
-                    document.getElementById('memberName').value = data.name || '';
-                    document.getElementById('memberEmail').value = data.email || '';
-                    document.getElementById('memberPhone').value = data.phone || '';
-                    document.getElementById('memberStatus').value = data.status || 'active';
-                } else {
-                    document.getElementById('memberForm').reset();
+            if (action === 'prev' && currentPage > 1) {
+                currentPage--;
+            } else if (action === 'next' && currentPage < totalPages) {
+                currentPage++;
+            } else if (page && page > 0) {
+                currentPage = page;
+            }
+
+            try {
+                // 模擬 API 延遲
+                await new Promise(resolve => setTimeout(resolve, 500));
+
+                // 過濾搜尋結果
+                let filteredMembers = mockDatabase.members;
+                if (searchQuery) {
+                    filteredMembers = mockDatabase.members.filter(member => 
+                        member.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                        member.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                        member.phone.includes(searchQuery)
+                    );
                 }
+
+                // 計算分頁
+                totalPages = Math.ceil(filteredMembers.length / pageSize);
+                const startIndex = (currentPage - 1) * pageSize;
+                const endIndex = startIndex + pageSize;
+                const paginatedMembers = filteredMembers.slice(startIndex, endIndex);
+
+                console.log('[v0] 載入完成，會員數量:', paginatedMembers.length);
+
+                // 更新表格
+                const tbody = document.getElementById('memberTableBody');
+                tbody.innerHTML = '';
+
+                if (paginatedMembers.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding: 40px; color: #64748b;">沒有找到符合條件的會員</td></tr>';
+                } else {
+                    paginatedMembers.forEach(member => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td><strong>${member.id}</strong></td>
+                            <td>${member.username}</td>
+                            <td>${member.email}</td>
+                            <td>${member.phone || '-'}</td>
+                            <td>${member.created_at}</td>
+                            <td><strong>${member.points.toLocaleString()}</strong></td>
+                            <td>
+                                <span class="status status-${member.status}">
+                                    ${member.status === 'active' ? '活躍' : '停用'}
+                                </span>
+                            </td>
+                            <td class="action-buttons">
+                                <button class="edit-btn" onclick="editMember('${member.id}')">
+                                    <i class="fas fa-edit"></i> 編輯
+                                </button>
+                                <button class="delete-btn" onclick="deleteMember('${member.id}')">
+                                    <i class="fas fa-trash"></i> 刪除
+                                </button>
+                            </td>
+                        `;
+                        tbody.appendChild(row);
+                    });
+                }
+
+                updatePagination();
+                
+            } catch (error) {
+                console.error('[v0] 載入會員失敗：', error);
+                showNotification('載入會員數據失敗，請重試', 'error');
+                document.getElementById('memberTableBody').innerHTML = 
+                    '<tr><td colspan="8" style="text-align:center; color: var(--danger-color); padding: 40px;">載入失敗，請重試</td></tr>';
             }
         }
 
+        function searchMembers() {
+            searchQuery = document.getElementById('searchInput').value.trim();
+            console.log('[v0] 搜尋會員:', searchQuery);
+            currentPage = 1;
+            loadMembers(currentPage);
+        }
+
+        // 搜尋框回車事件
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchMembers();
+            }
+        });
+
+        function updatePagination() {
+            const pagination = document.getElementById('paginationNav');
+            let paginationHTML = '';
+
+            // 上一頁按鈕
+            paginationHTML += `<a href="#" onclick="loadMembers(${currentPage}, 'prev')" ${currentPage <= 1 ? 'style="opacity:0.5;pointer-events:none;"' : ''}>&laquo; 上一頁</a>`;
+
+            // 頁碼按鈕
+            for (let i = 1; i <= totalPages; i++) {
+                if (i === currentPage) {
+                    paginationHTML += `<a href="#" class="active" onclick="loadMembers(${i})">${i}</a>`;
+                } else {
+                    paginationHTML += `<a href="#" onclick="loadMembers(${i})">${i}</a>`;
+                }
+            }
+
+            // 下一頁按鈕
+            paginationHTML += `<a href="#" onclick="loadMembers(${currentPage}, 'next')" ${currentPage >= totalPages ? 'style="opacity:0.5;pointer-events:none;"' : ''}>下一頁 &raquo;</a>`;
+
+            pagination.innerHTML = paginationHTML;
+        }
+
+        function editMember(memberId) {
+            console.log('[v0] 編輯會員:', memberId);
+            const member = mockDatabase.members.find(m => m.id === memberId);
+            if (member) {
+                openModal('addMemberModal', '編輯會員', member);
+            }
+        }
+
+        function openModal(modalId, title, data = null) {
+            console.log('[v0] 打開模態框:', modalId, title);
+            
+            if (modalId === 'addMemberModal') {
+                document.getElementById('modalTitle').textContent = title;
+                const form = document.getElementById('memberForm');
+
+                if (data) {
+                    // 編輯模式
+                    document.getElementById('memberId').value = data.id;
+                    document.getElementById('memberName').value = data.username;
+                    document.getElementById('memberEmail').value = data.email;
+                    document.getElementById('memberPhone').value = data.phone || '';
+                    document.getElementById('memberAddress').value = data.address || '';
+                    document.getElementById('memberBirthday').value = data.birthday || '';
+                    document.getElementById('memberPoints').value = data.points || 0;
+                    document.getElementById('memberPassword').value = '';
+                    document.getElementById('memberStatus').value = data.status;
+                } else {
+                    // 新增模式
+                    form.reset();
+                    document.getElementById('memberId').value = '';
+                    document.getElementById('memberPoints').value = 0;
+                    document.getElementById('memberStatus').value = 'active';
+                }
+            }
+            
+            document.getElementById(modalId).classList.add('show');
+        }
+
         function closeModal(modalId) {
+            console.log('[v0] 關閉模態框:', modalId);
             document.getElementById(modalId).classList.remove('show');
         }
 
-        document.getElementById('memberForm').addEventListener('submit', function(e) {
+        document.getElementById('memberForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            alert('會員資料已儲存');
-            closeModal('addMemberModal');
+            console.log('[v0] 提交會員表單');
+
+            const submitBtn = document.getElementById('submitBtn');
+            const btnText = submitBtn.querySelector('.btn-text');
+            const originalText = btnText.textContent;
+
+            // 顯示載入狀態
+            btnText.innerHTML = '<div class="loading"></div> 處理中...';
+            submitBtn.disabled = true;
+
+            try {
+                const memberId = document.getElementById('memberId').value.trim();
+                const memberData = {
+                    username: document.getElementById('memberName').value.trim(),
+                    email: document.getElementById('memberEmail').value.trim(),
+                    phone: document.getElementById('memberPhone').value.trim(),
+                    address: document.getElementById('memberAddress').value.trim(),
+                    birthday: document.getElementById('memberBirthday').value,
+                    points: parseInt(document.getElementById('memberPoints').value) || 0,
+                    status: document.getElementById('memberStatus').value
+                };
+
+                const password = document.getElementById('memberPassword').value;
+                if (password) {
+                    memberData.password = password;
+                }
+
+                // 模擬 API 延遲
+                await new Promise(resolve => setTimeout(resolve, 1000));
+
+                if (memberId) {
+                    // 編輯現有會員
+                    const memberIndex = mockDatabase.members.findIndex(m => m.id === memberId);
+                    if (memberIndex !== -1) {
+                        mockDatabase.members[memberIndex] = {
+                            ...mockDatabase.members[memberIndex],
+                            ...memberData
+                        };
+                        showNotification('會員資料更新成功！', 'success');
+                    }
+                } else {
+                    // 新增會員
+                    const newId = 'MEM' + String(mockDatabase.members.length + 1).padStart(3, '0');
+                    const newMember = {
+                        id: newId,
+                        ...memberData,
+                        created_at: new Date().toISOString().split('T')[0],
+                        password: 'hashed_password_new'
+                    };
+                    mockDatabase.members.push(newMember);
+                    showNotification('新會員新增成功！', 'success');
+                }
+
+                closeModal('addMemberModal');
+                await loadMembers(currentPage);
+
+            } catch (error) {
+                console.error('[v0] 保存會員失敗：', error);
+                showNotification('操作失敗，請重試', 'error');
+            } finally {
+                // 恢復按鈕狀態
+                btnText.textContent = originalText;
+                submitBtn.disabled = false;
+            }
         });
 
-        // 登出功能
+        async function deleteMember(memberId) {
+            console.log('[v0] 刪除會員:', memberId);
+            
+            if (!confirm('確定要刪除這個會員嗎？此操作無法復原。')) {
+                return;
+            }
+
+            try {
+                // 模擬 API 延遲
+                await new Promise(resolve => setTimeout(resolve, 500));
+
+                const memberIndex = mockDatabase.members.findIndex(m => m.id === memberId);
+                if (memberIndex !== -1) {
+                    const memberName = mockDatabase.members[memberIndex].username;
+                    mockDatabase.members.splice(memberIndex, 1);
+                    showNotification(`會員 ${memberName} 已成功刪除`, 'success');
+                    await loadMembers(currentPage);
+                } else {
+                    showNotification('找不到指定的會員', 'error');
+                }
+
+            } catch (error) {
+                console.error('[v0] 刪除會員失敗：', error);
+                showNotification('刪除失敗，請重試', 'error');
+            }
+        }
+
+        function showNotification(message, type = 'success') {
+            console.log('[v0] 顯示通知:', message, type);
+            
+            // 移除現有通知
+            const existingNotification = document.querySelector('.notification');
+            if (existingNotification) {
+                existingNotification.remove();
+            }
+
+            // 創建新通知
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            // 顯示通知
+            setTimeout(() => notification.classList.add('show'), 100);
+
+            // 自動隱藏
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
         document.getElementById('logoutBtn').addEventListener('click', function(e) {
             e.preventDefault();
+            console.log('[v0] 點擊登出按鈕');
             openModal('logoutConfirm');
         });
 
         function performLogout() {
+            console.log('[v0] 執行登出');
+            showNotification('正在登出...', 'warning');
+            
+            // 清除登入狀態
             localStorage.removeItem('loggedIn');
-            window.location.href = '/admin_login-page';
+            localStorage.removeItem('adminUser');
+            
+            // 延遲跳轉，讓用戶看到通知
+            setTimeout(() => {
+                window.location.href = '/admin_login-page';
+            }, 1000);
         }
 
-        setTimeout(() => {
-            const pendingCount = 1;
-            const badge = document.getElementById('pendingReviewCount');
-            badge.textContent = pendingCount;
-            badge.style.display = 'inline-block';
-        }, 1000);
+        // 側邊欄切換
+        document.getElementById('menuToggle').addEventListener('click', function() {
+            console.log('[v0] 切換側邊欄');
+            document.querySelector('.sidebar').classList.toggle('show');
+        });
 
-        // 點擊回收審核連結
+        // 更新待審核數量
+        function updatePendingReviewCount() {
+            setTimeout(() => {
+                const pendingCount = 3; // 模擬待審核數量
+                const badge = document.getElementById('pendingReviewCount');
+                if (pendingCount > 0) {
+                    badge.textContent = pendingCount;
+                    badge.style.display = 'inline-block';
+                }
+            }, 1000);
+        }
+
+        // 回收審核功能
         document.getElementById('recycleReviewLink').addEventListener('click', function(e) {
             e.preventDefault();
+            console.log('[v0] 打開回收審核');
             openModal('recycleReviewModal');
         });
 
-        // 點擊外部關閉 modal
+        // 點擊外部關閉模態框
         window.addEventListener('click', function(e) {
             const modals = document.querySelectorAll('.modal.show');
             modals.forEach(modal => {
@@ -976,6 +2744,18 @@
                 }
             });
         });
+
+        // ESC 鍵關閉模態框
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const openModals = document.querySelectorAll('.modal.show');
+                openModals.forEach(modal => {
+                    modal.classList.remove('show');
+                });
+            }
+        });
+
+        console.log('[v0] 會員管理系統初始化完成');
     </script>
 </body>
-</html>
+</html> -->
