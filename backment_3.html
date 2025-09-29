@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>會員帳號管理 - 回收管理後台</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --background: #f9fafb;
+            --foreground: #111827;
+            --card: #ffffff;
+            --card-foreground: #111827;
+            --popover: #ffffff;
+            --popover-foreground: #111827;
+            --primary: #3b82f6;
+            --primary-foreground: #ffffff;
+            --secondary: #f3f4f6;
+            --secondary-foreground: #111827;
+            --muted: #f3f4f6;
+            --muted-foreground: #6b7280;
+            --accent: #f3f4f6;
+            --accent-foreground: #111827;
+            --destructive: #ef4444;
+            --destructive-foreground: #ffffff;
+            --success: #22c55e;
+            --success-foreground: #ffffff;
+            --warning: #f59e0b;
+            --warning-foreground: #ffffff;
+            --border: #e5e7eb;
+            --input: #ffffff;
+            --ring: #3b82f6;
+            --radius: 0.5rem;
+        }
+
+        /* 深色主題覆寫 */
+        [data-theme="dark"] {
+            --background: #0a0a0a;
+            --foreground: #fafafa;
+            --card: #1a1a1a;
+            --card-foreground: #fafafa;
+            --popover: #1a1a1a;
+            --popover-foreground: #fafafa;
+            --primary: #8b5cf6;
+            --primary-foreground: #fafafa;
+            --secondary: #262626;
+            --secondary-foreground: #fafafa;
+            --muted: #262626;
+            --muted-foreground: #a1a1aa;
+            --accent: #262626;
+            --accent-foreground: #fafafa;
+            --destructive: #ef4444;
+            --destructive-foreground: #fafafa;
+            --success: #22c55e;
+            --success-foreground: #fafafa;
+            --warning: #f59e0b;
+            --warning-foreground: #fafafa;
+            --border: #262626;
+            --input: #262626;
+            --ring: #8b5cf6;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background-color: var(--background);
+            color: var(--foreground);
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .container-fluid { display: flex; min-height: 100vh; }
+
+        /* 側邊欄 */
+        .sidebar {
+            width: 280px;
+            background: var(--card);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1000;
+            transition: transform 0.3s ease, background 0.3s ease;
+        }
+
+        .sidebar-header { padding: 24px 20px; border-bottom: 1px solid var(--border); }
+        .sidebar-header h3 { font-size: 1.25rem; font-weight: 600; color: var(--primary); display: flex; align-items: center; gap: 8px; }
+        .sidebar-header h3::before { content: "♻"; font-size: 1.5rem; }
+
+        .sidebar-menu { flex: 1; padding: 16px 0; }
+        .menu-item { display:flex; align-items:center; padding:12px 20px; color:var(--muted-foreground); text-decoration:none; transition:all .2s; margin:2px 12px; border-radius:var(--radius); }
+        .menu-item i { width:20px; margin-right:12px; }
+        .menu-item:hover { background:var(--accent); color:var(--accent-foreground); }
+        .menu-item.active { background:var(--primary); color:var(--primary-foreground); }
+
+        .badge { margin-left:auto; background-color:var(--warning); color:var(--warning-foreground); border-radius:10px; padding:2px 8px; font-size:0.75rem; font-weight:500; }
+        .sidebar-footer { padding:20px; text-align:center; font-size:0.75rem; color:var(--muted-foreground); border-top:1px solid var(--border); }
+
+        /* 內容 */
+        .content { flex:1; margin-left:280px; background-color:var(--background); }
+
+        /* header */
+        .header { background:var(--card); padding:16px 24px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:999; backdrop-filter:blur(8px); }
+        .menu-toggle { display:none; background:none; border:none; font-size:1.2rem; cursor:pointer; color:var(--foreground); padding:8px; border-radius:var(--radius); }
+        .menu-toggle:hover{ background:var(--accent); }
+        .header h1 { font-size:1.5rem; color:var(--foreground); font-weight:600; }
+
+        .search-box { display:flex; align-items:center; background:var(--input); border:1px solid var(--border); border-radius:var(--radius); padding:8px 12px; margin:0 20px; flex:1; max-width:400px; transition:border-color .2s; }
+        .search-box input { border:none; background:none; outline:none; flex:1; padding:4px; color:var(--foreground); }
+        .search-box input::placeholder{ color:var(--muted-foreground); }
+        .search-box button{ background:none; border:none; color:var(--muted-foreground); cursor:pointer; padding:4px; }
+        .search-box button:hover{ color:var(--foreground); }
+
+        .user-info{ display:flex; align-items:center; }
+        .user-info img{ width:32px; height:32px; border-radius:50%; margin-right:8px; }
+        .dropdown{ position:relative; }
+        .dropdown-toggle{ cursor:pointer; display:flex; align-items:center; padding:8px 12px; border-radius:var(--radius); transition:background .2s; color:var(--foreground); }
+        .dropdown:hover .dropdown-content{ display:block; }
+        .dropdown-content{ display:none; position:absolute; right:0; top:100%; background:var(--popover); min-width:180px; box-shadow:0 10px 25px rgba(0,0,0,0.08); border:1px solid var(--border); border-radius:var(--radius); z-index:1000; margin-top:4px; }
+        .dropdown-content a{ color:var(--popover-foreground); padding:12px 16px; text-decoration:none; display:flex; align-items:center; }
+        .dropdown-content a:hover{ background:var(--accent); }
+
+        /* 統計卡片 */
+        .stats-cards{ display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:24px; padding:24px; }
+        .card{ background:var(--card); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; transition:all .2s; }
+        .card:hover{ border-color:var(--primary); box-shadow:0 8px 25px rgba(59,130,246,0.06); }
+        .stat-card{ padding:24px; display:flex; align-items:center; }
+
+        /* 表格 */
+        .table-container{ margin:0 24px 24px; background:var(--card); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; }
+        .table-header{ display:flex; justify-content:space-between; align-items:center; padding:20px 24px; border-bottom:1px solid var(--border); }
+        .table-header h2{ margin:0; font-size:1.25rem; font-weight:600; color:var(--foreground); }
+        .table-actions{ display:flex; gap:12px; }
+        .table-wrapper{ overflow-x:auto; }
+        table{ width:100%; border-collapse:collapse; }
+        th, td{ padding:16px; text-align:left; border-bottom:1px solid var(--border); }
+        th{ background-color:var(--muted); font-weight:600; color:var(--foreground); font-size:.875rem; text-transform:uppercase; letter-spacing:.025em; }
+        td{ color:var(--card-foreground); }
+        tr:hover{ background:var(--accent); }
+
+        .status{ padding:4px 12px; border-radius:9999px; font-size:.75rem; font-weight:500; text-transform:uppercase; letter-spacing:.025em; }
+        .status-active{ background-color:rgba(34,197,94,0.1); color:var(--success); border:1px solid rgba(34,197,94,0.2); }
+        .status-inactive{ background-color:rgba(239,68,68,0.1); color:var(--destructive); border:1px solid rgba(239,68,68,0.2); }
+        .status-pending{ background-color:rgba(245,158,11,0.1); color:var(--warning); border:1px solid rgba(245,158,11,0.2); }
+
+        .action-buttons{ display:flex; gap:8px; }
+        .btn{ padding:8px 16px; border:none; border-radius:var(--radius); cursor:pointer; font-size:.875rem; font-weight:500; display:inline-flex; align-items:center; gap:6px; }
+        .btn-primary{ background:var(--primary); color:var(--primary-foreground); }
+        .btn-primary:hover{ filter:brightness(.95); }
+        .btn-secondary{ background:var(--secondary); color:var(--secondary-foreground); border:1px solid var(--border); }
+        .btn-secondary:hover{ background:var(--accent); }
+        .btn-destructive{ background:var(--destructive); color:var(--destructive-foreground); }
+        .btn-success{ background:var(--success); color:var(--success-foreground); }
+
+        /* 分頁 */
+        .pagination{ display:flex; justify-content:center; align-items:center; margin:24px 0; gap:8px; }
+        .pagination a{ color:var(--muted-foreground); padding:8px 12px; text-decoration:none; border:1px solid var(--border); border-radius:var(--radius); font-size:.875rem; }
+        .pagination a:hover{ background:var(--accent); color:var(--foreground); }
+        .pagination a.active{ background:var(--primary); color:var(--primary-foreground); border-color:var(--primary); }
+
+        /* 模態 */
+        .modal{ display:none; position:fixed; z-index:2000; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.5); backdrop-filter:blur(4px); }
+        .modal.show{ display:flex; align-items:center; justify-content:center; }
+        .modal-content{ background:var(--card); border:1px solid var(--border); border-radius:var(--radius); width:90%; max-width:700px; max-height:90vh; overflow-y:auto; box-shadow:0 25px 50px rgba(0,0,0,0.08); }
+        .modal-header{ padding:24px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; }
+        .modal-header h2{ margin:0; color:var(--foreground); font-size:1.25rem; font-weight:600; }
+        .close-btn{ background:none; border:none; font-size:1.5rem; cursor:pointer; color:var(--muted-foreground); padding:4px; border-radius:var(--radius); }
+        .close-btn:hover{ color:var(--foreground); }
+        .form-group{ margin-bottom:20px; }
+        .form-group label{ display:block; margin-bottom:8px; font-weight:500; color:var(--foreground); font-size:.875rem; }
+        .form-group input, .form-group select{ width:100%; padding:12px; border:1px solid var(--border); border-radius:var(--radius); font-size:.875rem; background:var(--input); color:var(--foreground); }
+        .form-buttons{ display:flex; justify-content:flex-end; gap:12px; padding:24px; border-top:1px solid var(--border); }
+
+        /* 載入動畫 & 通知 */
+        .loading{ display:inline-block; width:20px; height:20px; border:2px solid var(--muted); border-radius:50%; border-top-color:var(--primary); animation:spin 1s linear infinite; }
+        @keyframes spin { to{ transform:rotate(360deg); } }
+        .notification{ position:fixed; top:20px; right:20px; padding:16px 20px; border-radius:var(--radius); color:white; font-weight:500; z-index:3000; transform:translateX(100%); transition:transform .3s ease; }
+        .notification.show{ transform:translateX(0); }
+        .notification.success{ background:var(--success); }
+        .notification.error{ background:var(--destructive); }
+        .notification.warning{ background:var(--warning); }
+
+        /* 響應式 */
+        @media (max-width:1024px){ .content{ margin-left:0; } }
+        @media (max-width:768px){ .sidebar{ transform:translateX(-100%); } .sidebar.show{ transform:translateX(0); box-shadow:0 8px 25px rgba(0,0,0,0.12); } .menu-toggle{ display:block; } .stats-cards{ grid-template-columns:1fr; padding:16px; } .table-container{ margin:0 16px 16px; } .search-box{ max-width:100%; } .table-actions, .action-buttons{ flex-direction:column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h3>回收管理後台</h3>
+            </div>
+            <nav class="sidebar-menu">
+                <a href="dashboard-home.html" class="menu-item">
+                    <i class="fas fa-home"></i>
+                    <span>主控台</span>
+                </a>
+                <a href="member-management.html" class="menu-item active">
+                    <i class="fas fa-users"></i>
+                    <span>會員帳號管理</span>
+                </a>
+                <a href="#" class="menu-item">
+                    <i class="fas fa-box-open"></i>
+                    <span>會員訂單管理</span>
+                </a>
+                <a href="#" class="menu-item">
+                    <i class="fas fa-coins"></i>
+                    <span>點數管理</span>
+                </a>
+                <a href="#" class="menu-item" id="recycleReviewLink">
+                    <i class="fas fa-recycle"></i>
+                    <span>回收瓶審核</span>
+                    <span class="badge" id="pendingReviewCount" style="display:none;">0</span>
+                </a>
+                <a href="/db-management-page" class="menu-item">
+                    <i class="fas fa-database"></i>
+                    <span>資料庫管理</span>
+                </a>
+                <a href="#" class="menu-item">
+                    <i class="fas fa-cogs"></i>
+                    <span>系統設定</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">&copy; 2025 回收系統</div>
+        </aside>
+
+        <main class="content">
+            <header class="header">
+                <div style="display:flex; align-items:center; gap:12px;">
+                    <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
+                    <h1>會員帳號管理</h1>
+                </div>
+
+                <div style="display:flex; align-items:center; gap:12px; flex:1; justify-content:flex-end;">
+                    <div class="search-box">
+                        <input type="text" placeholder="搜尋會員..." id="searchInput">
+                        <button type="button" onclick="searchMembers()"><i class="fas fa-search"></i></button>
+                    </div>
+
+                    <button class="theme-toggle btn" id="themeToggle" title="切換主題"><i class="fas fa-sun"></i></button>
+
+                    <div class="user-info">
+                        <img src="https://via.placeholder.com/32" alt="User Avatar">
+                        <div class="dropdown">
+                            <div class="dropdown-toggle">
+                                <span>管理員</span> <i class="fas fa-chevron-down" style="font-size:0.75em; margin-left:6px;"></i>
+                            </div>
+                            <div class="dropdown-content">
+                                <a href="#"><i class="fas fa-user-circle"></i> 個人資料</a>
+                                <a href="#"><i class="fas fa-cog"></i> 設定</a>
+                                <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> 登出</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <section class="table-container">
+                <div class="table-header">
+                    <h2>會員列表</h2>
+                    <div class="table-actions">
+                        <button class="btn btn-secondary" onclick="window.location.href='/create-account-page'">
+                            <i class="fas fa-user-plus"></i> 建立帳號
+                        </button>
+                        <button class="btn btn-secondary" onclick="window.location.href='/db-management-page'">
+                            <i class="fas fa-database"></i> 資料庫管理
+                        </button>
+                        <button class="btn btn-primary" onclick="openModal('addMemberModal', '新增會員')">
+                            <i class="fas fa-plus"></i> 新增會員
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>會員ID</th>
+                                <th>姓名</th>
+                                <th>Email</th>
+                                <th>電話</th>
+                                <th>註冊日期</th>
+                                <th>點數</th>
+                                <th>狀態</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="memberTableBody">
+                            <tr><td colspan="8" style="text-align:center; padding:40px;"><div class="loading"></div> 載入中...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <nav class="pagination" id="paginationNav">
+                <!-- pagination buttons will be rendered here -->
+            </nav>
+        </main>
+    </div>
+
+    <!-- 新增/編輯會員模態框 -->
+    <div id="addMemberModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">新增會員</h2>
+                <button class="close-btn" onclick="closeModal('addMemberModal')">&times;</button>
+            </div>
+            <form id="memberForm">
+                <input type="hidden" id="memberId" name="memberId">
+                <div style="padding:24px;">
+                    <div class="form-group">
+                        <label for="memberName">姓名 *:</label>
+                        <input type="text" id="memberName" name="memberName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="memberEmail">Email *:</label>
+                        <input type="email" id="memberEmail" name="memberEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="memberPhone">電話:</label>
+                        <input type="tel" id="memberPhone" name="memberPhone">
+                    </div>
+                    <div class="form-group">
+                        <label for="memberAddress">地址:</label>
+                        <input type="text" id="memberAddress" name="memberAddress">
+                    </div>
+                    <div class="form-group">
+                        <label for="memberBirthday">生日:</label>
+                        <input type="date" id="memberBirthday" name="memberBirthday">
+                    </div>
+                    <div class="form-group">
+                        <label for="memberPoints">點數:</label>
+                        <input type="number" id="memberPoints" name="memberPoints" min="0" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="memberPassword">密碼 (編輯時留空表示不修改):</label>
+                        <input type="password" id="memberPassword" name="memberPassword">
+                    </div>
+                    <div class="form-group">
+                        <label for="memberStatus">狀態:</label>
+                        <select id="memberStatus" name="memberStatus">
+                            <option value="active">活躍</option>
+                            <option value="inactive">停用</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-buttons">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('addMemberModal')">取消</button>
+                    <button type="submit" class="btn btn-primary" id="submitBtn"><span class="btn-text">儲存</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 回收審核模態框 -->
+    <div id="recycleReviewModal" class="modal">
+        <div class="modal-content" style="max-width:700px;">
+            <div class="modal-header">
+                <h2>回收物品審核</h2>
+                <button class="close-btn" onclick="closeModal('recycleReviewModal')">&times;</button>
+            </div>
+            <div id="recycleReviewContent" style="padding:24px;">
+                <!-- example content -->
+                <div class="review-item">
+                    <div class="review-item-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                        <div class="review-item-title">回收記錄 #REC001</div>
+                        <div class="review-item-date">2025-05-06 14:30</div>
+                    </div>
+                    <div class="review-item-content" style="display:flex; gap:16px;">
+                        <div><img src="https://via.placeholder.com/300x200?text=回收物品照片" alt="回收物品" style="max-width:300px; border-radius:8px;" /></div>
+                        <div class="review-item-details">
+                            <div style="margin-bottom:8px;"><strong>會員ID:</strong> MEM001</div>
+                            <div style="margin-bottom:8px;"><strong>會員姓名:</strong> 陳大文</div>
+                            <div style="margin-bottom:8px;"><strong>AI辨識結果:</strong> 寶特瓶 (500ml)</div>
+                            <div style="margin-bottom:8px;"><strong>數量:</strong> 3</div>
+                            <div style="margin-bottom:8px;"><strong>預估點數:</strong> 15</div>
+                        </div>
+                    </div>
+                    <div style="margin-top:16px; display:flex; gap:12px; justify-content:flex-end;">
+                        <button class="btn btn-destructive reject-btn"><i class="fas fa-times"></i> 拒絕</button>
+                        <button class="btn btn-success approve-btn"><i class="fas fa-check"></i> 核准</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 登出確認 -->
+    <div id="logoutConfirm" class="modal">
+        <div class="logout-confirm-content" style="background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:32px; max-width:400px; text-align:center; box-shadow:0 25px 50px rgba(0,0,0,0.08); margin:auto;">
+            <h3 style="color:var(--foreground); margin-bottom:16px; font-size:1.25rem;"><i class="fas fa-sign-out-alt" style="margin-right:10px; color:var(--destructive);"></i> 確認登出</h3>
+            <p style="color:var(--muted-foreground); margin-bottom:24px;">您確定要登出管理後台嗎？請確認您已保存所有變更。</p>
+            <div style="display:flex; gap:12px; justify-content:center;">
+                <button class="btn btn-secondary" onclick="closeModal('logoutConfirm')">取消</button>
+                <button class="btn btn-destructive" onclick="performLogout()">確認登出</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="notification" class="notification"></div>
+
+    <script>
+        // ----- Theme toggle -----
+        const themeToggleBtn = document.getElementById('themeToggle');
+        function setThemeIcon() {
+            if (!themeToggleBtn) return;
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            themeToggleBtn.innerHTML = isDark ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+        }
+
+        if (themeToggleBtn) {
+            themeToggleBtn.addEventListener('click', () => {
+                if (document.documentElement.getAttribute('data-theme') === 'dark') {
+                    document.documentElement.removeAttribute('data-theme');
+                    localStorage.setItem('theme', 'light');
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                    localStorage.setItem('theme', 'dark');
+                }
+                setThemeIcon();
+            });
+        }
+
+        (function(){
+            const saved = localStorage.getItem('theme');
+            if (saved === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+            setThemeIcon();
+        })();
+
+        // ----- Member management logic -----
+        let currentPage = 1;
+        const pageSize = 10;
+        let totalPages = 1;
+        let searchQuery = '';
+
+        const mockDatabase = {
+            members: [
+                { id: 1, username: 'testuser', email: '', phone: '', address: '', birthday: '', points: 100, status: 'active', created_at: '2025-01-01', password: 'hashed_password_here' },
+                { id: 2, username: 'eva', email: '', phone: '', address: '', birthday: '', points: 100, status: 'active', created_at: '2025-01-02', password: 'pbkdf2:sha256:260000$FTUs5SOMbnXosCe1$edb63c296405a7fcd99c65060cb8478946e89ff5653f518a59acbd622a177c1f' },
+                { id: 4, username: 'wei', email: '', phone: '', address: '', birthday: '', points: 100, status: 'active', created_at: '2025-01-03', password: 'pbkdf2:sha256:260000$HJNQp0Gn404XgleX$7a7d8e872b9459fcc128a2a902b9f09520455f69a58f1d06f196b1cdfe0f176e' },
+                { id: 6, username: 'alicechen', email: 'alice.chen@example.com', phone: '0912345678', address: '台北市大安區仁愛路100號', birthday: '1998-05-21', points: 100, status: 'active', created_at: '2025-01-04', password: 'pass1234' },
+                { id: 7, username: 'brianlin', email: 'brian.lin@example.com', phone: '0923456789', address: '新北市板橋區文化路200號', birthday: '1995-12-03', points: 100, status: 'active', created_at: '2025-01-05', password: 'hello5678' },
+                { id: 8, username: 'cindywang', email: 'cindy.wang@example.com', phone: '0934567890', address: '桃園市中壢區中央西路10號', birthday: '2000-01-15', points: 100, status: 'active', created_at: '2025-01-06', password: 'abc9999' },
+                { id: 9, username: 'davidwu', email: 'david.wu@example.com', phone: '0966123456', address: '台中市西屯區台灣大道三段300號', birthday: '1992-07-09', points: 100, status: 'active', created_at: '2025-01-07', password: 'qwerty88' },
+                { id: 10, username: 'emilyliu', email: 'emily.liu@example.com', phone: '0955123456', address: '高雄市左營區自由三路90號', birthday: '1997-03-30', points: 100, status: 'active', created_at: '2025-01-08', password: 'test5678' },
+                { id: 11, username: 'frankchou', email: 'frank.chou@example.com', phone: '0987654321', address: '基隆市仁愛區愛三路8號', birthday: '1994-10-12', points: 100, status: 'active', created_at: '2025-01-09', password: 'pass9999' },
+                { id: 12, username: 'gracehuang', email: 'grace.huang@example.com', phone: '0911222333', address: '新竹市東區光復路二段25號', birthday: '1999-11-11', points: 100, status: 'active', created_at: '2025-01-10', password: 'iloveu11' },
+                { id: 13, username: 'henrykao', email: 'henry.kao@example.com', phone: '0933111222', address: '台南市中西區民生路一段66號', birthday: '1993-06-05', points: 100, status: 'active', created_at: '2025-01-11', password: 'hello000' },
+                { id: 14, username: 'ivytsai', email: 'ivy.tsai@example.com', phone: '0977555666', address: '宜蘭縣羅東鎮中山路88號', birthday: '2001-08-17', points: 100, status: 'active', created_at: '2025-01-12', password: 'mypwd333' },
+                { id: 15, username: 'jasonlee', email: 'jason.lee@example.com', phone: '0966888999', address: '花蓮縣花蓮市中正路5號', birthday: '1990-09-23', points: 100, status: 'active', created_at: '2025-01-13', password: 'passpass' },
+                { id: 16, username: '001', email: 'evaluyiwei@gmail.com', phone: '0932899099', address: 'kh', birthday: '2025-04-15', points: 100, status: 'active', created_at: '2025-01-14', password: 'pbkdf2:sha256:260000$VCunSTVIE7okXcAC$c1636d54872848fd88372f5f4612c7dfeb99bccccc1c41548e72e33c85aee405' },
+                { id: 17, username: '002', email: '11336024@ntub.edu.tw', phone: '0932899099', address: 'kh', birthday: '2025-04-03', points: 100, status: 'active', created_at: '2025-01-15', password: 'pbkdf2:sha256:260000$8iEQG6BX0u4aag5F$7fc8b25ab7d860277a8f475eb940db982877a526ef61cd6bda9b000112fa3c34' },
+                { id: 18, username: '003', email: '10856034@ntub.edu.tw', phone: '0932899099', address: 'kh', birthday: '2025-04-08', points: 100, status: 'active', created_at: '2025-01-16', password: '$2b$12$yfS.PrfW14WADJ0fKT5FMu/8m8Ebj9gY9fKrDncHDLTsmxBnmoUKG' },
+                { id: 19, username: '004', email: 'eva@gmail.com', phone: '0932899099', address: 'kh', birthday: '2025-04-17', points: 100, status: 'active', created_at: '2025-01-17', password: '$2b$12$4102kfbnGe4.n34ow7ZIUOzYlYTKoUcyQWmfKdjs8Zol4BCiJsirq' },
+                { id: 20, username: '005', email: 'test005@example.com', phone: '0932899099', address: 'kh', birthday: '2025-04-18', points: 100, status: 'active', created_at: '2025-01-18', password: '$2b$12$Y6Hkx...' },
+                { id: 21, username: '006', email: 'test006@example.com', phone: '0932899099', address: 'kh', birthday: '2025-04-19', points: 100, status: 'active', created_at: '2025-01-19', password: '$2b$12$...' },
+                { id: 22, username: '007', email: 'test007@example.com', phone: '0932899099', address: 'kh', birthday: '2025-04-20', points: 100, status: 'active', created_at: '2025-01-20', password: '$2b$12$...' },
+                { id: 23, username: '008', email: 'test008@example.com', phone: '0932899099', address: 'kh', birthday: '2025-04-21', points: 100, status: 'active', created_at: '2025-01-21', password: '$2b$12$...' },
+                { id: 24, username: '009', email: 'test009@example.com', phone: '0932899099', address: 'kh', birthday: '2025-04-22', points: 100, status: 'active', created_at: '2025-01-22', password: '$2b$12$...' },
+                { id: 25, username: '010', email: 'test010@example.com', phone: '0932899099', address: 'kh', birthday: '2025-04-23', points: 100, status: 'active', created_at: '2025-01-23', password: '$2b$12$...' },
+                { id: 26, username: '011', email: 'test011@example.com', phone: '0932899099', address: 'kh', birthday: '2025-04-24', points: 100, status: 'active', created_at: '2025-01-24', password: '$2b$12$...' }
+            ]
+        };
+
+        // 頁面載入
+        window.onload = () => {
+            console.log('[v0] 頁面載入，檢查登入狀態');
+            checkLoginStatus();
+            loadMembers(currentPage);
+            updatePendingReviewCount();
+        };
+
+        function checkLoginStatus() {
+            const isLoggedIn = localStorage.getItem('loggedIn');
+            console.log('[v0] 登入狀態:', isLoggedIn);
+            if (isLoggedIn !== 'true') {
+                console.log('[v0] 未登入，重定向到登入頁面');
+                showNotification('請先登入管理後台', 'warning');
+                setTimeout(() => { window.location.href = '/admin_login-page'; }, 1500);
+                return false;
+            }
+            return true;
+        }
+
+        // 載入會員數據
+        async function loadMembers(page, action = '') {
+            console.log('[v0] 載入會員數據，頁面:', page, '動作:', action);
+            if (action === 'prev' && currentPage > 1) { currentPage--; }
+            else if (action === 'next' && currentPage < totalPages) { currentPage++; }
+            else if (page && page > 0) { currentPage = page; }
+
+            try {
+                // 模擬 API 延遲
+                await new Promise(resolve => setTimeout(resolve, 300));
+
+                // 過濾搜尋結果
+                let filteredMembers = mockDatabase.members;
+                if (searchQuery) {
+                    filteredMembers = mockDatabase.members.filter(member => 
+                        (member.username || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+                        (member.email || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+                        (member.phone || '').includes(searchQuery)
+                    );
+                }
+
+                // 計算分頁
+                totalPages = Math.max(1, Math.ceil(filteredMembers.length / pageSize));
+                if (currentPage > totalPages) currentPage = totalPages;
+                const startIndex = (currentPage - 1) * pageSize;
+                const endIndex = startIndex + pageSize;
+                const paginatedMembers = filteredMembers.slice(startIndex, endIndex);
+
+                console.log('[v0] 載入完成，會員數量:', paginatedMembers.length);
+
+                // 更新表格
+                const tbody = document.getElementById('memberTableBody');
+                tbody.innerHTML = '';
+
+                if (paginatedMembers.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding: 40px; color: #64748b;">沒有找到符合條件的會員</td></tr>';
+                } else {
+                    paginatedMembers.forEach(member => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `\n                            <td><strong>${member.id}</strong></td>\n                            <td>${member.username}</td>\n                            <td>${member.email || '-'}</td>\n                            <td>${member.phone || '-'}</td>\n                            <td>${member.created_at}</td>\n                            <td><strong>${member.points.toLocaleString()}</strong></td>\n                            <td>\n                                <span class="status status-${member.status}">\n                                    ${member.status === 'active' ? '活躍' : '停用'}\n                                </span>\n                            </td>\n                            <td class="action-buttons">\n                                <button class="btn btn-secondary" onclick="editMember('${member.id}')">\n                                    <i class="fas fa-edit"></i> 編輯\n                                </button>\n                                <button class="btn btn-destructive" onclick="deleteMember('${member.id}')">\n                                    <i class="fas fa-trash"></i> 刪除\n                                </button>\n                            </td>\n                        `;
+                        tbody.appendChild(row);
+                    });
+                }
+
+                updatePagination();
+            } catch (error) {
+                console.error('[v0] 載入會員失敗：', error);
+                showNotification('載入會員數據失敗，請重試', 'error');
+                document.getElementById('memberTableBody').innerHTML = '<tr><td colspan="8" style="text-align:center; color: var(--destructive); padding: 40px;">載入失敗，請重試</td></tr>';
+            }
+        }
+
+        function searchMembers() {
+            searchQuery = document.getElementById('searchInput').value.trim();
+            console.log('[v0] 搜尋會員:', searchQuery);
+            currentPage = 1;
+            loadMembers(currentPage);
+        }
+
+        // 搜尋框回車事件
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') { searchMembers(); }
+        });
+
+        function updatePagination() {
+            const pagination = document.getElementById('paginationNav');
+            let paginationHTML = '';
+
+            paginationHTML += `<a href="#" onclick="loadMembers(${currentPage}, 'prev')" ${currentPage <= 1 ? 'style="opacity:0.5;pointer-events:none;"' : ''}>&laquo; 上一頁</a>`;
+
+            for (let i = 1; i <= totalPages; i++) {
+                if (i === currentPage) {
+                    paginationHTML += `<a href="#" class="active" onclick="loadMembers(${i})">${i}</a>`;
+                } else {
+                    paginationHTML += `<a href="#" onclick="loadMembers(${i})">${i}</a>`;
+                }
+            }
+
+            paginationHTML += `<a href="#" onclick="loadMembers(${currentPage}, 'next')" ${currentPage >= totalPages ? 'style="opacity:0.5;pointer-events:none;"' : ''}>下一頁 &raquo;</a>`;
+
+            pagination.innerHTML = paginationHTML;
+        }
+
+        function editMember(memberId) {
+            console.log('[v0] 編輯會員:', memberId);
+            const member = mockDatabase.members.find(m => m.id === parseInt(memberId));
+            if (member) openModal('addMemberModal', '編輯會員', member);
+        }
+
+        function openModal(modalId, title, data = null) {
+            console.log('[v0] 打開模態框:', modalId, title);
+            if (modalId === 'addMemberModal') {
+                document.getElementById('modalTitle').textContent = title;
+                const form = document.getElementById('memberForm');
+                if (data) {
+                    document.getElementById('memberId').value = data.id;
+                    document.getElementById('memberName').value = data.username;
+                    document.getElementById('memberEmail').value = data.email;
+                    document.getElementById('memberPhone').value = data.phone || '';
+                    document.getElementById('memberAddress').value = data.address || '';
+                    document.getElementById('memberBirthday').value = data.birthday || '';
+                    document.getElementById('memberPoints').value = data.points || 0;
+                    document.getElementById('memberPassword').value = '';
+                    document.getElementById('memberStatus').value = data.status;
+                } else {
+                    form.reset();
+                    document.getElementById('memberId').value = '';
+                    document.getElementById('memberPoints').value = 0;
+                    document.getElementById('memberStatus').value = 'active';
+                }
+            }
+            document.getElementById(modalId).classList.add('show');
+        }
+
+        function closeModal(modalId) { document.getElementById(modalId).classList.remove('show'); }
+
+        document.getElementById('memberForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            console.log('[v0] 提交會員表單');
+
+            const submitBtn = document.getElementById('submitBtn');
+            const btnText = submitBtn.querySelector('.btn-text');
+            const originalText = btnText.textContent;
+
+            btnText.innerHTML = '<div class="loading"></div> 處理中...';
+            submitBtn.disabled = true;
+
+            try {
+                const memberId = document.getElementById('memberId').value.trim();
+                const memberData = {
+                    username: document.getElementById('memberName').value.trim(),
+                    email: document.getElementById('memberEmail').value.trim(),
+                    phone: document.getElementById('memberPhone').value.trim(),
+                    address: document.getElementById('memberAddress').value.trim(),
+                    birthday: document.getElementById('memberBirthday').value,
+                    points: parseInt(document.getElementById('memberPoints').value) || 0,
+                    status: document.getElementById('memberStatus').value
+                };
+
+                const password = document.getElementById('memberPassword').value;
+                if (password) memberData.password = password;
+
+                await new Promise(resolve => setTimeout(resolve, 800));
+
+                if (memberId) {
+                    const idx = mockDatabase.members.findIndex(m => m.id === parseInt(memberId));
+                    if (idx !== -1) {
+                        mockDatabase.members[idx] = { ...mockDatabase.members[idx], ...memberData };
+                        showNotification('會員資料更新成功！', 'success');
+                    }
+                } else {
+                    const newId = mockDatabase.members.length > 0 ? Math.max(...mockDatabase.members.map(m => m.id)) + 1 : 1;
+                    const newMember = { id: newId, ...memberData, created_at: new Date().toISOString().split('T')[0], password: 'hashed_password_new' };
+                    mockDatabase.members.push(newMember);
+                    showNotification('新會員新增成功！', 'success');
+                }
+
+                closeModal('addMemberModal');
+                await loadMembers(currentPage);
+            } catch (error) {
+                console.error('[v0] 保存會員失敗：', error);
+                showNotification('操作失敗，請重試', 'error');
+            } finally {
+                btnText.textContent = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+
+        async function deleteMember(memberId) {
+            console.log('[v0] 刪除會員:', memberId);
+            if (!confirm('確定要刪除這個會員嗎？此操作無法復原。')) return;
+            try {
+                await new Promise(resolve => setTimeout(resolve, 400));
+                const memberIndex = mockDatabase.members.findIndex(m => m.id === parseInt(memberId));
+                if (memberIndex !== -1) {
+                    const memberName = mockDatabase.members[memberIndex].username;
+                    mockDatabase.members.splice(memberIndex, 1);
+                    showNotification(`會員 ${memberName} 已成功刪除`, 'success');
+                    await loadMembers(currentPage);
+                } else showNotification('找不到指定的會員', 'error');
+            } catch (error) {
+                console.error('[v0] 刪除會員失敗：', error);
+                showNotification('刪除失敗，請重試', 'error');
+            }
+        }
+
+        // 通知
+        function showNotification(message, type = 'success') {
+            const el = document.getElementById('notification');
+            if (!el) return;
+            el.textContent = message;
+            el.className = `notification ${type}`;
+            el.classList.add('show');
+            setTimeout(() => { el.classList.remove('show'); }, 3000);
+        }
+
+        // 登出
+        document.getElementById('logoutBtn').addEventListener('click', function(e) { e.preventDefault(); openModal('logoutConfirm'); });
+        function performLogout() {
+            showNotification('正在登出...', 'warning');
+            localStorage.removeItem('loggedIn');
+            localStorage.removeItem('adminUser');
+            setTimeout(() => { window.location.href = '/admin_login-page'; }, 800);
+        }
+
+        // 側邊欄切換
+        document.getElementById('menuToggle').addEventListener('click', function() { document.querySelector('.sidebar').classList.toggle('show'); });
+
+        // 待審核數量
+        function updatePendingReviewCount() { setTimeout(() => {
+            const pendingCount = 3; const badge = document.getElementById('pendingReviewCount'); if (badge) { if (pendingCount > 0) { badge.textContent = pendingCount; badge.style.display = 'inline-block'; } }
+        }, 600); }
+
+        // 回收審核
+        document.getElementById('recycleReviewLink').addEventListener('click', function(e) { e.preventDefault(); openModal('recycleReviewModal'); });
+
+        // 點擊背景關閉模態框
+        window.addEventListener('click', function(e) { const modals = document.querySelectorAll('.modal.show'); modals.forEach(modal => { if (e.target === modal) modal.classList.remove('show'); }); });
+
+        // ESC 關閉
+        document.addEventListener('keydown', function(e) { if (e.key === 'Escape') { document.querySelectorAll('.modal.show').forEach(m => m.classList.remove('show')); } });
+
+        console.log('[v0] 會員管理系統初始化完成');
+    </script>
+</body>
+</html>

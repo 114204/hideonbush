@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>會員帳號管理 - 回收管理後台</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --background: #0a0a0a;
+            --foreground: #fafafa;
+            --card: #1a1a1a;
+            --card-foreground: #fafafa;
+            --popover: #1a1a1a;
+            --popover-foreground: #fafafa;
+            --primary: #8b5cf6;
+            --primary-foreground: #fafafa;
+            --secondary: #262626;
+            --secondary-foreground: #fafafa;
+            --muted: #262626;
+            --muted-foreground: #a1a1aa;
+            --accent: #262626;
+            --accent-foreground: #fafafa;
+            --destructive: #ef4444;
+            --destructive-foreground: #fafafa;
+            --success: #22c55e;
+            --success-foreground: #fafafa;
+            --warning: #f59e0b;
+            --warning-foreground: #fafafa;
+            --border: #262626;
+            --input: #262626;
+            --ring: #8b5cf6;
+            --radius: 0.5rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background-color: var(--background);
+            color: var(--foreground);
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .container-fluid {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* 側邊欄樣式 */
+        .sidebar {
+            width: 280px;
+            background: var(--card);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-header {
+            padding: 24px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .sidebar-header h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .sidebar-header h3::before {
+            content: "♻";
+            font-size: 1.5rem;
+        }
+
+        .sidebar-menu {
+            flex: 1;
+            padding: 16px 0;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: var(--muted-foreground);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            border-radius: 0;
+        }
+
+        .menu-item:hover {
+            background: var(--secondary);
+            color: var(--foreground);
+        }
+
+        .menu-item.active {
+            background: var(--primary);
+            color: var(--primary-foreground);
+        }
+
+        .menu-item i {
+            width: 20px;
+            margin-right: 12px;
+        }
+
+        .sidebar-footer {
+            padding: 20px;
+            border-top: 1px solid var(--border);
+            color: var(--muted-foreground);
+            font-size: 0.875rem;
+            text-align: center;
+        }
+
+        /* 主內容區域 */
+        .content {
+            flex: 1;
+            margin-left: 280px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: var(--card);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--foreground);
+            font-size: 1.25rem;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            flex: 1;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: var(--input);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        .search-box input {
+            background: none;
+            border: none;
+            padding: 8px 12px;
+            color: var(--foreground);
+            outline: none;
+            width: 200px;
+        }
+
+        .search-box button {
+            background: var(--primary);
+            border: none;
+            color: var(--primary-foreground);
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .user-info img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-toggle {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: var(--radius);
+            transition: background 0.2s;
+        }
+
+        .dropdown-toggle:hover {
+            background: var(--secondary);
+        }
+
+        .dropdown-content {
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background: var(--popover);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            min-width: 150px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            display: none;
+            z-index: 1000;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown-content a {
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            color: var(--popover-foreground);
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+
+        .dropdown-content a:hover {
+            background: var(--secondary);
+        }
+
+        .dropdown-content a i {
+            margin-right: 8px;
+            width: 16px;
+        }
+
+        /* 表格容器 */
+        .table-container {
+            flex: 1;
+            padding: 24px;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .table-header h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--primary-foreground);
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+
+        .btn-secondary {
+            background: var(--secondary);
+            color: var(--secondary-foreground);
+        }
+
+        .btn-secondary:hover {
+            opacity: 0.9;
+        }
+
+        .btn-destructive {
+            background: var(--destructive);
+            color: var(--destructive-foreground);
+        }
+
+        .btn-destructive:hover {
+            opacity: 0.9;
+        }
+
+        /* 表格樣式 */
+        .table-wrapper {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background: var(--muted);
+            color: var(--muted-foreground);
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover {
+            background: var(--muted);
+        }
+
+        .status {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .status-active {
+            background: var(--success);
+            color: var(--success-foreground);
+        }
+
+        .status-inactive {
+            background: var(--muted);
+            color: var(--muted-foreground);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-buttons .btn {
+            padding: 4px 8px;
+            font-size: 0.75rem;
+        }
+
+        /* 分頁樣式 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+            padding: 24px;
+        }
+
+        .pagination a {
+            padding: 8px 12px;
+            color: var(--muted-foreground);
+            text-decoration: none;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            transition: all 0.2s;
+        }
+
+        .pagination a:hover {
+            background: var(--secondary);
+            color: var(--foreground);
+        }
+
+        .pagination a.active {
+            background: var(--primary);
+            color: var(--primary-foreground);
+            border-color: var(--primary);
+        }
+
+        /* 模態框樣式 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .modal-header h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--muted-foreground);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .close-btn:hover {
+            color: var(--foreground);
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 4px;
+            font-weight: 500;
+            color: var(--foreground);
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 8px 12px;
+            background: var(--input);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            color: var(--foreground);
+            font-size: 0.875rem;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--ring);
+            box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.2);
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            padding: 20px 24px;
+            border-top: 1px solid var(--border);
+        }
+
+        /* 通知樣式 */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 16px;
+            border-radius: var(--radius);
+            color: white;
+            font-weight: 500;
+            z-index: 3000;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background: var(--success);
+        }
+
+        .notification.error {
+            background: var(--destructive);
+        }
+
+        .notification.warning {
+            background: var(--warning);
+        }
+
+        /* 載入動畫 */
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--muted-foreground);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* 響應式設計 */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.show {
+                transform: translateX(0);
+            }
+
+            .content {
+                margin-left: 0;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .search-box {
+                display: none;
+            }
+
+            .table-actions {
+                flex-direction: column;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h3>回收管理後台</h3>
+            </div>
+            <nav class="sidebar-menu">
+                <a href="#" class="menu-item">
+                    <i class="fas fa-home"></i>
+                    <span>主控台</span>
+                </a>
+                <a href="#" class="menu-item active">
+                    <i class="fas fa-users"></i>
+                    <span>會員帳號管理</span>
+                </a>
+                <a href="#" class="menu-item">
+                    <i class="fas fa-box-open"></i>
+                    <span>會員訂單管理</span>
+                </a>
+                <a href="#" class="menu-item">
+                    <i class="fas fa-coins"></i>
+                    <span>點數管理</span>
+                </a>
+                <a href="#" class="menu-item">
+                    <i class="fas fa-recycle"></i>
+                    <span>回收瓶審核</span>
+                </a>
+                <a href="#" class="menu-item">
+                    <i class="fas fa-database"></i>
+                    <span>資料庫管理</span>
+                </a>
+                <a href="#" class="menu-item">
+                    <i class="fas fa-cogs"></i>
+                    <span>系統設定</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                &copy; 2025 回收系統
+            </div>
+        </aside>
+
+        <main class="content">
+            <header class="header">
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1>會員帳號管理</h1>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="搜尋會員...">
+                    <button type="button" onclick="searchMembers()"><i class="fas fa-search"></i></button>
+                </div>
+                <div class="user-info">
+                    <img src="https://via.placeholder.com/32" alt="User Avatar"> 
+                    <div class="dropdown">
+                        <div class="dropdown-toggle">
+                           <span>管理員</span> <i class="fas fa-chevron-down" style="font-size: 0.75em; margin-left: 6px;"></i>
+                        </div>
+                        <div class="dropdown-content">
+                            <a href="#"><i class="fas fa-user-circle"></i> 個人資料</a>
+                            <a href="#"><i class="fas fa-cog"></i> 設定</a>
+                            <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> 登出</a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <section class="table-container">
+                <div class="table-header">
+                    <h2>會員列表</h2>
+                    <div class="table-actions">
+                        <button class="btn btn-primary" onclick="openModal('addMemberModal', '新增會員')">
+                            <i class="fas fa-plus"></i> 新增會員
+                        </button>
+                    </div>
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>會員ID</th>
+                                <th>姓名</th>
+                                <th>Email</th>
+                                <th>電話</th>
+                                <th>註冊日期</th>
+                                <th>點數</th>
+                                <th>狀態</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="memberTableBody">
+                            <tr><td colspan="8" style="text-align:center; padding: 40px;"><div class="loading"></div> 載入中...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <nav class="pagination" id="paginationNav">
+                <a href="#" onclick="loadMembers(1, 'prev')">&laquo; 上一頁</a>
+                <a href="#" class="active" onclick="loadMembers(1)">1</a>
+                <a href="#" onclick="loadMembers(2)">2</a>
+                <a href="#" onclick="loadMembers(3)">3</a>
+                <a href="#" onclick="loadMembers(1, 'next')">下一頁 &raquo;</a>
+            </nav>
+        </main>
+    </div>
+
+    <!-- 新增/編輯會員模態框 -->
+    <div id="addMemberModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">新增會員</h2>
+                <button class="close-btn" onclick="closeModal('addMemberModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="memberForm">
+                    <input type="hidden" id="memberId" name="memberId">
+                    <div class="form-group">
+                        <label for="memberName">姓名</label>
+                        <input type="text" id="memberName" name="memberName" placeholder="請輸入會員姓名" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="memberEmail">Email</label>
+                        <input type="email" id="memberEmail" name="memberEmail" placeholder="請輸入電子郵件" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="memberPhone">電話</label>
+                        <input type="tel" id="memberPhone" name="memberPhone" placeholder="請輸入電話號碼">
+                    </div>
+                    <div class="form-group">
+                        <label for="memberAddress">地址</label>
+                        <input type="text" id="memberAddress" name="memberAddress" placeholder="請輸入地址">
+                    </div>
+                    <div class="form-group">
+                        <label for="memberBirthday">生日</label>
+                        <input type="date" id="memberBirthday" name="memberBirthday">
+                    </div>
+                    <div class="form-group">
+                        <label for="memberPoints">點數</label>
+                        <input type="number" id="memberPoints" name="memberPoints" value="0" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="memberPassword">密碼 (編輯時留空表示不修改)</label>
+                        <input type="password" id="memberPassword" name="memberPassword" placeholder="請輸入密碼">
+                    </div>
+                    <div class="form-group">
+                        <label for="memberStatus">狀態</label>
+                        <select id="memberStatus" name="memberStatus">
+                            <option value="active">活躍</option>
+                            <option value="inactive">停用</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('addMemberModal')">取消</button>
+                <button type="submit" form="memberForm" class="btn btn-primary" id="submitBtn">
+                    <span class="btn-text">儲存</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 全域變數
+        let currentPage = 1;
+        let totalPages = 1;
+        let pageSize = 10;
+        let searchQuery = '';
+
+        // 模擬資料庫數據 (基於您的 SQL 查詢 SELECT * FROM eco_db.users)
+        const mockDatabase = {
+            members: [
+                {
+                    id: 'MEM001',
+                    username: '張小明',
+                    email: 'ming@example.com',
+                    phone: '0912345678',
+                    address: '台北市信義區',
+                    birthday: '1990-05-15',
+                    points: 1250,
+                    status: 'active',
+                    created_at: '2024-01-15',
+                    password: 'hashed_password_1'
+                },
+                {
+                    id: 'MEM002',
+                    username: '李美華',
+                    email: 'meihua@example.com',
+                    phone: '0923456789',
+                    address: '新北市板橋區',
+                    birthday: '1985-08-22',
+                    points: 890,
+                    status: 'active',
+                    created_at: '2024-01-20',
+                    password: 'hashed_password_2'
+                },
+                {
+                    id: 'MEM003',
+                    username: '王大偉',
+                    email: 'david@example.com',
+                    phone: '0934567890',
+                    address: '桃園市中壢區',
+                    birthday: '1992-12-03',
+                    points: 2100,
+                    status: 'active',
+                    created_at: '2024-02-01',
+                    password: 'hashed_password_3'
+                },
+                {
+                    id: 'MEM004',
+                    username: '陳雅婷',
+                    email: 'yating@example.com',
+                    phone: '0945678901',
+                    address: '台中市西屯區',
+                    birthday: '1988-03-18',
+                    points: 650,
+                    status: 'inactive',
+                    created_at: '2024-02-10',
+                    password: 'hashed_password_4'
+                },
+                {
+                    id: 'MEM005',
+                    username: '林志強',
+                    email: 'zhiqiang@example.com',
+                    phone: '0956789012',
+                    address: '高雄市前鎮區',
+                    birthday: '1995-07-25',
+                    points: 1800,
+                    status: 'active',
+                    created_at: '2024-02-15',
+                    password: 'hashed_password_5'
+                }
+            ]
+        };
+
+        // 頁面載入完成後初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('[v0] 會員管理系統初始化開始');
+            loadMembers(1);
+            
+            // 搜尋框回車事件
+            document.getElementById('searchInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchMembers();
+                }
+            });
+
+            // 側邊欄切換
+            document.getElementById('menuToggle').addEventListener('click', function() {
+                document.querySelector('.sidebar').classList.toggle('show');
+            });
+
+            // 表單提交事件
+            document.getElementById('memberForm').addEventListener('submit', handleFormSubmit);
+
+            // 登出按鈕
+            document.getElementById('logoutBtn').addEventListener('click', function(e) {
+                e.preventDefault();
+                if (confirm('確定要登出嗎？')) {
+                    showNotification('已成功登出', 'success');
+                    // 這裡可以加入實際的登出邏輯
+                }
+            });
+
+            console.log('[v0] 會員管理系統初始化完成');
+        });
+
+        // 載入會員數據
+        async function loadMembers(page, action = '') {
+            console.log('[v0] 載入會員數據，頁面:', page, '動作:', action);
+            
+            if (action === 'prev' && currentPage > 1) {
+                currentPage--;
+            } else if (action === 'next' && currentPage < totalPages) {
+                currentPage++;
+            } else if (page && page > 0) {
+                currentPage = page;
+            }
+
+            try {
+                // 模擬 API 延遲
+                await new Promise(resolve => setTimeout(resolve, 500));
+
+                // 過濾搜尋結果
+                let filteredMembers = mockDatabase.members;
+                if (searchQuery) {
+                    filteredMembers = mockDatabase.members.filter(member => 
+                        member.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                        member.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                        member.phone.includes(searchQuery)
+                    );
+                }
+
+                // 計算分頁
+                totalPages = Math.ceil(filteredMembers.length / pageSize);
+                const startIndex = (currentPage - 1) * pageSize;
+                const endIndex = startIndex + pageSize;
+                const paginatedMembers = filteredMembers.slice(startIndex, endIndex);
+
+                console.log('[v0] 載入完成，會員數量:', paginatedMembers.length);
+
+                // 更新表格
+                const tbody = document.getElementById('memberTableBody');
+                tbody.innerHTML = '';
+
+                if (paginatedMembers.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding: 40px; color: var(--muted-foreground);">沒有找到符合條件的會員</td></tr>';
+                } else {
+                    paginatedMembers.forEach(member => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td><strong>${member.id}</strong></td>
+                            <td>${member.username}</td>
+                            <td>${member.email}</td>
+                            <td>${member.phone || '-'}</td>
+                            <td>${member.created_at}</td>
+                            <td><strong>${member.points.toLocaleString()}</strong></td>
+                            <td>
+                                <span class="status status-${member.status}">
+                                    ${member.status === 'active' ? '活躍' : '停用'}
+                                </span>
+                            </td>
+                            <td class="action-buttons">
+                                <button class="btn btn-secondary" onclick="editMember('${member.id}')">
+                                    <i class="fas fa-edit"></i> 編輯
+                                </button>
+                                <button class="btn btn-destructive" onclick="deleteMember('${member.id}')">
+                                    <i class="fas fa-trash"></i> 刪除
+                                </button>
+                            </td>
+                        `;
+                        tbody.appendChild(row);
+                    });
+                }
+
+                updatePagination();
+                
+            } catch (error) {
+                console.error('[v0] 載入會員失敗：', error);
+                showNotification('載入會員數據失敗，請重試', 'error');
+                document.getElementById('memberTableBody').innerHTML = 
+                    '<tr><td colspan="8" style="text-align:center; color: var(--destructive); padding: 40px;">載入失敗，請重試</td></tr>';
+            }
+        }
+
+        // 搜尋會員
+        function searchMembers() {
+            searchQuery = document.getElementById('searchInput').value.trim();
+            console.log('[v0] 搜尋會員:', searchQuery);
+            currentPage = 1;
+            loadMembers(currentPage);
+        }
+
+        // 更新分頁
+        function updatePagination() {
+            const pagination = document.getElementById('paginationNav');
+            let paginationHTML = '';
+
+            // 上一頁按鈕
+            paginationHTML += `<a href="#" onclick="loadMembers(${currentPage}, 'prev')" ${currentPage <= 1 ? 'style="opacity:0.5;pointer-events:none;"' : ''}>&laquo; 上一頁</a>`;
+
+            // 頁碼按鈕
+            for (let i = 1; i <= totalPages; i++) {
+                if (i === currentPage) {
+                    paginationHTML += `<a href="#" class="active" onclick="loadMembers(${i})">${i}</a>`;
+                } else {
+                    paginationHTML += `<a href="#" onclick="loadMembers(${i})">${i}</a>`;
+                }
+            }
+
+            // 下一頁按鈕
+            paginationHTML += `<a href="#" onclick="loadMembers(${currentPage}, 'next')" ${currentPage >= totalPages ? 'style="opacity:0.5;pointer-events:none;"' : ''}>下一頁 &raquo;</a>`;
+
+            pagination.innerHTML = paginationHTML;
+        }
+
+        // 編輯會員
+        function editMember(memberId) {
+            console.log('[v0] 編輯會員:', memberId);
+            const member = mockDatabase.members.find(m => m.id === memberId);
+            if (member) {
+                openModal('addMemberModal', '編輯會員', member);
+            }
+        }
+
+        // 開啟模態框
+        function openModal(modalId, title, data = null) {
+            console.log('[v0] 打開模態框:', modalId, title);
+            
+            document.getElementById('modalTitle').textContent = title;
+            const form = document.getElementById('memberForm');
+
+            if (data) {
+                // 編輯模式
+                document.getElementById('memberId').value = data.id;
+                document.getElementById('memberName').value = data.username;
+                document.getElementById('memberEmail').value = data.email;
+                document.getElementById('memberPhone').value = data.phone || '';
+                document.getElementById('memberAddress').value = data.address || '';
+                document.getElementById('memberBirthday').value = data.birthday || '';
+                document.getElementById('memberPoints').value = data.points || 0;
+                document.getElementById('memberPassword').value = '';
+                document.getElementById('memberStatus').value = data.status;
+            } else {
+                // 新增模式
+                form.reset();
+                document.getElementById('memberId').value = '';
+                document.getElementById('memberPoints').value = 0;
+                document.getElementById('memberStatus').value = 'active';
+            }
+            
+            document.getElementById(modalId).classList.add('show');
+        }
+
+        // 關閉模態框
+        function closeModal(modalId) {
+            console.log('[v0] 關閉模態框:', modalId);
+            document.getElementById(modalId).classList.remove('show');
+        }
+
+        // 處理表單提交
+        async function handleFormSubmit(e) {
+            e.preventDefault();
+            console.log('[v0] 提交會員表單');
+
+            const submitBtn = document.getElementById('submitBtn');
+            const btnText = submitBtn.querySelector('.btn-text');
+            const originalText = btnText.textContent;
+
+            // 顯示載入狀態
+            btnText.innerHTML = '<div class="loading"></div> 處理中...';
+            submitBtn.disabled = true;
+
+            try {
+                const memberId = document.getElementById('memberId').value.trim();
+                const memberData = {
+                    username: document.getElementById('memberName').value.trim(),
+                    email: document.getElementById('memberEmail').value.trim(),
+                    phone: document.getElementById('memberPhone').value.trim(),
+                    address: document.getElementById('memberAddress').value.trim(),
+                    birthday: document.getElementById('memberBirthday').value,
+                    points: parseInt(document.getElementById('memberPoints').value) || 0,
+                    status: document.getElementById('memberStatus').value
+                };
+
+                const password = document.getElementById('memberPassword').value;
+                if (password) {
+                    memberData.password = password;
+                }
+
+                // 模擬 API 延遲
+                await new Promise(resolve => setTimeout(resolve, 1000));
+
+                if (memberId) {
+                    // 編輯現有會員
+                    const memberIndex = mockDatabase.members.findIndex(m => m.id === memberId);
+                    if (memberIndex !== -1) {
+                        mockDatabase.members[memberIndex] = {
+                            ...mockDatabase.members[memberIndex],
+                            ...memberData
+                        };
+                        showNotification('會員資料更新成功！', 'success');
+                    }
+                } else {
+                    // 新增會員
+                    const newId = 'MEM' + String(mockDatabase.members.length + 1).padStart(3, '0');
+                    const newMember = {
+                        id: newId,
+                        ...memberData,
+                        created_at: new Date().toISOString().split('T')[0],
+                        password: 'hashed_password_new'
+                    };
+                    mockDatabase.members.push(newMember);
+                    showNotification('新會員新增成功！', 'success');
+                }
+
+                closeModal('addMemberModal');
+                await loadMembers(currentPage);
+
+            } catch (error) {
+                console.error('[v0] 保存會員失敗：', error);
+                showNotification('操作失敗，請重試', 'error');
+            } finally {
+                // 恢復按鈕狀態
+                btnText.textContent = originalText;
+                submitBtn.disabled = false;
+            }
+        }
+
+        // 刪除會員
+        async function deleteMember(memberId) {
+            console.log('[v0] 刪除會員:', memberId);
+            
+            if (!confirm('確定要刪除這個會員嗎？此操作無法復原。')) {
+                return;
+            }
+
+            try {
+                // 模擬 API 延遲
+                await new Promise(resolve => setTimeout(resolve, 500));
+
+                const memberIndex = mockDatabase.members.findIndex(m => m.id === memberId);
+                if (memberIndex !== -1) {
+                    const memberName = mockDatabase.members[memberIndex].username;
+                    mockDatabase.members.splice(memberIndex, 1);
+                    showNotification(`會員 ${memberName} 已成功刪除`, 'success');
+                    await loadMembers(currentPage);
+                } else {
+                    showNotification('找不到指定的會員', 'error');
+                }
+
+            } catch (error) {
+                console.error('[v0] 刪除會員失敗：', error);
+                showNotification('刪除失敗，請重試', 'error');
+            }
+        }
+
+        // 顯示通知
+        function showNotification(message, type = 'success') {
+            console.log('[v0] 顯示通知:', message, type);
+            
+            // 移除現有通知
+            const existingNotification = document.querySelector('.notification');
+            if (existingNotification) {
+                existingNotification.remove();
+            }
+
+            // 創建新通知
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            // 顯示通知
+            setTimeout(() => notification.classList.add('show'), 100);
+
+            // 自動隱藏
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // 點擊外部關閉模態框
+        window.addEventListener('click', function(e) {
+            const modals = document.querySelectorAll('.modal.show');
+            modals.forEach(modal => {
+                if (e.target === modal) {
+                    modal.classList.remove('show');
+                }
+            });
+        });
+
+        // ESC 鍵關閉模態框
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const openModals = document.querySelectorAll('.modal.show');
+                openModals.forEach(modal => {
+                    modal.classList.remove('show');
+                });
+            }
+        });
+    </script>
+</body>
+</html>

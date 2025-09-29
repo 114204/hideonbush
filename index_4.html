@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>環保回收兌換系統 - 主頁 | 回收換點數，共創永續未來</title>
+  <meta name="description" content="加入「環保回收兌換系統」，透過回收塑膠瓶、紙類等日常廢棄物即可賺取環保點數，兌換豐富商品。輕鬆參與資源回收，為地球永續發展盡一份心力。立即了解如何開始！">
+
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Noto Sans TC', sans-serif; color: #2d3748; line-height: 1.6; background-color: #ffffff; overflow-x: hidden; }
+
+    /* 導覽列 */
+    .navbar { position: fixed; top: 0; width: 100%; z-index: 1000; background: linear-gradient(135deg, rgba(240,240,237,0.95), rgba(255,255,255,0.95)); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(0,137,123,0.1); }
+    .nav-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 2rem; height: 70px; }
+    .logo { display: flex; align-items: center; font-weight: 700; font-size: 1.3rem; color: #00695c; text-decoration: none; }
+    .logo-icon { margin-right: 10px; font-size: 1.5rem; }
+    .nav-links { display: flex; gap: 1.5rem; }
+    .nav-links a { text-decoration: none; color: #5a5a55; font-weight: 500; }
+    .nav-links a:hover { color: #00695c; }
+    .ai-scan-btn { background: linear-gradient(135deg, #00695c, #4DB6AC); color: #fff; padding: 0.5rem 1rem; border-radius: 20px; }
+
+    /* Hero */
+    .hero { min-height: 100vh; background: linear-gradient(135deg, #f5f7f4, #dde0d7); display: flex; align-items: center; padding-top: 80px; }
+    .hero-container { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; padding: 0 2rem; align-items: center; }
+    .hero-content h1 { font-size: 3rem; background: linear-gradient(135deg, #00695c, #4DB6AC); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 1.5rem; }
+    .hero-content p { margin-bottom: 2rem; color: #5a5a55; }
+    .hero-buttons { display: flex; gap: 1rem; }
+    .btn { padding: 0.8rem 1.5rem; border-radius: 30px; font-weight: 600; text-decoration: none; display: inline-block; }
+    .btn-primary { background: linear-gradient(135deg, #00695c, #4DB6AC); color: #fff; }
+    .btn-secondary { border: 2px solid #00695c; color: #00695c; background: #fff; }
+
+    /* 功能區 */
+    .features { padding: 4rem 2rem; background: #e9ebe4; }
+    .section-header { text-align: center; margin-bottom: 3rem; }
+    .section-header h2 { font-size: 2rem; color: #00695c; margin-bottom: 1rem; }
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap: 2rem; }
+    .feature-card { background: #fff; padding: 2rem; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+    .feature-card h3 { color: #00695c; margin-bottom: 1rem; }
+
+    /* 四步驟 */
+    .how-it-works { padding: 4rem 2rem; }
+    .steps-container { display: grid; gap: 2rem; max-width: 900px; margin: 0 auto; }
+    .step-card { display: flex; align-items: flex-start; gap: 1rem; background: #fff; padding: 1.5rem; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+    .step-number { width: 40px; height: 40px; background: #00695c; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; }
+
+    /* 成效統計 */
+    .stats-section { padding: 4rem 2rem; background: #fff; }
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 2rem; text-align: center; }
+    .stat-item { background: #f0fdf9; padding: 2rem; border-radius: 15px; }
+    .stat-number { font-size: 2rem; color: #00695c; font-weight: 700; }
+
+    /* FAQ */
+    .faq-section { padding: 4rem 2rem; background: #f8f9f8; }
+    .faq-item { background: #fff; padding: 1rem 1.5rem; border-radius: 10px; margin-bottom: 1rem; box-shadow: 0 5px 10px rgba(0,0,0,0.05); cursor: pointer; transform: translateY(20px); opacity: 0; transition: all 0.6s ease; }
+    .faq-item.show { transform: translateY(0); opacity: 1; }
+    .faq-item h3 { margin-bottom: 0.5rem; color: #00695c; }
+    .faq-answer { display: none; padding-top: 0.5rem; color: #444; }
+
+    /* CTA */
+    .cta-section { background: linear-gradient(135deg,#00695c,#004D40); color:#fff; padding:4rem 2rem; text-align:center; }
+    .btn-cta { background:#fff; color:#00695c; padding:0.8rem 2rem; border-radius:30px; text-decoration:none; font-weight:600; }
+
+    /* Footer */
+    .footer { background: #111827; color:#fff; padding:2rem; text-align:center; }
+
+    /* Scroll reveal */
+    .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease; }
+    .reveal.show { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+  <!-- 導覽列 -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="/" class="logo"><div class="logo-icon">♻️</div> 環保回收兌換系統</a>
+      <div class="nav-links">
+        <a href="#how-it-works">如何使用</a>
+        <a href="#features">功能介紹</a>
+        <a href="#stats">成效統計</a>
+        <a href="#faq">常見問題</a>
+        <a href="/admin_login-page">管理員登入</a>
+        <a href="#" class="ai-scan-btn">AI回收掃描</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-container">
+      <div class="hero-content">
+        <h1>回收換點數，共創永續未來</h1>
+        <p>透過回收塑膠瓶、紙類、金屬等日常廢棄物，立即獲得環保點數，兌換豐富商品。</p>
+        <div class="hero-buttons">
+          <a href="/register-page" class="btn btn-primary">立即註冊</a>
+          <a href="/login-page" class="btn btn-secondary">會員登入</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 功能介紹 -->
+  <section class="features" id="features">
+    <div class="section-header">
+      <h2>我們的特色功能</h2>
+      <p>簡單幾個步驟，參與永續循環，讓環保變得更有趣、更有意義</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card reveal"><h3>智慧回收換點數</h3><p>透過AI辨識與計重，自動累積回收點數。</p></div>
+      <div class="feature-card reveal"><h3>點數兌換商品</h3><p>使用點數可兌換多種環保商品與禮券。</p></div>
+      <div class="feature-card reveal"><h3>環保貢獻追蹤</h3><p>記錄您的每一次回收，累積綠色足跡。</p></div>
+    </div>
+  </section>
+
+  <!-- 四步驟 -->
+  <section class="how-it-works" id="how-it-works">
+    <div class="section-header"><h2>簡單四步驟，輕鬆開始環保之旅</h2></div>
+    <div class="steps-container">
+      <div class="step-card reveal"><div class="step-number">1</div><div><h3>下載應用並註冊</h3><p>快速建立帳號，加入綠色行動。</p></div></div>
+      <div class="step-card reveal"><div class="step-number">2</div><div><h3>拍照上傳回收物</h3><p>AI自動辨識物品種類與重量。</p></div></div>
+      <div class="step-card reveal"><div class="step-number">3</div><div><h3>獲得環保點數</h3><p>回收即時累積點數，隨時查看。</p></div></div>
+      <div class="step-card reveal"><div class="step-number">4</div><div><h3>兌換商品或服務</h3><p>用點數兌換綠色商品與專屬優惠。</p></div></div>
+    </div>
+  </section>
+
+  <!-- 成效統計 -->
+  <section class="stats-section" id="stats">
+    <div class="section-header"><h2>成效統計</h2></div>
+    <div class="stats-grid">
+      <div class="stat-item reveal"><div class="stat-number" data-target="500">0</div><p>合作商店</p></div>
+      <div class="stat-item reveal"><div class="stat-number" data-target="10000">0</div><p>活躍會員</p></div>
+      <div class="stat-item reveal"><div class="stat-number" data-target="50">0</div><p>已回收公噸</p></div>
+      <div class="stat-item reveal"><div class="stat-number" data-target="99">0</div><p>會員滿意度%</p></div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq-section" id="faq">
+    <div class="section-header"><h2>常見問題</h2></div>
+    <div class="faq-item">
+      <h3>Q1: 如何獲得環保點數？</h3>
+      <div class="faq-answer"><p>將回收物拍照上傳，系統辨識後即可累積點數。</p></div>
+    </div>
+    <div class="faq-item">
+      <h3>Q2: 點數可以兌換什麼？</h3>
+      <div class="faq-answer"><p>可兌換環保商品、禮券，或支持公益專案。</p></div>
+    </div>
+    <div class="faq-item">
+      <h3>Q3: 如何查詢我的回收紀錄？</h3>
+      <div class="faq-answer"><p>登入會員中心即可查看詳細回收紀錄。</p></div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <h2>現在就加入我們，共創永續未來！</h2>
+    <a href="/register-page" class="btn-cta">立即參與</a>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>© 2025 環保回收兌換系統. All rights reserved.</p>
+  </footer>
+
+  <!-- JavaScript -->
+  <script>
+    // FAQ 折疊
+    document.querySelectorAll('.faq-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const answer = item.querySelector('.faq-answer');
+        answer.style.display = (answer.style.display === 'block') ? 'none' : 'block';
+      });
+    });
+
+    // 數字統計動畫
+    const counters = document.querySelectorAll('.stat-number');
+    const speed = 50;
+    const animateCounters = () => {
+      counters.forEach(counter => {
+        const updateCount = () => {
+          const target = +counter.getAttribute('data-target');
+          const count = +counter.innerText;
+          const increment = Math.ceil(target / speed);
+          if(count < target) {
+            counter.innerText = count + increment;
+            setTimeout(updateCount, 40);
+          } else {
+            counter.innerText = target;
+          }
+        };
+        updateCount();
+      });
+    };
+
+    // 監聽 scroll reveal + 統計
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting) {
+          entry.target.classList.add('show');
+          if(entry.target.id === 'stats') animateCounters();
+        }
+      });
+    }, { threshold: 0.2 });
+
+    document.querySelectorAll('.reveal, .faq-item, #stats').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
