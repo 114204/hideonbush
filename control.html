@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>回收瓶審核 - 回收管理後台</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --background: #0a0a0a;
+            --foreground: #fafafa;
+            --card: #1a1a1a;
+            --card-foreground: #fafafa;
+            --popover: #1a1a1a;
+            --popover-foreground: #fafafa;
+            --primary: #8b5cf6;
+            --primary-foreground: #fafafa;
+            --secondary: #262626;
+            --secondary-foreground: #fafafa;
+            --muted: #262626;
+            --muted-foreground: #a1a1aa;
+            --accent: #262626;
+            --accent-foreground: #fafafa;
+            --destructive: #ef4444;
+            --destructive-foreground: #fafafa;
+            --success: #22c55e;
+            --success-foreground: #fafafa;
+            --warning: #f59e0b;
+            --warning-foreground: #fafafa;
+            --border: #262626;
+            --input: #262626;
+            --ring: #8b5cf6;
+            --radius: 0.5rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background-color: var(--background);
+            color: var(--foreground);
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .container-fluid {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: var(--card);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-header {
+            padding: 24px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .sidebar-header h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .sidebar-header h3::before {
+            content: "♻";
+            font-size: 1.5rem;
+        }
+
+        .sidebar-menu {
+            flex: 1;
+            padding: 16px 0;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: var(--muted-foreground);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            margin: 2px 12px;
+            border-radius: var(--radius);
+        }
+
+        .menu-item:hover {
+            background-color: var(--accent);
+            color: var(--accent-foreground);
+        }
+
+        .menu-item.active {
+            background-color: var(--primary);
+            color: var(--primary-foreground);
+        }
+
+        .menu-item i {
+            width: 20px;
+            margin-right: 12px;
+            font-size: 16px;
+        }
+
+        .sidebar-footer {
+            padding: 20px;
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--muted-foreground);
+            border-top: 1px solid var(--border);
+        }
+
+        .content {
+            flex: 1;
+            margin-left: 280px;
+            background-color: var(--background);
+        }
+
+        .header {
+            background: var(--card);
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 999;
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: var(--foreground);
+            padding: 8px;
+            border-radius: var(--radius);
+        }
+
+        .menu-toggle:hover {
+            background-color: var(--accent);
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            color: var(--foreground);
+            font-weight: 600;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+        }
+
+        .user-info img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-toggle {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            border-radius: var(--radius);
+            transition: background-color 0.2s ease;
+            color: var(--foreground);
+        }
+
+        .dropdown-toggle:hover {
+            background-color: var(--accent);
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background: var(--popover);
+            min-width: 180px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            z-index: 1000;
+            margin-top: 4px;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown-content a {
+            color: var(--popover-foreground);
+            padding: 12px 16px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            transition: background-color 0.2s ease;
+        }
+
+        .dropdown-content a:hover {
+            background-color: var(--accent);
+        }
+
+        .dropdown-content a i {
+            margin-right: 8px;
+            width: 16px;
+        }
+
+        .review-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 24px;
+            padding: 24px;
+        }
+
+        .review-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+
+        .review-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.1);
+        }
+
+        .review-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: var(--secondary);
+        }
+
+        .review-content {
+            padding: 20px;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .review-id {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .review-date {
+            font-size: 0.75rem;
+            color: var(--muted-foreground);
+        }
+
+        .review-info {
+            margin-bottom: 16px;
+        }
+
+        .review-info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .review-info-row:last-child {
+            border-bottom: none;
+        }
+
+        .review-label {
+            color: var(--muted-foreground);
+            font-size: 0.875rem;
+        }
+
+        .review-value {
+            color: var(--foreground);
+            font-weight: 500;
+        }
+
+        .review-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 10px 16px;
+            border: none;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+            flex: 1;
+        }
+
+        .btn-success {
+            background-color: var(--success);
+            color: var(--success-foreground);
+        }
+
+        .btn-success:hover {
+            background-color: #16a34a;
+        }
+
+        .btn-destructive {
+            background-color: var(--destructive);
+            color: var(--destructive-foreground);
+        }
+
+        .btn-destructive:hover {
+            background-color: #dc2626;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 80px 24px;
+            color: var(--muted-foreground);
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.show {
+                transform: translateX(0);
+            }
+
+            .content {
+                margin-left: 0;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .review-grid {
+                grid-template-columns: 1fr;
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h3>回收管理後台</h3>
+            </div>
+            <nav class="sidebar-menu">
+    <a href="/center-page" class="menu-item" data-page="center">
+        <i class="fas fa-home"></i>
+        <span>主控台</span>
+    </a>
+    <a href="/backmanament-page" class="menu-item" data-page="backmanament">
+        <i class="fas fa-users"></i>
+        <span>會員帳號管理</span>
+    </a>
+    <a href="/member_order-page" class="menu-item" data-page="member_order">
+        <i class="fas fa-box-open"></i>
+        <span>會員訂單管理</span>
+    </a>
+    <a href="/point-page" class="menu-item" data-page="point">
+        <i class="fas fa-coins"></i>
+        <span>點數管理</span>
+    </a>
+    <a href="/control-page" class="menu-item active" data-page="control" id="recycleReviewLink">
+        <i class="fas fa-recycle"></i>
+        <span>回收瓶審核</span>
+        <span class="badge" id="pendingReviewCount" style="display: none;">0</span>
+    </a>
+    <a href="/db-management-page" class="menu-item" data-page="db">
+        <i class="fas fa-database"></i>
+        <span>資料庫管理</span>
+    </a>
+    <a href="#" class="menu-item" data-page="system">
+        <i class="fas fa-cogs"></i>
+        <span>系統設定</span>
+    </a>
+</nav>
+            <div class="sidebar-footer">
+                &copy; 2025 回收系統
+            </div>
+        </aside>
+
+        <main class="content">
+            <header class="header">
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1>回收瓶審核</h1>
+                <div class="user-info">
+                    <img src="https://via.placeholder.com/32" alt="User Avatar">
+                    <div class="dropdown">
+                        <div class="dropdown-toggle">
+                            <span>管理員</span> <i class="fas fa-chevron-down" style="font-size: 0.75em; margin-left: 6px;"></i>
+                        </div>
+                        <div class="dropdown-content">
+                            <a href="#"><i class="fas fa-user-circle"></i> 個人資料</a>
+                            <a href="#"><i class="fas fa-cog"></i> 設定</a>
+                            <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> 登出</a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="review-grid" id="reviewGrid">
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const mockReviews = [
+            {
+                id: 'REC001',
+                member: '陳大文',
+                memberId: 'MEM001',
+                itemType: '寶特瓶 (500ml)',
+                quantity: 5,
+                points: 50,
+                date: '2025-01-15 14:30',
+                image: 'https://via.placeholder.com/400x300?text=寶特瓶+x5'
+            },
+            {
+                id: 'REC002',
+                member: '王小華',
+                memberId: 'MEM002',
+                itemType: '鋁罐',
+                quantity: 10,
+                points: 30,
+                date: '2025-01-15 15:45',
+                image: 'https://via.placeholder.com/400x300?text=鋁罐+x10'
+            },
+            {
+                id: 'REC003',
+                member: '李美玲',
+                memberId: 'MEM003',
+                itemType: '玻璃瓶',
+                quantity: 3,
+                points: 15,
+                date: '2025-01-16 09:20',
+                image: 'https://via.placeholder.com/400x300?text=玻璃瓶+x3'
+            },
+            {
+                id: 'REC004',
+                member: '張志明',
+                memberId: 'MEM004',
+                itemType: '寶特瓶 (1000ml)',
+                quantity: 8,
+                points: 80,
+                date: '2025-01-16 11:10',
+                image: 'https://via.placeholder.com/400x300?text=寶特瓶+x8'
+            },
+            {
+                id: 'REC005',
+                member: '林雅婷',
+                memberId: 'MEM005',
+                itemType: '紙類',
+                quantity: 20,
+                points: 40,
+                date: '2025-01-17 08:35',
+                image: 'https://via.placeholder.com/400x300?text=紙類+x20'
+            },
+            {
+                id: 'REC006',
+                member: '黃建國',
+                memberId: 'MEM006',
+                itemType: '鋁罐',
+                quantity: 15,
+                points: 45,
+                date: '2025-01-17 13:50',
+                image: 'https://via.placeholder.com/400x300?text=鋁罐+x15'
+            }
+        ];
+
+        window.onload = () => {
+            loadReviews();
+        };
+
+        function loadReviews() {
+            const grid = document.getElementById('reviewGrid');
+            
+            if (mockReviews.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1 / -1;">
+                        <i class="fas fa-inbox"></i>
+                        <h3>目前沒有待審核的回收記錄</h3>
+                        <p>所有回收申請都已處理完畢</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = '';
+            mockReviews.forEach(review => {
+                const card = document.createElement('div');
+                card.className = 'review-card';
+                card.innerHTML = `
+                    <img src="${review.image}" alt="回收物品" class="review-image">
+                    <div class="review-content">
+                        <div class="review-header">
+                            <span class="review-id">${review.id}</span>
+                            <span class="review-date">${review.date}</span>
+                        </div>
+                        <div class="review-info">
+                            <div class="review-info-row">
+                                <span class="review-label">會員姓名</span>
+                                <span class="review-value">${review.member}</span>
+                            </div>
+                            <div class="review-info-row">
+                                <span class="review-label">會員ID</span>
+                                <span class="review-value">${review.memberId}</span>
+                            </div>
+                            <div class="review-info-row">
+                                <span class="review-label">AI辨識結果</span>
+                                <span class="review-value">${review.itemType}</span>
+                            </div>
+                            <div class="review-info-row">
+                                <span class="review-label">數量</span>
+                                <span class="review-value">${review.quantity}</span>
+                            </div>
+                            <div class="review-info-row">
+                                <span class="review-label">預估點數</span>
+                                <span class="review-value">${review.points}</span>
+                            </div>
+                        </div>
+                        <div class="review-actions">
+                            <button class="btn btn-destructive" onclick="rejectReview('${review.id}')">
+                                <i class="fas fa-times"></i> 拒絕
+                            </button>
+                            <button class="btn btn-success" onclick="approveReview('${review.id}')">
+                                <i class="fas fa-check"></i> 核准
+                            </button>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function approveReview(reviewId) {
+            if (confirm(`確定要核准回收記錄 ${reviewId} 嗎？`)) {
+                const index = mockReviews.findIndex(r => r.id === reviewId);
+                if (index !== -1) {
+                    mockReviews.splice(index, 1);
+                    loadReviews();
+                    alert('回收記錄已核准，點數已發放給會員！');
+                }
+            }
+        }
+
+        function rejectReview(reviewId) {
+            const reason = prompt(`請輸入拒絕原因 (回收記錄 ${reviewId}):`);
+            if (reason) {
+                const index = mockReviews.findIndex(r => r.id === reviewId);
+                if (index !== -1) {
+                    mockReviews.splice(index, 1);
+                    loadReviews();
+                    alert('回收記錄已拒絕！');
+                }
+            }
+        }
+
+        document.getElementById('menuToggle').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('show');
+        });
+
+        document.getElementById('logoutBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            if (confirm('確定要登出嗎？')) {
+                localStorage.removeItem('loggedIn');
+                window.location.href = '/admin_login-page';
+            }
+        });
+    </script>
+</body>
+</html>

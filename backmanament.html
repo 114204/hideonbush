@@ -410,14 +410,22 @@
             background-color: var(--accent);
         }
 
-        .status {
-            padding: 4px 12px;
-            border-radius: 9999px;
-            font-size: 0.75rem;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.025em;
-        }
+        
+.status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 48px;      /* 保證寬度一致 */
+    height: 24px;         /* 固定高度 */
+    padding: 0 12px;      /* 左右間距 */
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+}
+
 
         .status-active {
             background-color: rgba(34, 197, 94, 0.1);
@@ -441,6 +449,15 @@
             display: flex;
             gap: 8px;
         }
+
+.action-buttons .btn {
+    min-width: 70px;      /* 固定按鈕寬度 */
+    height: 32px;         /* 固定高度 */
+    justify-content: center;
+    text-align: center;
+    padding: 0 12px;      /* 縮小 padding，避免太大 */
+}
+
 
         .btn {
             padding: 8px 16px;
@@ -629,7 +646,7 @@
             padding: 24px;
         }
 
-        /* 登出確認對話框樣式 */
+        /* <!-- 登出確認對話框 -->樣式 */
         .logout-confirm {
             display: none;
             position: fixed;
@@ -721,6 +738,15 @@
             .action-buttons {
                 flex-direction: column;
             }
+
+.action-buttons .btn {
+    min-width: 70px;      /* 固定按鈕寬度 */
+    height: 32px;         /* 固定高度 */
+    justify-content: center;
+    text-align: center;
+    padding: 0 12px;      /* 縮小 padding，避免太大 */
+}
+
         }
 
         /* 載入動畫 */
@@ -772,23 +798,23 @@
                 <h3>回收管理後台</h3>
             </div>
             <nav class="sidebar-menu">
-                <a href="dashboard-home.html" class="menu-item">
+                <a href="/center-page" class="menu-item">
                     <i class="fas fa-home"></i>
                     <span>主控台</span>
                 </a>
-                <a href="member-management.html" class="menu-item active">
+                <a href="/backmanament-page" class="menu-item active">
                     <i class="fas fa-users"></i>
                     <span>會員帳號管理</span>
                 </a>
-                <a href="#" class="menu-item">
+                <a href="/member_order-page" class="menu-item">
                     <i class="fas fa-box-open"></i>
                     <span>會員訂單管理</span>
                 </a>
-                <a href="#" class="menu-item">
+                <a href="/point-page" class="menu-item">
                     <i class="fas fa-coins"></i>
                     <span>點數管理</span>
                 </a>
-                <a href="#" class="menu-item" id="recycleReviewLink">
+                <a href="/control-page" class="menu-item" id="recycleReviewLink">
                     <i class="fas fa-recycle"></i>
                     <span>回收瓶審核</span>
                     <span class="badge" id="pendingReviewCount" style="display: none;">0</span>
@@ -878,7 +904,7 @@
         </main>
     </div>
 
-     新增/編輯會員模態框 
+     <!-- 新增/編輯會員模態框 --> 
     <div id="addMemberModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -932,56 +958,10 @@
         </div>
     </div>
 
-     回收物品審核模態框 
-    <div id="recycleReviewModal" class="modal">
-        <div class="modal-content" style="max-width: 700px;">
-            <div class="modal-header">
-                <h2>回收物品審核</h2>
-                <button class="close-btn" onclick="closeModal('recycleReviewModal')">&times;</button>
-            </div>
-            <div id="recycleReviewContent">
-                <div class="review-item">
-                    <div class="review-item-header">
-                        <div class="review-item-title">回收記錄 #REC001</div>
-                        <div class="review-item-date">2025-05-06 14:30</div>
-                    </div>
-                    <div class="review-item-content">
-                        <div>
-                            <img src="https://via.placeholder.com/300x200?text=回收物品照片" alt="回收物品" class="review-item-image">
-                        </div>
-                        <div class="review-item-details">
-                            <div class="review-item-detail">
-                                <span class="review-item-label">會員ID:</span>
-                                <span>MEM001</span>
-                            </div>
-                            <div class="review-item-detail">
-                                <span class="review-item-label">會員姓名:</span>
-                                <span>陳大文</span>
-                            </div>
-                            <div class="review-item-detail">
-                                <span class="review-item-label">AI辨識結果:</span>
-                                <span>寶特瓶 (500ml)</span>
-                            </div>
-                            <div class="review-item-detail">
-                                <span class="review-item-label">數量:</span>
-                                <span>3</span>
-                            </div>
-                            <div class="review-item-detail">
-                                <span class="review-item-label">預估點數:</span>
-                                <span>15</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="review-item-actions">
-                        <button class="btn btn-destructive reject-btn"><i class="fas fa-times"></i> 拒絕</button>
-                        <button class="btn btn-success approve-btn"><i class="fas fa-check"></i> 核准</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+     
     </div>
 
-     登出確認對話框 
+     <!-- 登出確認對話框 --> 
     <div id="logoutConfirm" class="logout-confirm">
         <div class="logout-confirm-content">
             <h3><i class="fas fa-sign-out-alt" style="margin-right: 10px; color: var(--destructive);"></i>確認登出</h3>
@@ -993,10 +973,11 @@
         </div>
     </div>
 
-     通知元素 
+     <!-- 通知元素 --> 
     <div id="notification" class="notification"></div>
 
     <script>
+        
         let currentPage = 1;
         const pageSize = 10;
         let totalPages = 1;
