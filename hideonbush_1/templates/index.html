@@ -70,11 +70,9 @@
       background-size: contain;
       background-position: center;
       background-repeat: no-repeat;
-      /* 移除白底 */
       background-color: transparent;
       border-radius: 12px;
       margin-right: clamp(8px, 2vw, 12px);
-      /* 調整陰影以配合透明背景 */
       filter: drop-shadow(0 4px 8px rgba(0, 137, 123, 0.2));
       position: relative;
       overflow: hidden;
@@ -121,14 +119,44 @@
       width: 100%;
     }
 
+    /* AI掃描按鈕特殊樣式 */
+    .ai-scan-btn {
+      background: linear-gradient(135deg, #00695c, #004d40) !important;
+      color: white !important;
+      padding: 0.6rem 1.2rem !important;
+      border-radius: 25px !important;
+      font-weight: 600 !important;
+      box-shadow: 0 3px 10px rgba(0, 137, 123, 0.3);
+      display: flex !important;
+      align-items: center;
+      gap: 0.5rem;
+      animation: pulse-btn 2s infinite;
+    }
+    
+    @keyframes pulse-btn {
+      0%, 100% { box-shadow: 0 3px 10px rgba(0, 137, 123, 0.3); }
+      50% { box-shadow: 0 3px 20px rgba(0, 137, 123, 0.5); }
+    }
+    
+    .ai-scan-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(0, 137, 123, 0.4) !important;
+      background: linear-gradient(135deg, #004d40, #00695c) !important;
+    }
+    
+    .ai-scan-btn::before {
+      content: '🤖';
+      font-size: 1.1em;
+    }
+
     /* 漢堡選單 */
     .hamburger {
       display: none;
       flex-direction: column;
       cursor: pointer;
-      padding: 0.5rem; /* 增加點擊區域 */
-      gap: 5px; /* 調整線條間距 */
-      z-index: 1001; /* 確保在其他元素之上 */
+      padding: 0.5rem;
+      gap: 5px;
+      z-index: 1001;
     }
 
     .hamburger span {
@@ -154,15 +182,15 @@
     .mobile-menu {
       display: none;
       position: absolute;
-      top: 100%; /* 相對於 navbar 的底部 */
+      top: 100%;
       left: 0;
       width: 100%;
       background: rgba(240, 240, 237, 0.98);
       backdrop-filter: blur(15px);
-      border-top: 1px solid #e0e0d9; /* 分隔線 */
+      border-top: 1px solid #e0e0d9;
       border-bottom: 1px solid #e0e0d9;
-      padding: 0.5rem 0; /* 上下留白 */
-      z-index: 1000; /* 與 navbar 同層級或略低，但高於頁面內容 */
+      padding: 0.5rem 0;
+      z-index: 1000;
       box-shadow: 0 4px 6px rgba(0,0,0,0.05);
     }
 
@@ -172,7 +200,7 @@
 
     .mobile-menu a {
       display: block;
-      padding: 0.85rem clamp(1rem, 4vw, 2rem); /* 增加內距 */
+      padding: 0.85rem clamp(1rem, 4vw, 2rem);
       color: #7a7a75;
       text-decoration: none;
       font-weight: 500;
@@ -181,12 +209,26 @@
       font-size: clamp(0.9rem, 2.5vw, 1rem);
     }
     .mobile-menu a:last-child {
-        border-bottom: none; /* 最後一個連結無底線 */
+        border-bottom: none;
     }
 
     .mobile-menu a:hover {
       color: #00695c;
       background: rgba(0, 137, 123, 0.05);
+    }
+
+    /* 移動版AI掃描按鈕樣式 */
+    .mobile-menu .ai-scan-mobile {
+      background: linear-gradient(135deg, #00695c, #004d40) !important;
+      color: white !important;
+      margin: 0.5rem 1rem;
+      border-radius: 25px;
+      text-align: center;
+      font-weight: 600;
+    }
+    
+    .mobile-menu .ai-scan-mobile:hover {
+      background: linear-gradient(135deg, #004d40, #00695c) !important;
     }
     
     /* 主視覺區域 */
@@ -197,7 +239,7 @@
       align-items: center;
       position: relative;
       overflow: hidden;
-      padding-top: clamp(60px, 8vh, 80px); /* 確保內容不被 navbar 遮擋 */
+      padding-top: clamp(60px, 8vh, 80px);
     }
     
     .hero::before {
@@ -494,6 +536,242 @@
       box-shadow: 0 7px 18px rgba(0, 0, 0, 0.12);
     }
     
+    /* 統計數據區域樣式 */
+    .stats-section {
+      padding: clamp(3rem, 8vw, 5rem) clamp(1rem, 4vw, 2rem);
+      background: linear-gradient(135deg, #f8faf5 0%, #f0f2eb 100%);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: clamp(1.5rem, 4vw, 2rem);
+      margin-top: 2rem;
+    }
+
+    .stat-card {
+      background: white;
+      padding: clamp(1.5rem, 4vw, 2rem);
+      border-radius: 16px;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      transition: transform 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(135deg, #00695c, #004d40);
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .stat-number {
+      font-size: clamp(1.8rem, 5vw, 2.5rem);
+      font-weight: 700;
+      color: #00695c;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      font-size: clamp(0.9rem, 2.5vw, 1rem);
+      color: #70706b;
+      margin-bottom: 1rem;
+    }
+
+    .stat-icon {
+      font-size: clamp(1.5rem, 4vw, 2rem);
+    }
+
+    /* 使用步驟區域樣式 */
+    .how-it-works {
+      padding: clamp(3rem, 8vw, 5rem) clamp(1rem, 4vw, 2rem);
+      background: white;
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: clamp(1.5rem, 4vw, 2rem);
+      margin-top: 2rem;
+    }
+
+    .step-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 1.5rem;
+      padding: clamp(1.5rem, 4vw, 2rem);
+      background: #f8faf5;
+      border-radius: 16px;
+      transition: transform 0.3s ease;
+    }
+
+    .step-card:hover {
+      transform: translateY(-3px);
+    }
+
+    .step-number {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #00695c, #004d40);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .step-content h3 {
+      font-size: clamp(1.1rem, 3vw, 1.3rem);
+      font-weight: 600;
+      color: #00695c;
+      margin-bottom: 0.5rem;
+    }
+
+    .step-content p {
+      color: #70706b;
+      line-height: 1.6;
+      font-size: clamp(0.85rem, 2vw, 0.95rem);
+    }
+
+    /* 用戶見證區域樣式 */
+    .testimonials {
+      padding: clamp(3rem, 8vw, 5rem) clamp(1rem, 4vw, 2rem);
+      background: #e9ebe4;
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: clamp(1.5rem, 4vw, 2rem);
+      margin-top: 2rem;
+    }
+
+    .testimonial-card {
+      background: white;
+      padding: clamp(1.5rem, 4vw, 2rem);
+      border-radius: 16px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      transition: transform 0.3s ease;
+    }
+
+    .testimonial-card:hover {
+      transform: translateY(-3px);
+    }
+
+    .testimonial-content {
+      margin-bottom: 1.5rem;
+    }
+
+    .testimonial-content p {
+      font-style: italic;
+      color: #70706b;
+      line-height: 1.7;
+      font-size: clamp(0.9rem, 2.5vw, 1rem);
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .author-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #e8eae2, #dde0d7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+
+    .author-name {
+      font-weight: 600;
+      color: #00695c;
+      font-size: clamp(0.9rem, 2.5vw, 1rem);
+    }
+
+    .author-title {
+      color: #70706b;
+      font-size: clamp(0.8rem, 2vw, 0.9rem);
+    }
+
+    /* FAQ 區域樣式 */
+    .faq-section {
+      padding: clamp(3rem, 8vw, 5rem) clamp(1rem, 4vw, 2rem);
+      background: white;
+    }
+
+    .faq-list {
+      max-width: 800px;
+      margin: 2rem auto 0;
+    }
+
+    .faq-item {
+      border-bottom: 1px solid #e0e2d9;
+      margin-bottom: 1rem;
+    }
+
+    .faq-question {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 0;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+
+    .faq-question:hover {
+      color: #00695c;
+    }
+
+    .faq-question h3 {
+      font-size: clamp(1rem, 2.5vw, 1.1rem);
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .faq-toggle {
+      font-size: 1.5rem;
+      font-weight: 300;
+      color: #00695c;
+      transition: transform 0.3s ease;
+    }
+
+    .faq-item.active .faq-toggle {
+      transform: rotate(45deg);
+    }
+
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+
+    .faq-item.active .faq-answer {
+      max-height: 200px;
+    }
+
+    .faq-answer p {
+      padding: 0 0 1.5rem 0;
+      color: #70706b;
+      line-height: 1.7;
+      font-size: clamp(0.85rem, 2vw, 0.95rem);
+    }
+    
     /* 頁腳 */
     .footer {
       background: linear-gradient(135deg, #1f2937, #111827);
@@ -608,21 +886,6 @@
 
       .hamburger {
         display: flex;
-      }
-
-      /* .navbar {
-        position: relative; 
-      } */
-      /* 上一行 navbar position:relative 註解掉，以讓 mobile-menu 的 absolute 定位參考 fixed 的 navbar */
-
-      .mobile-menu {
-        /* position: static; 改回 absolute 以正確顯示在 navbar 下方 */
-        /* 如果 navbar 維持 fixed，mobile-menu 也應相對於它或 viewport 定位 */
-      } 
-      
-      .hero {
-        /* padding-top: 0; 如果 navbar 不是 relative，這個可能需要調整 */
-        /* 因為 navbar 仍是 fixed，所以 hero 的 padding-top: clamp(60px, 8vh, 80px); 依然有效 */
       }
       
       .hero-buttons {
@@ -785,7 +1048,8 @@
         <a href="/howto-page">如何使用</a>
         <a href="/about-page">關於我們</a>
         <a href="/contact-page">聯絡我們</a>
-        <a href="/admin_login-page">管理員登入</a>
+        <!-- 將管理員登入改為AI掃描 -->
+        <a href="/ai3_0-page" class="ai-scan-btn">AI智慧掃描</a>
       </div>
       <div class="hamburger" id="hamburger-icon">
         <span></span>
@@ -798,7 +1062,8 @@
       <a href="/howto-page">如何使用</a>
       <a href="/about-page">關於我們</a>
       <a href="/contact-page">聯絡我們</a>
-      <a href="/admin_login-page">管理員登入</a>
+      <!-- 移動版選單也改為AI掃描 -->
+      <a href="ai-scan.html" class="ai-scan-mobile">🤖 AI智慧掃描</a>
     </div>
   </nav>
 
@@ -808,8 +1073,9 @@
         <h1>共創永續環境未來</h1>
         <p>環保回收兌換系統是一個激勵民眾參與資源回收的創新平台。回收物品獲取點數，兌換環保商品，一起為地球盡一份心力！</p>
         <div class="hero-buttons">
-          <a href="/register-page" class="btn btn-primary">✨ 立即註冊</a>
-          <a href="/login-page" class="btn btn-secondary">🔐 會員登入</a>
+          <!-- 主要按鈕也連結到AI掃描 -->
+          <a href="/register-page" class="btn btn-primary">立即註冊</a>
+          <a href="/login-page" class="btn btn-secondary">會員登入</a>
         </div>
       </div>
       <div class="hero-visual">
@@ -866,7 +1132,176 @@
   <section class="cta-section" id="join-us"> <div class="cta-content">
       <h2>🌍 加入我們，為地球盡一份心力</h2>
       <p>現在註冊環保回收兌換系統，開始您的綠色生活之旅。每一個小小的環保行動，都能為我們美麗的地球帶來巨大而深遠的正面改變。</p>
-      <a href="/register-page" class="btn-cta">🚀 立即開始環保之旅</a>
+      <!-- CTA按鈕也連結到AI掃描 -->
+      <a href="/ai3_0-page" class="btn-cta">🤖 立即開始AI掃描</a>
+    </div>
+  </section>
+
+  <!-- 統計數據區域 -->
+  <section class="stats-section">
+    <div class="container">
+      <div class="section-header">
+        <h2>我們的環保成果</h2>
+        <p>透過全民參與，我們已經為地球帶來了顯著的正面影響</p>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-number">47,392</div>
+          <div class="stat-label">回收物品總數</div>
+          <div class="stat-icon">♻️</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">35</div>
+          <div class="stat-label">活躍用戶數</div>
+          <div class="stat-icon">👥</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">9,456</div>
+          <div class="stat-label">CO₂減排量(公斤)</div>
+          <div class="stat-icon">🌱</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">5,847</div>
+          <div class="stat-label">等同種樹數量</div>
+          <div class="stat-icon">🌳</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 使用步驟區域 -->
+  <section class="how-it-works">
+    <div class="container">
+      <div class="section-header">
+        <h2>如何開始使用</h2>
+        <p>簡單四個步驟，開啟您的環保回收之旅</p>
+      </div>
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h3>註冊帳號</h3>
+            <p>快速註冊成為會員，建立您的專屬環保檔案</p>
+          </div>
+        </div>
+        <div class="step-card">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h3>收集回收物</h3>
+            <p>收集日常生活中的塑膠瓶、紙類、金屬等可回收物品</p>
+          </div>
+        </div>
+        <div class="step-card">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h3>AI智慧掃描</h3>
+            <p>使用我們的AI掃描系統，自動識別並計算回收物價值</p>
+          </div>
+        </div>
+        <div class="step-card">
+          <div class="step-number">4</div>
+          <div class="step-content">
+            <h3>兌換獎勵</h3>
+            <p>累積點數兌換環保商品，享受綠色生活的樂趣</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 用戶見證區域 -->
+  <section class="testimonials">
+    <div class="container">
+      <div class="section-header">
+        <h2>用戶真實分享</h2>
+        <p>聽聽其他環保夥伴的使用心得</p>
+      </div>
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <div class="testimonial-content">
+            <p>"使用這個系統後，我更積極參與回收了！AI掃描功能很方便，而且能兌換實用的環保商品。"</p>
+          </div>
+          <div class="testimonial-author">
+            <div class="author-avatar">👩</div>
+            <div class="author-info">
+              <div class="author-name">林小美</div>
+              <div class="author-title">環保愛好者</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-content">
+            <p>"孩子們現在都搶著幫忙收集回收物，因為可以累積點數！這個系統讓環保教育變得更有趣。"</p>
+          </div>
+          <div class="testimonial-author">
+            <div class="author-avatar">👨</div>
+            <div class="author-info">
+              <div class="author-name">陳爸爸</div>
+              <div class="author-title">三個孩子的父親</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-content">
+            <p>"公司導入這個系統後，員工的環保意識大幅提升，辦公室回收率增加了300%！"</p>
+          </div>
+          <div class="testimonial-author">
+            <div class="author-avatar">👩‍💼</div>
+            <div class="author-info">
+              <div class="author-name">王經理</div>
+              <div class="author-title">企業永續主管</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ 區域 -->
+  <section class="faq-section">
+    <div class="container">
+      <div class="section-header">
+        <h2>常見問題</h2>
+        <p>快速找到您需要的答案</p>
+      </div>
+      <div class="faq-list">
+        <div class="faq-item">
+          <div class="faq-question">
+            <h3>如何開始使用環保回收兌換系統？</h3>
+            <span class="faq-toggle">+</span>
+          </div>
+          <div class="faq-answer">
+            <p>只需要註冊一個免費帳號，然後使用我們的AI掃描功能掃描您的回收物品即可開始累積點數。整個過程非常簡單快速。</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">
+            <h3>哪些物品可以進行回收？</h3>
+            <span class="faq-toggle">+</span>
+          </div>
+          <div class="faq-answer">
+            <p>我們接受塑膠瓶、紙類、金屬罐、玻璃瓶等多種可回收物品。AI系統會自動識別物品類型並給予相應點數。</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">
+            <h3>點數可以兌換什麼商品？</h3>
+            <span class="faq-toggle">+</span>
+          </div>
+          <div class="faq-answer">
+            <p>我們提供各種環保商品，包括環保袋、竹製餐具、有機清潔用品、節能家電等，讓您的環保行動獲得實質回饋。</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">
+            <h3>AI掃描系統準確度如何？</h3>
+            <span class="faq-toggle">+</span>
+          </div>
+          <div class="faq-answer">
+            <p>我們的AI系統準確度超過95%，能夠精確識別物品類型、材質和重量，確保您獲得公平的點數回饋。</p>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -924,12 +1359,11 @@
       }
     });
 
-    // 平滑滾動 (此處針對頁內錨點，如果您的連結都是跨頁面，此段可選擇性保留或移除)
-    // 若要啟用，請確保您的連結格式為 href="#section-id" 且目標區塊有對應的 id
+    // 平滑滾動
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', function (e) {
         const hrefAttribute = this.getAttribute('href');
-        if (hrefAttribute.length > 1 && hrefAttribute.startsWith('#')) { // 避免處理 href="#" 這樣的空錨點，並確認是錨點
+        if (hrefAttribute.length > 1 && hrefAttribute.startsWith('#')) {
           const target = document.querySelector(hrefAttribute);
           if (target) {
             e.preventDefault();
@@ -942,56 +1376,9 @@
       });
     });
 
-    // 登入功能 (保持不變，後端處理邏輯需您自行實現)
-    async function login() {
-      const username = document.getElementById('login_username')?.value.trim();
-      const password = document.getElementById('login_password')?.value;
-      const msg = document.getElementById('login_message');
-
-      if (!username || !password) {
-        if (msg) {
-          msg.innerHTML = '<i class="fas fa-exclamation-circle"></i> 請輸入使用者名稱與密碼！';
-          msg.className = 'message error';
-        }
-        return;
-      }
-
-      try {
-        if (msg) {
-          msg.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 登入中...';
-          msg.className = 'message';
-        }
-
-        const formData = new URLSearchParams();
-        formData.append('username', username);
-        formData.append('password', password);
-
-        const res = await fetch('/login', { // '/login' 端點需由後端實現
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: formData
-        });
-
-        if (res.redirected) {
-          window.location.href = res.url;
-        } else {
-          const text = await res.text();
-          if (msg) {
-            msg.innerHTML = '<i class="fas fa-exclamation-circle"></i> ' + text;
-            msg.className = 'message error';
-          }
-        }
-      } catch (err) {
-        if (msg) {
-          msg.innerHTML = '<i class="fas fa-exclamation-circle"></i> 登入失敗，請稍後再試';
-          msg.className = 'message error';
-        }
-      }
-    }
-
-    // 載入動畫 及 漢堡選單
+    // 載入動畫及漢堡選單
     document.addEventListener('DOMContentLoaded', function() {
-      // 載入動畫 (Fade-in)
+      // 載入動畫
       const observerOptions = {
         threshold: 0.1,
         rootMargin: '0px 0px -50px 0px'
@@ -1002,7 +1389,7 @@
           if (entry.isIntersecting) {
             entry.target.style.opacity = '1';
             entry.target.style.transform = 'translateY(0)';
-            observer.unobserve(entry.target); // 動畫執行一次後停止觀察
+            observer.unobserve(entry.target);
           }
         });
       }, observerOptions);
@@ -1014,35 +1401,45 @@
         observer.observe(el);
       });
       
-      // --- 新增：漢堡選單控制邏輯 ---
+      // 漢堡選單控制邏輯
       const hamburgerIcon = document.getElementById('hamburger-icon');
       const mobileMenuLinks = document.getElementById('mobile-menu-links');
 
       if (hamburgerIcon && mobileMenuLinks) {
         hamburgerIcon.addEventListener('click', function() {
-          // 切換漢堡圖示的 active 狀態 (X 形狀)
           this.classList.toggle('active');
-          // 切換行動版選單的 active 狀態 (顯示/隱藏)
           mobileMenuLinks.classList.toggle('active');
         });
 
-        // 可選：點擊行動版選單中的連結後自動關閉選單
         mobileMenuLinks.querySelectorAll('a').forEach(link => {
           link.addEventListener('click', () => {
-            // 檢查是否為頁內錨點連結
             const isPageAnchor = link.getAttribute('href').startsWith('#') && link.getAttribute('href').length > 1;
             
             if (mobileMenuLinks.classList.contains('active')) {
               hamburgerIcon.classList.remove('active');
               mobileMenuLinks.classList.remove('active');
-              
-              // 如果是頁內錨點，平滑滾動的邏輯已由上面的 scrollIntoView 處理
-              // 如果不是頁內錨點（即跳轉到其他頁面），則無需額外處理滾動
             }
           });
         });
       }
-      // --- 漢堡選單控制邏輯結束 ---
+    });
+
+    // FAQ互動功能
+    document.querySelectorAll('.faq-question').forEach(question => {
+      question.addEventListener('click', () => {
+        const faqItem = question.parentElement;
+        const isActive = faqItem.classList.contains('active');
+        
+        // 關閉所有其他FAQ項目
+        document.querySelectorAll('.faq-item').forEach(item => {
+          item.classList.remove('active');
+        });
+        
+        // 切換當前項目
+        if (!isActive) {
+          faqItem.classList.add('active');
+        }
+      });
     });
   </script>
 </body>

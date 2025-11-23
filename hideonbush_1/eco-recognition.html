@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>環保物品辨識系統</title>
+    <style>
+    </style>
+</head>
+<body>
+    
+    <script>
+        // 環保物品資料庫 (擴充版)
+        var ecoDatabase = {
+        };
+
+        var fileInput = document.getElementById('fileInput');
+        var uploadArea = document.querySelector('.upload-area');
+        var previewContainer = document.getElementById('previewContainer');
+        var previewImage = document.getElementById('previewImage');
+
+        fileInput.addEventListener('change', handleFileSelect);
+
+
+        function handleFileSelect(e) {
+            var file = e.target.files[0];
+            if (file) {
+                handleFile(file);
+            }
+        }
+
+        function handleFile(file) {
+            if (!file.type.startsWith('image/')) {
+                alert('請上傳圖片檔案！');
+                return;
+            }
+
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                previewImage.src = e.target.result;
+                previewContainer.classList.remove('hidden');
+                document.getElementById('resultContainer').classList.add('hidden');
+                document.getElementById('quickSelectContainer').classList.add('hidden');
+            };
+            reader.readAsDataURL(file);
+        }
+
+    </script>
+</body>
+</html>

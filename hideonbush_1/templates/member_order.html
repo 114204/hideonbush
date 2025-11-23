@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>會員訂單管理 - 回收管理後台</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --background: #0a0a0a;
+            --foreground: #fafafa;
+            --card: #1a1a1a;
+            --card-foreground: #fafafa;
+            --popover: #1a1a1a;
+            --popover-foreground: #fafafa;
+            --primary: #8b5cf6;
+            --primary-foreground: #fafafa;
+            --secondary: #262626;
+            --secondary-foreground: #fafafa;
+            --muted: #262626;
+            --muted-foreground: #a1a1aa;
+            --accent: #262626;
+            --accent-foreground: #fafafa;
+            --destructive: #ef4444;
+            --destructive-foreground: #fafafa;
+            --success: #22c55e;
+            --success-foreground: #fafafa;
+            --warning: #f59e0b;
+            --warning-foreground: #fafafa;
+            --border: #262626;
+            --input: #262626;
+            --ring: #8b5cf6;
+            --radius: 0.5rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background-color: var(--background);
+            color: var(--foreground);
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .container-fluid {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: var(--card);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-header {
+            padding: 24px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .sidebar-header h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .sidebar-header h3::before {
+            content: "♻";
+            font-size: 1.5rem;
+        }
+
+        .sidebar-menu {
+            flex: 1;
+            padding: 16px 0;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: var(--muted-foreground);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            margin: 2px 12px;
+            border-radius: var(--radius);
+        }
+
+        .menu-item:hover {
+            background-color: var(--accent);
+            color: var(--accent-foreground);
+        }
+
+        .menu-item.active {
+            background-color: var(--primary);
+            color: var(--primary-foreground);
+        }
+
+        .menu-item i {
+            width: 20px;
+            margin-right: 12px;
+            font-size: 16px;
+        }
+
+        .sidebar-footer {
+            padding: 20px;
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--muted-foreground);
+            border-top: 1px solid var(--border);
+        }
+
+        .content {
+            flex: 1;
+            margin-left: 280px;
+            background-color: var(--background);
+        }
+
+        .header {
+            background: var(--card);
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 999;
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: var(--foreground);
+            padding: 8px;
+            border-radius: var(--radius);
+        }
+
+        .menu-toggle:hover {
+            background-color: var(--accent);
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            color: var(--foreground);
+            font-weight: 600;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: var(--input);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 8px 12px;
+            margin: 0 20px;
+            flex: 1;
+            max-width: 400px;
+        }
+
+        .search-box input {
+            border: none;
+            background: none;
+            outline: none;
+            flex: 1;
+            padding: 4px;
+            color: var(--foreground);
+        }
+
+        .search-box button {
+            background: none;
+            border: none;
+            color: var(--muted-foreground);
+            cursor: pointer;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-info img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-toggle {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            border-radius: var(--radius);
+            transition: background-color 0.2s ease;
+            color: var(--foreground);
+        }
+
+        .dropdown-toggle:hover {
+            background-color: var(--accent);
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background: var(--popover);
+            min-width: 180px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            z-index: 1000;
+            margin-top: 4px;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown-content a {
+            color: var(--popover-foreground);
+            padding: 12px 16px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            transition: background-color 0.2s ease;
+        }
+
+        .dropdown-content a:hover {
+            background-color: var(--accent);
+        }
+
+        .dropdown-content a i {
+            margin-right: 8px;
+            width: 16px;
+        }
+
+        .table-container {
+            margin: 24px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .table-header h2 {
+            margin: 0;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--foreground);
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 12px;
+        }
+
+        .filter-group select {
+            padding: 8px 12px;
+            background: var(--input);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            color: var(--foreground);
+            cursor: pointer;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background-color: var(--muted);
+            font-weight: 600;
+            color: var(--foreground);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+        }
+
+        td {
+            color: var(--card-foreground);
+        }
+
+        tr:hover {
+            background-color: var(--accent);
+        }
+
+        .status {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 70px;
+            height: 24px;
+            padding: 0 12px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            line-height: 1;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .status-pending {
+            background-color: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+
+        .status-processing {
+            background-color: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .status-completed {
+            background-color: rgba(34, 197, 94, 0.1);
+            color: var(--success);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+        }
+
+        .status-cancelled {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: var(--destructive);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--primary-foreground);
+        }
+
+        .btn-primary:hover {
+            background-color: #7c3aed;
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary);
+            color: var(--secondary-foreground);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--accent);
+        }
+
+        .btn-destructive {
+            background-color: var(--destructive);
+            color: var(--destructive-foreground);
+        }
+
+        .btn-destructive:hover {
+            background-color: #c02626;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 24px 0;
+            gap: 8px;
+        }
+
+        .pagination a {
+            color: var(--muted-foreground);
+            padding: 8px 12px;
+            text-decoration: none;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            transition: all 0.2s ease;
+            font-size: 0.875rem;
+        }
+
+        .pagination a:hover {
+            background-color: var(--accent);
+            color: var(--foreground);
+        }
+
+        .pagination a.active {
+            background-color: var(--primary);
+            color: var(--primary-foreground);
+            border-color: var(--primary);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            backdrop-filter: blur(4px);
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+        }
+
+        .modal-header {
+            padding: 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            color: var(--foreground);
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--muted-foreground);
+            padding: 4px;
+            border-radius: var(--radius);
+        }
+
+        .close-btn:hover {
+            color: var(--foreground);
+            background-color: var(--accent);
+        }
+
+        .order-details {
+            padding: 24px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            font-weight: 500;
+            color: var(--muted-foreground);
+        }
+
+        .detail-value {
+            color: var(--foreground);
+        }
+
+        .logout-confirm {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            backdrop-filter: blur(4px);
+        }
+
+        .logout-confirm.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logout-confirm-content {
+            background-color: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 32px;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+        }
+
+        .logout-confirm-content h3 {
+            color: var(--foreground);
+            margin-bottom: 16px;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .logout-confirm-content p {
+            color: var(--muted-foreground);
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+
+        .logout-confirm-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.show {
+                transform: translateX(0);
+            }
+
+            .content {
+                margin-left: 0;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .table-container {
+                margin: 16px;
+            }
+
+            .search-box {
+                max-width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h3>回收管理後台</h3>
+            </div>
+            <nav class="sidebar-menu">
+                <a href="/center-page" class="menu-item" data-page="center">
+                    <i class="fas fa-home"></i>
+                    <span>主控台</span>
+                </a>
+                <a href="/backmanament-page" class="menu-item" data-page="backmanament">
+                    <i class="fas fa-users"></i>
+                    <span>會員帳號管理</span>
+                </a>
+                <a href="/member_order-page" class="menu-item active" data-page="member_order">
+                    <i class="fas fa-box-open"></i>
+                    <span>會員訂單管理</span>
+                </a>
+                <a href="/point-page" class="menu-item" data-page="point">
+                    <i class="fas fa-coins"></i>
+                    <span>點數管理</span>
+                </a>
+                <a href="/control-page" class="menu-item" data-page="control" id="recycleReviewLink">
+                    <i class="fas fa-recycle"></i>
+                    <span>回收瓶審核</span>
+                    <span class="badge" id="pendingReviewCount" style="display: none;">0</span>
+                </a>
+                <a href="/db_management-page" class="menu-item" data-page="db">
+                    <i class="fas fa-database"></i>
+                    <span>資料庫管理</span>
+                </a>
+                <a href="#" class="menu-item" data-page="system">
+                    <i class="fas fa-cogs"></i>
+                    <span>系統設定</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                &copy; 2025 回收系統
+            </div>
+        </aside>
+
+        <main class="content">
+            <header class="header">
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1>會員訂單管理</h1>
+                <div class="search-box">
+                    <input type="text" placeholder="搜尋訂單..." id="searchInput">
+                    <button type="button" onclick="searchOrders()"><i class="fas fa-search"></i></button>
+                </div>
+                <div class="user-info">
+                    <img src="https://via.placeholder.com/32" alt="User Avatar">
+                    <div class="dropdown">
+                        <div class="dropdown-toggle">
+                            <span>管理員</span> <i class="fas fa-chevron-down" style="font-size: 0.75em; margin-left: 6px;"></i>
+                        </div>
+                        <div class="dropdown-content">
+                            <a href="#"><i class="fas fa-user-circle"></i> 個人資料</a>
+                            <a href="#"><i class="fas fa-cog"></i> 設定</a>
+                            <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> 登出</a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <section class="table-container">
+                <div class="table-header">
+                    <h2>訂單列表</h2>
+                    <div class="filter-group">
+                        <select id="statusFilter" onchange="filterOrders()">
+                            <option value="">全部狀態</option>
+                            <option value="pending">待處理</option>
+                            <option value="processing">處理中</option>
+                            <option value="completed">已完成</option>
+                            <option value="cancelled">已取消</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>訂單編號</th>
+                                <th>會員姓名</th>
+                                <th>商品名稱</th>
+                                <th>數量</th>
+                                <th>總金額</th>
+                                <th>訂單日期</th>
+                                <th>狀態</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orderTableBody">
+                            <tr><td colspan="8" style="text-align:center; padding: 40px;">載入中...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <nav class="pagination" id="paginationNav">
+                <a href="#" onclick="loadOrders(1, 'prev')">&laquo; 上一頁</a>
+                <a href="#" class="active" onclick="loadOrders(1)">1</a>
+                <a href="#" onclick="loadOrders(2)">2</a>
+                <a href="#" onclick="loadOrders(3)">3</a>
+                <a href="#" onclick="loadOrders(1, 'next')">下一頁 &raquo;</a>
+            </nav>
+        </main>
+    </div>
+
+    <div id="orderDetailModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>訂單詳情</h2>
+                <button class="close-btn" onclick="closeModal('orderDetailModal')">&times;</button>
+            </div>
+            <div class="order-details" id="orderDetailsContent">
+            </div>
+        </div>
+    </div>
+
+    <div id="logoutConfirm" class="logout-confirm">
+        <div class="logout-confirm-content">
+            <h3><i class="fas fa-sign-out-alt" style="margin-right: 10px; color: var(--destructive);"></i>確認登出</h3>
+            <p>您確定要登出管理後台嗎？請確認您已保存所有變更。</p>
+            <div class="logout-confirm-buttons">
+                <button class="btn btn-secondary" onclick="closeModal('logoutConfirm')">取消</button>
+                <button class="btn btn-destructive" onclick="performLogout()">確認登出</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="editOrderModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>編輯訂單狀態</h2>
+                <button class="close-btn" onclick="closeModal('editOrderModal')">&times;</button>
+            </div>
+            <div class="order-details">
+                <div class="detail-row">
+                    <span class="detail-label">訂單編號：</span>
+                    <span class="detail-value" id="editOrderId"></span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">訂單狀態：</span>
+                    <select id="editOrderStatus" style="padding: 8px 12px; background: var(--input); border: 1px solid var(--border); border-radius: var(--radius); color: var(--foreground); cursor: pointer; width: 100%; max-width: 200px;">
+                        <option value="pending">待處理</option>
+                        <option value="processing">處理中</option>
+                        <option value="completed">已完成</option>
+                        <option value="cancelled">已取消</option>
+                    </select>
+                </div>
+                <div style="margin-top: 24px; display: flex; gap: 12px; justify-content: flex-end;">
+                    <button class="btn btn-secondary" onclick="closeModal('editOrderModal')">取消</button>
+                    <button class="btn btn-primary" onclick="saveOrderStatus()">
+                        <i class="fas fa-save"></i> 保存
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // <CHANGE> 將 API 調用替換為硬編碼的訂單資料
+        const allOrdersData = [
+            { id: 'ORD-2025-001', member: '005', product: '環保購物袋', quantity: 2, total: 120, date: '2025-10-15 10:30', status: 'completed', address: '台北市信義區信義路五段7號', phone: '0912-345-678' },
+            { id: 'ORD-2025-002', member: '005', product: '有機蔬菜種子包', quantity: 1, total: 150, date: '2025-10-15 11:45', status: 'completed', address: '新北市板橋區中山路一段161號', phone: '0923-456-789' },
+            { id: 'ORD-2025-003', member: '005', product: '有機蔬菜種子包', quantity: 3, total: 150, date: '2025-10-14 09:20', status: 'completed', address: '桃園市中壢區中央西路二段141號', phone: '0934-567-890' },
+            { id: 'ORD-2025-004', member: '005', product: '有機蔬菜種子包', quantity: 1, total: 150, date: '2025-10-14 14:15', status: 'completed', address: '台中市西屯區台灣大道三段99號', phone: '0945-678-901' },
+            { id: 'ORD-2025-005', member: '005', product: '有機蔬菜種子包', quantity: 2, total: 150, date: '2025-10-14 08:50', status: 'completed', address: '台南市東區中華東路三段360號', phone: '0956-789-012' },
+            { id: 'ORD-2025-006', member: '005', product: '有機蔬菜種子包', quantity: 1, total: 150, date: '2025-10-14 13:30', status: 'completed', address: '高雄市前鎮區中山二路1號', phone: '0967-890-123' },
+            { id: 'ORD-2025-007', member: '005', product: '環保購物袋', quantity: 4, total: 1200, date: '2025-01-18 10:00', status: 'completed', address: '新竹市東區光復路二段101號', phone: '0978-901-234' },
+            { id: 'ORD-2025-008', member: '013', product: '環保購物袋', quantity: 2, total: 200, date: '2025-01-18 15:45', status: 'completed', address: '基隆市仁愛區孝二路99號', phone: '0989-012-345' },
+            { id: 'ORD-2025-009', member: '015', product: '環保購物袋', quantity: 3, total: 750, date: '2025-01-19 09:30', status: 'processing', address: '宜蘭縣宜蘭市中山路二段200號', phone: '0912-123-456' },
+            { id: 'ORD-2025-010', member: '005', product: '竹製牙刷組', quantity: 5, total: 500, date: '2025-01-19 11:20', status: 'completed', address: '花蓮縣花蓮市中山路100號', phone: '0923-234-567' },
+            { id: 'ORD-2025-011', member: '005', product: '環保購物袋', quantity: 1, total: 250, date: '2025-01-20 08:15', status: 'completed', address: '台東縣台東市中華路一段500號', phone: '0934-345-678' },
+            { id: 'ORD-2025-012', member: '005', product: '不鏽鋼便當盒', quantity: 2, total: 1000, date: '2025-01-20 14:00', status: 'processing', address: '屏東縣屏東市中山路60號', phone: '0945-456-789' },
+            { id: 'ORD-2025-013', member: '005', product: '環保保溫杯', quantity: 1, total: 800, date: '2025-01-21 10:45', status: 'completed', address: '嘉義市西區中山路200號', phone: '0956-567-890' },
+            { id: 'ORD-2025-014', member: '005', product: '玻璃吸管組', quantity: 3, total: 450, date: '2025-01-21 16:30', status: 'cancelled', address: '雲林縣斗六市中山路150號', phone: '0967-678-901' },
+            { id: 'ORD-2025-015', member: '005', product: '竹纖維餐具組', quantity: 2, total: 600, date: '2025-01-22 09:00', status: 'pending', address: '彰化縣彰化市中山路二段300號', phone: '0978-789-012' },
+            { id: 'ORD-2025-016', member: '005', product: '環保餐盒', quantity: 1, total: 450, date: '2025-01-22 13:15', status: 'processing', address: '南投縣南投市中興路100號', phone: '0989-890-123' },
+            { id: 'ORD-2025-017', member: '005', product: '矽膠食物袋', quantity: 2, total: 600, date: '2025-01-23 11:30', status: 'completed', address: '苗栗縣苗栗市中正路500號', phone: '0912-901-234' },
+            { id: 'ORD-2025-018', member: '005', product: '環保洗碗刷', quantity: 4, total: 400, date: '2025-01-23 15:00', status: 'completed', address: '澎湖縣馬公市中正路1號', phone: '0923-012-345' },
+            { id: 'ORD-2025-019', member: '005', product: '蜂蠟保鮮布', quantity: 1, total: 250, date: '2025-01-24 08:45', status: 'pending', address: '金門縣金城鎮民族路90號', phone: '0934-123-456' },
+            { id: 'ORD-2025-020', member: '005', product: '竹製牙刷組', quantity: 3, total: 300, date: '2025-01-24 14:20', status: 'processing', address: '連江縣南竿鄉介壽村76號', phone: '0945-234-567' }
+        ];
+
+        let currentPage = 1;
+        const pageSize = 10;
+        let totalPages = 1;
+        let searchQuery = '';
+        let statusFilter = '';
+        let filteredOrders = [];
+
+        function loadOrders(page, action = '') {
+            if (action === 'prev' && currentPage > 1) {
+                currentPage--;
+            } else if (action === 'next' && currentPage < totalPages) {
+                currentPage++;
+            } else if (page && page > 0) {
+                currentPage = page;
+            }
+
+            // <CHANGE> 使用硬編碼資料進行篩選和搜尋
+            filteredOrders = allOrdersData.filter(order => {
+                const matchesSearch = !searchQuery || 
+                    order.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    order.member.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    order.product.toLowerCase().includes(searchQuery.toLowerCase());
+                
+                const matchesStatus = !statusFilter || order.status === statusFilter;
+                
+                return matchesSearch && matchesStatus;
+            });
+
+            totalPages = Math.ceil(filteredOrders.length / pageSize);
+            const startIndex = (currentPage - 1) * pageSize;
+            const endIndex = startIndex + pageSize;
+            const paginatedOrders = filteredOrders.slice(startIndex, endIndex);
+
+            const tbody = document.getElementById('orderTableBody');
+            tbody.innerHTML = '';
+            
+            if (paginatedOrders.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding: 40px; color: #64748b;">沒有找到符合條件的訂單</td></tr>';
+            } else {
+                paginatedOrders.forEach(order => {
+                    const statusClass = `status-${order.status}`;
+                    const statusText = {
+                        'pending': '待處理',
+                        'processing': '處理中',
+                        'completed': '已完成',
+                        'cancelled': '已取消'
+                    }[order.status] || order.status;
+
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td><strong>${order.id}</strong></td>
+                        <td>${order.member}</td>
+                        <td>${order.product}</td>
+                        <td>${order.quantity}</td>
+                        <td><strong>${order.total} 點</strong></td>
+                        <td>${order.date}</td>
+                        <td><span class="status ${statusClass}">${statusText}</span></td>
+                        <td class="action-buttons">
+                            <button class="btn btn-secondary" onclick="viewOrderDetails('${order.id}')">
+                                <i class="fas fa-eye"></i> 查看
+                            </button>
+                            <button class="btn btn-primary" onclick="editOrder('${order.id}', '${order.status}')">
+                                <i class="fas fa-edit"></i> 編輯
+                            </button>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            }
+            
+            updatePagination();
+        }
+
+        function searchOrders() {
+            searchQuery = document.getElementById('searchInput').value.trim();
+            currentPage = 1;
+            loadOrders(currentPage);
+        }
+
+        function filterOrders() {
+            statusFilter = document.getElementById('statusFilter').value;
+            currentPage = 1;
+            loadOrders(currentPage);
+        }
+
+        function updatePagination() {
+            const pagination = document.getElementById('paginationNav');
+            let paginationHTML = '';
+
+            paginationHTML += `<a href="#" onclick="loadOrders(${currentPage}, 'prev')" ${currentPage <= 1 ? 'style="opacity:0.5;pointer-events:none;"' : ''}>&laquo; 上一頁</a>`;
+
+            for (let i = 1; i <= totalPages; i++) {
+                if (i === currentPage) {
+                    paginationHTML += `<a href="#" class="active" onclick="loadOrders(${i})">${i}</a>`;
+                } else {
+                    paginationHTML += `<a href="#" onclick="loadOrders(${i})">${i}</a>`;
+                }
+            }
+
+            paginationHTML += `<a href="#" onclick="loadOrders(${currentPage}, 'next')" ${currentPage >= totalPages ? 'style="opacity:0.5;pointer-events:none;"' : ''}>下一頁 &raquo;</a>`;
+
+            pagination.innerHTML = paginationHTML;
+        }
+
+        function viewOrderDetails(orderId) {
+            // <CHANGE> 從硬編碼資料中查找訂單
+            const order = allOrdersData.find(o => o.id === orderId);
+            
+            if (order) {
+                const statusText = {
+                    'pending': '待處理',
+                    'processing': '處理中',
+                    'completed': '已完成',
+                    'cancelled': '已取消'
+                }[order.status] || order.status;
+
+                document.getElementById('orderDetailsContent').innerHTML = `
+                    <div class="detail-row">
+                        <span class="detail-label">訂單編號：</span>
+                        <span class="detail-value">${order.id}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">會員姓名：</span>
+                        <span class="detail-value">${order.member}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">商品名稱：</span>
+                        <span class="detail-value">${order.product}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">數量：</span>
+                        <span class="detail-value">${order.quantity}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">總點數：</span>
+                        <span class="detail-value">${order.total} 點</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">訂單日期：</span>
+                        <span class="detail-value">${order.date}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">訂單狀態：</span>
+                        <span class="detail-value">${statusText}</span>
+                    </div>
+                   
+                    ${order.phone ? `
+                    <div class="detail-row">
+                        <span class="detail-label">聯絡電話：</span>
+                        <span class="detail-value">${order.phone}</span>
+                    </div>
+                    ` : ''}
+                `;
+                document.getElementById('orderDetailModal').classList.add('show');
+            } else {
+                alert('訂單不存在');
+            }
+        }
+
+        function editOrder(orderId, currentStatus) {
+            document.getElementById('editOrderId').textContent = orderId;
+            document.getElementById('editOrderStatus').value = currentStatus;
+            document.getElementById('editOrderModal').classList.add('show');
+        }
+
+        function saveOrderStatus() {
+            const orderId = document.getElementById('editOrderId').textContent;
+            const newStatus = document.getElementById('editOrderStatus').value;
+
+            // <CHANGE> 更新硬編碼資料中的訂單狀態
+            const orderIndex = allOrdersData.findIndex(o => o.id === orderId);
+            if (orderIndex !== -1) {
+                allOrdersData[orderIndex].status = newStatus;
+                alert('訂單狀態更新成功！');
+                closeModal('editOrderModal');
+                loadOrders(currentPage);
+            } else {
+                alert('更新訂單狀態失敗');
+            }
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('show');
+        }
+
+        function performLogout() {
+            localStorage.removeItem('loggedIn');
+            window.location.href = '/admin_login-page';
+        }
+
+        document.getElementById('menuToggle').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('show');
+        });
+
+        document.getElementById('logoutBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('logoutConfirm').classList.add('show');
+        });
+
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchOrders();
+            }
+        });
+        
+        window.onload = () => {
+            loadOrders(currentPage);
+        };
+    </script>
+
+</body>
+</html>

@@ -751,6 +751,30 @@
             this.closest('.input-container').style.transform = 'scale(1)';
         });
     });
+    // 登入成功後的處理
+async function handleLoginSuccess(response) {
+    const data = await response.json();
+    
+    if (data.status === 'success') {
+        // 存儲用戶名
+        localStorage.setItem('currentUser', data.username || '用戶名');
+        
+        // 立即獲取完整用戶資訊
+        try {
+            const userResponse = await fetch(`http://localhost:5000/api/users?username=${data.username}`);
+            if (userResponse.ok) {
+                const userData = await userResponse.json();
+                localStorage.setItem('userData', JSON.stringify(userData));
+                console.log('用戶資訊已保存:', userData);
+            }
+        } catch (error) {
+            console.error('獲取用戶資訊失敗:', error);
+        }
+        
+        // 跳轉到 dashboard
+        window.location.href = data.redirect || '/dashboard';
+    }
+}
 </script>
 </body>
 </html>

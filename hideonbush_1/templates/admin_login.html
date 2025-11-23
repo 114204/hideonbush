@@ -15,10 +15,7 @@
         :root {
             --primary-color: #3498db;
             --dark-color: #2c3e50;
-            --light-color: #ecf0f1;
             --danger-color: #e74c3c;
-            --success-color: #2ecc71;
-            --warning-color: #f39c12;
         }
 
         body {
@@ -87,8 +84,20 @@
             background-color: #2980b9;
         }
 
+        .login-btn:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+        }
+
         .error-message {
             color: var(--danger-color);
+            margin-top: 15px;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .success-message {
+            color: #27ae60;
             margin-top: 15px;
             font-size: 0.9rem;
             display: none;
@@ -108,33 +117,124 @@
                 <label for="password">密碼</label>
                 <input type="password" id="password" name="password" required>
             </div>
-            <button type="submit" class="login-btn">登入</button>
+            <button type="submit" class="login-btn" id="loginBtn">登入</button>
             <div id="errorMessage" class="error-message"></div>
+            <div id="successMessage" class="success-message"></div>
         </form>
     </div>
 
     <script>
-        document.getElementById('loginForm').addEventListener('submit', function(event) {
+        document.getElementById('loginForm').addEventListener('submit', async function(event) {
             event.preventDefault();
 
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             const errorMessage = document.getElementById('errorMessage');
+            const successMessage = document.getElementById('successMessage');
+            const loginBtn = document.getElementById('loginBtn');
 
-            // 簡單驗證（正式環境應使用後端驗證）
-            if (username === 'admin' && password === 'password') {
-                localStorage.setItem('loggedIn', 'true');
-                window.location.href = '/backmanament-page'; // 修改轉跳頁面
-            } else {
-                errorMessage.textContent = '用戶名或密碼錯誤。';
+            // 隱藏之前的訊息
+            errorMessage.style.display = 'none';
+            successMessage.style.display = 'none';
+
+            // 禁用登入按鈕
+            loginBtn.disabled = true;
+            loginBtn.textContent = '登入中...';
+
+            try {
+                console.log('[v0] 開始管理員登入:', username);
+
+                // 調用後端 API 進行登入
+                const response = await fetch('http://localhost:5000/api/admin/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    credentials: 'include', // 重要：包含 session cookies
+                    body: JSON.stringify({
+                        username: username,
+                        password: password
+                    })
+                });
+
+                console.log('[v0] 響應狀態:', response.status);
+                
+                const data = await response.json();
+                console.log('[v0] 登入響應:', data);
+
+                if (response.ok && data.status === 'success') {
+                    // 登入成功
+                    console.log('[v0] 管理員登入成功');
+                    
+                    // 設置 localStorage 標記（用於前端檢查）
+                    localStorage.setItem('loggedIn', 'true');
+                    localStorage.setItem('username', username);
+                    localStorage.setItem('isAdmin', 'true');
+                    
+                    // 顯示成功訊息
+                    successMessage.textContent = '登入成功，正在跳轉...';
+                    successMessage.style.display = 'block';
+                    
+                    // 延遲跳轉以顯示成功訊息
+                    setTimeout(() => {
+                        window.location.href = '/center-page';
+                    }, 500);
+                } else {
+                    // 登入失敗
+                    console.error('[v0] 登入失敗:', data);
+                    
+                    // 顯示詳細錯誤訊息
+                    let errorText = data.message || '用戶名或密碼錯誤';
+                    
+                    // 根據不同的錯誤狀態提供更詳細的提示
+                    if (response.status === 401) {
+                        errorText += '\n\n提示：請確認用戶名和密碼是否正確';
+                    } else if (response.status === 500) {
+                        errorText += '\n\n提示：伺服器錯誤，請檢查資料庫連接';
+                    }
+                    
+                    errorMessage.textContent = errorText;
+                    errorMessage.style.display = 'block';
+                    
+                    // 重新啟用登入按鈕
+                    loginBtn.disabled = false;
+                    loginBtn.textContent = '登入';
+                }
+            } catch (error) {
+                console.error('[v0] 登入請求失敗:', error);
+                console.error('[v0] 錯誤詳情:', error.message, error.stack);
+                
+                errorMessage.textContent = `登入失敗：${error.message}\n\n請檢查：\n1. 後端伺服器是否正在運行 (http://localhost:5000)\n2. 資料庫連接是否正常\n3. 是否已創建管理員帳號`;
                 errorMessage.style.display = 'block';
+                errorMessage.style.whiteSpace = 'pre-line'; // 允許換行顯示
+                
+                // 重新啟用登入按鈕
+                loginBtn.disabled = false;
+                loginBtn.textContent = '登入';
             }
         });
 
-        // 已登入則直接跳轉
-        if (localStorage.getItem('loggedIn') === 'true') {
-            window.location.href = '/backmanament-page'; // 修改轉跳頁面
+        // 檢查是否已登入，如果已登入則跳轉到主頁
+        async function checkLoginStatus() {
+            try {
+                const response = await fetch('http://localhost:5000/api/check-auth', {
+                    credentials: 'include'
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.authenticated) {
+                        console.log('[v0] 已登入，跳轉到主頁');
+                        window.location.href = '/center-page';
+                    }
+                }
+            } catch (error) {
+                console.error('[v0] 檢查登入狀態失敗:', error);
+            }
         }
+
+        // 頁面載入時檢查登入狀態
+        checkLoginStatus();
     </script>
 </body>
 </html>

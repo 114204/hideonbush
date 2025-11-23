@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>主控台 - 回收管理後台</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --background: #0a0a0a;
+            --foreground: #fafafa;
+            --card: #1a1a1a;
+            --card-foreground: #fafafa;
+            --popover: #1a1a1a;
+            --popover-foreground: #fafafa;
+            --primary: #8b5cf6;
+            --primary-foreground: #fafafa;
+            --secondary: #262626;
+            --secondary-foreground: #fafafa;
+            --muted: #262626;
+            --muted-foreground: #a1a1aa;
+            --accent: #262626;
+            --accent-foreground: #fafafa;
+            --destructive: #ef4444;
+            --destructive-foreground: #fafafa;
+            --success: #22c55e;
+            --success-foreground: #fafafa;
+            --warning: #f59e0b;
+            --warning-foreground: #fafafa;
+            --border: #262626;
+            --input: #262626;
+            --ring: #8b5cf6;
+            --radius: 0.5rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background-color: var(--background);
+            color: var(--foreground);
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .container-fluid {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: var(--card);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-header {
+            padding: 24px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .sidebar-header h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .sidebar-header h3::before {
+            content: "♻";
+            font-size: 1.5rem;
+        }
+
+        .sidebar-menu {
+            flex: 1;
+            padding: 16px 0;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: var(--muted-foreground);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            border-radius: 0;
+            margin: 2px 12px;
+            border-radius: var(--radius);
+        }
+
+        .menu-item:hover {
+            background-color: var(--accent);
+            color: var(--accent-foreground);
+        }
+
+        .menu-item.active {
+            background-color: var(--primary);
+            color: var(--primary-foreground);
+        }
+
+        .menu-item i {
+            width: 20px;
+            margin-right: 12px;
+            font-size: 16px;
+        }
+
+        .sidebar-footer {
+            padding: 20px;
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--muted-foreground);
+            border-top: 1px solid var(--border);
+        }
+
+        .content {
+            flex: 1;
+            margin-left: 280px;
+            background-color: var(--background);
+        }
+
+        .header {
+            background: var(--card);
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 999;
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: var(--foreground);
+            padding: 8px;
+            border-radius: var(--radius);
+        }
+
+        .menu-toggle:hover {
+            background-color: var(--accent);
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            color: var(--foreground);
+            font-weight: 600;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+        }
+
+        .user-info img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-toggle {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            border-radius: var(--radius);
+            transition: background-color 0.2s ease;
+            color: var(--foreground);
+        }
+
+        .dropdown-toggle:hover {
+            background-color: var(--accent);
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background: var(--popover);
+            min-width: 180px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            z-index: 1000;
+            margin-top: 4px;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown-content a {
+            color: var(--popover-foreground);
+            padding: 12px 16px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            transition: background-color 0.2s ease;
+        }
+
+        .dropdown-content a:hover {
+            background-color: var(--accent);
+        }
+
+        .dropdown-content a i {
+            margin-right: 8px;
+            width: 16px;
+        }
+
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            padding: 24px;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+
+        .card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.1);
+        }
+
+        .stat-card {
+            padding: 24px;
+            display: flex;
+            align-items: center;
+        }
+
+        .stat-card-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 16px;
+            font-size: 1.5rem;
+            color: var(--primary-foreground);
+        }
+
+        .stat-card-icon.users { background: var(--primary); }
+        .stat-card-icon.orders { background: var(--success); }
+        .stat-card-icon.points { background: var(--warning); }
+        .stat-card-icon.recycle { background: #06b6d4; }
+
+        .stat-info {
+            flex: 1;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--foreground);
+            line-height: 1;
+        }
+
+        .stat-label {
+            color: var(--muted-foreground);
+            font-size: 0.875rem;
+            margin-top: 4px;
+        }
+
+        .stat-change {
+            font-size: 0.75rem;
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .stat-change.positive {
+            color: var(--success);
+        }
+
+        .stat-change.negative {
+            color: var(--destructive);
+        }
+
+        .chart-container {
+            margin: 0 24px 24px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .chart-header h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--foreground);
+        }
+
+        .chart-placeholder {
+            height: 300px;
+            background: var(--secondary);
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--muted-foreground);
+        }
+
+        .recent-activities {
+            margin: 0 24px 24px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+        }
+
+        .activity-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .activity-header h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--foreground);
+        }
+
+        .activity-list {
+            padding: 16px 24px;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 16px;
+            font-size: 1rem;
+        }
+
+        .activity-icon.user { background: rgba(139, 92, 246, 0.1); color: var(--primary); }
+        .activity-icon.order { background: rgba(34, 197, 94, 0.1); color: var(--success); }
+        .activity-icon.recycle { background: rgba(6, 182, 212, 0.1); color: #06b6d4; }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-title {
+            font-weight: 500;
+            color: var(--foreground);
+            margin-bottom: 4px;
+        }
+
+        .activity-time {
+            font-size: 0.75rem;
+            color: var(--muted-foreground);
+        }
+
+        /* 新增登出確認對話框樣式 */
+        .logout-confirm {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            backdrop-filter: blur(4px);
+        }
+
+        .logout-confirm.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logout-confirm-content {
+            background-color: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 32px;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+        }
+
+        .logout-confirm-content h3 {
+            color: var(--foreground);
+            margin-bottom: 16px;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .logout-confirm-content p {
+            color: var(--muted-foreground);
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+
+        .logout-confirm-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary);
+            color: var(--secondary-foreground);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--accent);
+        }
+
+        .btn-destructive {
+            background-color: var(--destructive);
+            color: var(--destructive-foreground);
+        }
+
+        .btn-destructive:hover {
+            background-color: #dc2626;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.show {
+                transform: translateX(0);
+            }
+
+            .content {
+                margin-left: 0;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .stats-cards {
+                grid-template-columns: 1fr;
+                padding: 16px;
+            }
+
+            .chart-container, .recent-activities {
+                margin: 0 16px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h3>回收管理後台</h3>
+            </div>
+            <nav class="sidebar-menu">
+                <a href="/center-page" class="menu-item active" data-page="center">
+                    <i class="fas fa-home"></i>
+                    <span>主控台</span>
+                </a>
+                <a href="/backmanament-page" class="menu-item" data-page="backmanament">
+                    <i class="fas fa-users"></i>
+                    <span>會員帳號管理</span>
+                </a>
+                <a href="/member_order-page" class="menu-item" data-page="member_order">
+                    <i class="fas fa-box-open"></i>
+                    <span>會員訂單管理</span>
+                </a>
+                <a href="/point-page" class="menu-item" data-page="point">
+                    <i class="fas fa-coins"></i>
+                    <span>點數管理</span>
+                </a>
+                <a href="/control-page" class="menu-item" data-page="control" id="recycleReviewLink">
+                    <i class="fas fa-recycle"></i>
+                    <span>回收瓶審核</span>
+                    <span class="badge" id="pendingReviewCount" style="display: none;">0</span>
+                </a>
+                <a href="/db_management-page" class="menu-item" data-page="db">
+                    <i class="fas fa-database"></i>
+                    <span>資料庫管理</span>
+                </a>
+                <a href="#" class="menu-item" data-page="system">
+                    <i class="fas fa-cogs"></i>
+                    <span>系統設定</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                &copy; 2025 回收系統
+            </div>
+        </aside>
+
+        <main class="content">
+            <header class="header">
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1>主控台</h1>
+                <div class="user-info">
+                    <img src="https://via.placeholder.com/32" alt="User Avatar">
+                    <div class="dropdown">
+                        <div class="dropdown-toggle">
+                            <span>管理員</span> <i class="fas fa-chevron-down" style="font-size: 0.75em; margin-left: 6px;"></i>
+                        </div>
+                        <div class="dropdown-content">
+                            <a href="#"><i class="fas fa-user-circle"></i> 個人資料</a>
+                            <a href="#"><i class="fas fa-cog"></i> 設定</a>
+                            <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> 登出</a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <section class="stats-cards">
+                <div class="card">
+                    <div class="stat-card">
+                        <div class="stat-card-icon users">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="totalMembers">35</div>
+                            <div class="stat-label">總會員數</div>
+                            <div class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>+12% 本月</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="stat-card">
+                        <div class="stat-card-icon orders">
+                            <i class="fas fa-box-open"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="totalOrders">30</div>
+                            <div class="stat-label">總訂單數</div>
+                            <div class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>+8% 本月</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="stat-card">
+                        <div class="stat-card-icon points">
+                            <i class="fas fa-coins"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="totalPoints">200</div>
+                            <div class="stat-label">總點數發放</div>
+                            <div class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>+15% 本月</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="stat-card">
+                        <div class="stat-card-icon recycle">
+                            <i class="fas fa-recycle"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="totalRecycled">50</div>
+                            <div class="stat-label">回收瓶數量</div>
+                            <div class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>+20% 本月</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="chart-container">
+                <div class="chart-header">
+                    <h2>回收趨勢統計</h2>
+                    <select style="padding: 8px 12px; background: var(--input); border: 1px solid var(--border); border-radius: var(--radius); color: var(--foreground);">
+                        <option>本週</option>
+                        <option>本月</option>
+                        <option>本年</option>
+                    </select>
+                </div>
+                <div class="chart-placeholder">
+                    <i class="fas fa-chart-line" style="font-size: 3rem; margin-right: 16px;"></i>
+                    <span>圖表數據載入中...</span>
+                </div>
+            </div>
+
+            <div class="recent-activities">
+                <div class="activity-header">
+                    <h2>最近活動</h2>
+                </div>
+                <div class="activity-list" id="activityList">
+                    <div class="activity-item">
+                        <div class="activity-icon user">
+                            <i class="fas fa-spinner fa-spin"></i>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">載入中...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 新增登出確認對話框 -->
+    <div id="logoutConfirm" class="logout-confirm">
+        <div class="logout-confirm-content">
+            <h3><i class="fas fa-sign-out-alt" style="margin-right: 10px; color: var(--destructive);"></i>確認登出</h3>
+            <p>您確定要登出管理後台嗎？請確認您已保存所有變更。</p>
+            <div class="logout-confirm-buttons">
+                <button class="btn btn-secondary" onclick="closeLogoutModal()">取消</button>
+                <button class="btn btn-destructive" onclick="performLogout()">確認登出</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:5000/api';
+        
+        async function loadDashboardStats() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/dashboard/stats`);
+                const result = await response.json();
+                
+                if (result.success) {
+                    const data = result.data;
+                    
+                    document.getElementById('totalMembers').textContent = data.totalMembers.toLocaleString();
+                    document.getElementById('totalOrders').textContent = data.totalOrders.toLocaleString();
+                    document.getElementById('totalPoints').textContent = data.totalPoints.toLocaleString();
+                    document.getElementById('totalRecycled').textContent = data.totalRecycled.toLocaleString();
+                    
+                    if (data.pendingReviews > 0) {
+                        const badge = document.getElementById('pendingReviewCount');
+                        badge.textContent = data.pendingReviews;
+                        badge.style.display = 'inline-block';
+                    }
+                } else {
+                    console.error('載入統計數據失敗:', result.message);
+                }
+            } catch (error) {
+                console.error('[v0] 載入統計數據失敗:', error);
+                document.getElementById('totalMembers').textContent = '0';
+                document.getElementById('totalOrders').textContent = '0';
+                document.getElementById('totalPoints').textContent = '0';
+                document.getElementById('totalRecycled').textContent = '0';
+            }
+        }
+        
+        async function loadRecentActivities() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/dashboard/activities?limit=5`);
+                const result = await response.json();
+                
+                if (result.success && result.data.length > 0) {
+                    const activityList = document.getElementById('activityList');
+                    activityList.innerHTML = '';
+                    
+                    result.data.forEach(activity => {
+                        const iconClass = activity.type === 'user' ? 'user' : 
+                                        activity.type === 'recycle' ? 'recycle' : 'order';
+                        
+                        const activityItem = document.createElement('div');
+                        activityItem.className = 'activity-item';
+                        activityItem.innerHTML = `
+                            <div class="activity-icon ${iconClass}">
+                                <i class="fas fa-${activity.icon}"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-title">${activity.title}</div>
+                                <div class="activity-time">${formatTimeAgo(activity.time)}</div>
+                            </div>
+                        `;
+                        activityList.appendChild(activityItem);
+                    });
+                } else {
+                    const activityList = document.getElementById('activityList');
+                    activityList.innerHTML = `
+                        <div class="activity-item">
+                            <div class="activity-icon user">
+                                <i class="fas fa-info-circle"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-title">目前沒有最近活動</div>
+                                <div class="activity-time">系統運作正常</div>
+                            </div>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('[v0] 載入活動記錄失敗:', error);
+                const activityList = document.getElementById('activityList');
+                activityList.innerHTML = `
+                    <div class="activity-item">
+                        <div class="activity-icon user">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">無法載入活動記錄</div>
+                            <div class="activity-time">請檢查後端連線</div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+        
+        function formatTimeAgo(timeStr) {
+            const now = new Date();
+            const time = new Date(timeStr);
+            const diff = Math.floor((now - time) / 1000);
+            
+            if (diff < 60) return `${diff} 秒前`;
+            if (diff < 3600) return `${Math.floor(diff / 60)} 分鐘前`;
+            if (diff < 86400) return `${Math.floor(diff / 3600)} 小時前`;
+            return `${Math.floor(diff / 86400)} 天前`;
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('[v0] 初始化主控台頁面');
+            loadDashboardStats();
+            loadRecentActivities();
+            
+            setInterval(() => {
+                console.log('[v0] 自動更新統計數據');
+                loadDashboardStats();
+                loadRecentActivities();
+            }, 30000);
+        });
+
+        document.getElementById('menuToggle').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('show');
+        });
+
+        document.getElementById('logoutBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('logoutConfirm').classList.add('show');
+        });
+
+        function closeLogoutModal() {
+            document.getElementById('logoutConfirm').classList.remove('show');
+        }
+
+        function performLogout() {
+            console.log('[v0] 執行登出');
+            localStorage.removeItem('loggedIn');
+            window.location.href = '/admin_login-page';
+        }
+        
+        document.getElementById('logoutConfirm').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeLogoutModal();
+            }
+        });
+    </script>
+</body>
+</html>

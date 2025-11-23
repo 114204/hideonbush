@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>點數管理 - 回收管理後台</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --background: #0a0a0a;
+            --foreground: #fafafa;
+            --card: #1a1a1a;
+            --card-foreground: #fafafa;
+            --popover: #1a1a1a;
+            --popover-foreground: #fafafa;
+            --primary: #8b5cf6;
+            --primary-foreground: #fafafa;
+            --secondary: #262626;
+            --secondary-foreground: #fafafa;
+            --muted: #262626;
+            --muted-foreground: #a1a1aa;
+            --accent: #262626;
+            --accent-foreground: #fafafa;
+            --destructive: #ef4444;
+            --destructive-foreground: #fafafa;
+            --success: #22c55e;
+            --success-foreground: #fafafa;
+            --warning: #f59e0b;
+            --warning-foreground: #fafafa;
+            --border: #262626;
+            --input: #262626;
+            --ring: #8b5cf6;
+            --radius: 0.5rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background-color: var(--background);
+            color: var(--foreground);
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .container-fluid {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: var(--card);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-header {
+            padding: 24px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .sidebar-header h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .sidebar-header h3::before {
+            content: "♻";
+            font-size: 1.5rem;
+        }
+
+        .sidebar-menu {
+            flex: 1;
+            padding: 16px 0;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: var(--muted-foreground);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            margin: 2px 12px;
+            border-radius: var(--radius);
+        }
+
+        .menu-item:hover {
+            background-color: var(--accent);
+            color: var(--accent-foreground);
+        }
+
+        .menu-item.active {
+            background-color: var(--primary);
+            color: var(--primary-foreground);
+        }
+
+        .menu-item i {
+            width: 20px;
+            margin-right: 12px;
+            font-size: 16px;
+        }
+
+        .sidebar-footer {
+            padding: 20px;
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--muted-foreground);
+            border-top: 1px solid var(--border);
+        }
+
+        .content {
+            flex: 1;
+            margin-left: 280px;
+            background-color: var(--background);
+        }
+
+        .header {
+            background: var(--card);
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 999;
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: var(--foreground);
+            padding: 8px;
+            border-radius: var(--radius);
+        }
+
+        .menu-toggle:hover {
+            background-color: var(--accent);
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            color: var(--foreground);
+            font-weight: 600;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: var(--input);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 8px 12px;
+            margin: 0 20px;
+            flex: 1;
+            max-width: 400px;
+        }
+
+        .search-box input {
+            border: none;
+            background: none;
+            outline: none;
+            flex: 1;
+            padding: 4px;
+            color: var(--foreground);
+        }
+
+        .search-box button {
+            background: none;
+            border: none;
+            color: var(--muted-foreground);
+            cursor: pointer;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-info img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-toggle {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            border-radius: var(--radius);
+            transition: background-color 0.2s ease;
+            color: var(--foreground);
+        }
+
+        .dropdown-toggle:hover {
+            background-color: var(--accent);
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background: var(--popover);
+            min-width: 180px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            z-index: 1000;
+            margin-top: 4px;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown-content a {
+            color: var(--popover-foreground);
+            padding: 12px 16px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            transition: background-color 0.2s ease;
+        }
+
+        .dropdown-content a:hover {
+            background-color: var(--accent);
+        }
+
+        .dropdown-content a i {
+            margin-right: 8px;
+            width: 16px;
+        }
+
+        .table-container {
+            margin: 24px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .table-header h2 {
+            margin: 0;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--foreground);
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background-color: var(--muted);
+            font-weight: 600;
+            color: var(--foreground);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+        }
+
+        td {
+            color: var(--card-foreground);
+        }
+
+        tr:hover {
+            background-color: var(--accent);
+        }
+
+        .type-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 60px;
+            height: 24px;
+            padding: 0 12px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            line-height: 1;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .type-earn {
+            background-color: rgba(34, 197, 94, 0.1);
+            color: var(--success);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+        }
+
+        .type-spend {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: var(--destructive);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .type-adjust {
+            background-color: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--primary-foreground);
+        }
+
+        .btn-primary:hover {
+            background-color: #7c3aed;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 24px 0;
+            gap: 8px;
+        }
+
+        .pagination a {
+            color: var(--muted-foreground);
+            padding: 8px 12px;
+            text-decoration: none;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            transition: all 0.2s ease;
+            font-size: 0.875rem;
+        }
+
+        .pagination a:hover {
+            background-color: var(--accent);
+            color: var(--foreground);
+        }
+
+        .pagination a.active {
+            background-color: var(--primary);
+            color: var(--primary-foreground);
+            border-color: var(--primary);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            backdrop-filter: blur(4px);
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+        }
+
+        .modal-header {
+            padding: 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            color: var(--foreground);
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--muted-foreground);
+            padding: 4px;
+            border-radius: var(--radius);
+        }
+
+        .close-btn:hover {
+            color: var(--foreground);
+            background-color: var(--accent);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--foreground);
+            font-size: 0.875rem;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 0.875rem;
+            background-color: var(--input);
+            color: var(--foreground);
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: var(--ring);
+        }
+
+        .form-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            padding: 24px;
+            border-top: 1px solid var(--border);
+        }
+
+        form {
+            padding: 24px;
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary);
+            color: var(--secondary-foreground);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--accent);
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.show {
+                transform: translateX(0);
+            }
+
+            .content {
+                margin-left: 0;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .table-container {
+                margin: 16px;
+            }
+
+            .search-box {
+                max-width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h3>回收管理後台</h3>
+            </div>
+            <nav class="sidebar-menu">
+    <a href="/center-page" class="menu-item" data-page="center">
+        <i class="fas fa-home"></i>
+        <span>主控台</span>
+    </a>
+    <a href="/backmanament-page" class="menu-item" data-page="backmanament">
+        <i class="fas fa-users"></i>
+        <span>會員帳號管理</span>
+    </a>
+    <a href="/member_order-page" class="menu-item" data-page="member_order">
+        <i class="fas fa-box-open"></i>
+        <span>會員訂單管理</span>
+    </a>
+    <a href="/point-page" class="menu-item active" data-page="point">
+        <i class="fas fa-coins"></i>
+        <span>點數管理</span>
+    </a>
+    <a href="/control-page" class="menu-item" data-page="control" id="recycleReviewLink">
+        <i class="fas fa-recycle"></i>
+        <span>回收瓶審核</span>
+        <span class="badge" id="pendingReviewCount" style="display: none;">0</span>
+    </a>
+    <a href="/db_management-page" class="menu-item" data-page="db">
+        <i class="fas fa-database"></i>
+        <span>資料庫管理</span>
+    </a>
+    <a href="#" class="menu-item" data-page="system">
+        <i class="fas fa-cogs"></i>
+        <span>系統設定</span>
+    </a>
+</nav>
+            <div class="sidebar-footer">
+                &copy; 2025 回收系統
+            </div>
+        </aside>
+
+        <main class="content">
+            <header class="header">
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1>點數管理</h1>
+                <div class="search-box">
+                    <input type="text" placeholder="搜尋會員..." id="searchInput">
+                    <button type="button" onclick="searchPoints()"><i class="fas fa-search"></i></button>
+                </div>
+                <div class="user-info">
+                    <img src="https://via.placeholder.com/32" alt="User Avatar">
+                    <div class="dropdown">
+                        <div class="dropdown-toggle">
+                            <span>管理員</span> <i class="fas fa-chevron-down" style="font-size: 0.75em; margin-left: 6px;"></i>
+                        </div>
+                        <div class="dropdown-content">
+                            <a href="#"><i class="fas fa-user-circle"></i> 個人資料</a>
+                            <a href="#"><i class="fas fa-cog"></i> 設定</a>
+                            <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> 登出</a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <section class="table-container">
+                <div class="table-header">
+                    <h2>點數交易記錄</h2>
+                    <div class="table-actions">
+                        <button class="btn btn-primary" onclick="openModal('adjustPointsModal')">
+                            <i class="fas fa-plus-minus"></i> 調整點數
+                        </button>
+                    </div>
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>交易ID</th>
+                                <th>會員姓名</th>
+                                <th>類型</th>
+                                <th>點數變動</th>
+                                <th>餘額</th>
+                                <th>說明</th>
+                                <th>交易時間</th>
+                            </tr>
+                        </thead>
+                        <tbody id="pointsTableBody">
+                            <tr><td colspan="7" style="text-align:center; padding: 40px;">載入中...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <nav class="pagination" id="paginationNav">
+                <a href="#" onclick="loadPoints(1, 'prev')">&laquo; 上一頁</a>
+                <a href="#" class="active" onclick="loadPoints(1)">1</a>
+                <a href="#" onclick="loadPoints(2)">2</a>
+                <a href="#" onclick="loadPoints(3)">3</a>
+                <a href="#" onclick="loadPoints(1, 'next')">下一頁 &raquo;</a>
+            </nav>
+        </main>
+    </div>
+
+    <div id="adjustPointsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>調整會員點數</h2>
+                <button class="close-btn" onclick="closeModal('adjustPointsModal')">&times;</button>
+            </div>
+            <form id="adjustPointsForm">
+                <div class="form-group">
+                    <label for="memberId">會員ID *:</label>
+                    <input type="text" id="memberId" name="memberId" required>
+                </div>
+                <div class="form-group">
+                    <label for="pointsChange">點數變動 *:</label>
+                    <input type="number" id="pointsChange" name="pointsChange" required placeholder="正數為增加，負數為減少">
+                </div>
+                <div class="form-group">
+                    <label for="reason">調整原因 *:</label>
+                    <textarea id="reason" name="reason" rows="3" required placeholder="請輸入調整原因..."></textarea>
+                </div>
+                <div class="form-buttons">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('adjustPointsModal')">取消</button>
+                    <button type="submit" class="btn btn-primary">確認調整</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // <CHANGE> 將 SQL 資料轉換為 JavaScript 陣列
+        const pointsData = [
+            {id: 1, user_id: 20, points_change: 2, reason: '回收紙盒/紙箱 x1', created_at: '2025-10-13 01:22:47'},
+            {id: 2, user_id: 20, points_change: 2, reason: '回收紙盒/紙箱 x1', created_at: '2025-10-13 01:28:40'},
+            {id: 3, user_id: 20, points_change: 3, reason: '回收鋁罐 x1', created_at: '2025-10-13 01:36:34'},
+            {id: 4, user_id: 20, points_change: 10, reason: '回收寶特瓶 x1', created_at: '2025-10-13 02:57:19'},
+            {id: 5, user_id: 20, points_change: 3, reason: '回收鋁罐 x1', created_at: '2025-10-13 03:32:40'},
+            {id: 6, user_id: 20, points_change: 2, reason: '回收紙盒/紙箱 x1', created_at: '2025-10-13 03:32:44'},
+            {id: 7, user_id: 20, points_change: -120, reason: '兌換商品：有機蔬菜種子包 x1', created_at: '2025-10-13 03:32:54'},
+            {id: 8, user_id: 20, points_change: 2, reason: '回收紙盒/紙箱 x1', created_at: '2025-10-13 04:58:36'},
+            {id: 9, user_id: 20, points_change: 2, reason: '回收紙盒/紙箱 x1', created_at: '2025-10-14 02:01:32'},
+            {id: 10, user_id: 20, points_change: 2, reason: '回收紙盒/紙箱 x1', created_at: '2025-10-14 17:18:20'},
+            {id: 11, user_id: 20, points_change: 200, reason: '回收紙盒/紙箱 x100', created_at: '2025-10-14 17:19:52'},
+            {id: 12, user_id: 20, points_change: -120, reason: '兌換商品：有機蔬菜種子包 x1', created_at: '2025-10-14 17:20:10'},
+            {id: 13, user_id: 33, points_change: 2, reason: '回收紙盒/紙箱 x1', created_at: '2025-10-14 17:26:47'},
+            {id: 14, user_id: 33, points_change: 200, reason: '回收紙盒/紙箱 x100', created_at: '2025-10-14 17:27:58'},
+            {id: 15, user_id: 33, points_change: -150, reason: '兌換商品：環保購物袋 x1', created_at: '2025-10-14 17:28:20'}
+        ];
+
+        // <CHANGE> 模擬會員名稱對應
+        const userNames = {
+            20: '005',
+            33: '015'
+        };
+
+        let currentPage = 1;
+        const pageSize = 10;
+        let totalPages = 1;
+        let searchQuery = '';
+        let filteredData = [];
+
+        // <CHANGE> 修改 loadPoints 函數以使用本地資料
+        function loadPoints(page, action = '') {
+            if (action === 'prev' && currentPage > 1) {
+                currentPage--;
+            } else if (action === 'next' && currentPage < totalPages) {
+                currentPage++;
+            } else if (page && page > 0) {
+                currentPage = page;
+            }
+
+            // 過濾資料
+            filteredData = pointsData.filter(item => {
+                if (!searchQuery) return true;
+                const userName = userNames[item.user_id] || `會員 ${item.user_id}`;
+                return userName.includes(searchQuery) || 
+                       item.user_id.toString().includes(searchQuery) ||
+                       item.reason.includes(searchQuery);
+            });
+
+            // 計算總頁數
+            totalPages = Math.ceil(filteredData.length / pageSize);
+            if (totalPages === 0) totalPages = 1;
+
+            // 分頁
+            const startIndex = (currentPage - 1) * pageSize;
+            const endIndex = startIndex + pageSize;
+            const pageData = filteredData.slice(startIndex, endIndex);
+
+            // 計算餘額
+            const dataWithBalance = pageData.map((item, index) => {
+                const actualIndex = startIndex + index;
+                let balance = 0;
+                for (let i = 0; i <= actualIndex; i++) {
+                    balance += filteredData[i].points_change;
+                }
+                return { ...item, balance };
+            });
+
+            // 渲染表格
+            const tbody = document.getElementById('pointsTableBody');
+            tbody.innerHTML = '';
+            
+            if (dataWithBalance.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 40px; color: #64748b;">沒有找到符合條件的記錄</td></tr>';
+            } else {
+                dataWithBalance.forEach(trans => {
+                    const userName = userNames[trans.user_id] || `會員 ${trans.user_id}`;
+                    const isPositive = trans.points_change > 0;
+                    const typeClass = trans.reason.includes('兌換') ? 'type-spend' : (isPositive ? 'type-earn' : 'type-adjust');
+                    const typeText = trans.reason.includes('兌換') ? '消費' : (isPositive ? '獲得' : '調整');
+                    const changeText = isPositive ? `+${trans.points_change}` : trans.points_change;
+                    const changeColor = isPositive ? 'var(--success)' : 'var(--destructive)';
+
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td><strong>${trans.id}</strong></td>
+                        <td>${userName}</td>
+                        <td><span class="type-badge ${typeClass}">${typeText}</span></td>
+                        <td><strong style="color: ${changeColor}">${changeText}</strong></td>
+                        <td>${trans.balance}</td>
+                        <td>${trans.reason}</td>
+                        <td>${trans.created_at}</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            }
+            
+            updatePagination();
+        }
+
+        function searchPoints() {
+            searchQuery = document.getElementById('searchInput').value.trim();
+            currentPage = 1;
+            loadPoints(currentPage);
+        }
+
+        function updatePagination() {
+            const pagination = document.getElementById('paginationNav');
+            let paginationHTML = '';
+
+            paginationHTML += `<a href="#" onclick="loadPoints(${currentPage}, 'prev')" ${currentPage <= 1 ? 'style="opacity:0.5;pointer-events:none;"' : ''}>&laquo; 上一頁</a>`;
+
+            for (let i = 1; i <= totalPages; i++) {
+                if (i === currentPage) {
+                    paginationHTML += `<a href="#" class="active" onclick="loadPoints(${i})">${i}</a>`;
+                } else {
+                    paginationHTML += `<a href="#" onclick="loadPoints(${i})">${i}</a>`;
+                }
+            }
+
+            paginationHTML += `<a href="#" onclick="loadPoints(${currentPage}, 'next')" ${currentPage >= totalPages ? 'style="opacity:0.5;pointer-events:none;"' : ''}>下一頁 &raquo;</a>`;
+
+            pagination.innerHTML = paginationHTML;
+        }
+
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('show');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('show');
+        }
+
+        document.getElementById('adjustPointsForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('此為靜態展示頁面，無法實際調整點數');
+            closeModal('adjustPointsModal');
+            this.reset();
+        });
+
+        document.getElementById('menuToggle').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('show');
+        });
+
+        document.getElementById('logoutBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            if (confirm('確定要登出嗎？')) {
+                localStorage.removeItem('loggedIn');
+                window.location.href = '/admin_login-page';
+            }
+        });
+
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPoints();
+            }
+        });
+        
+        window.onload = () => {
+            loadPoints(currentPage);
+        };
+    </script>
+
+</body>
+</html>

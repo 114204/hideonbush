@@ -1296,6 +1296,185 @@ body {
   opacity: 1;
   transform: translateY(0);
 }
+
+/* Added Styles for Recycle Records and Edit Profile Modal */
+.reviews-grid { /* Renamed from features-grid to be more specific */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.recycle-record-card {
+  background: linear-gradient(135deg, #ffffff, #f9fafb);
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+  border: 1px solid #e5e7eb;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.recycle-record-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+}
+
+.status-badge {
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.status-pending { background: #fef3c7; color: #92400e; }
+.status-approved { background: #d1fae5; color: #065f46; }
+.status-rejected { background: #fee2e2; color: #991b1b; }
+
+.record-info-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Adjusted for better layout */
+  gap: 1rem;
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background: rgba(0,137,123,0.05);
+  border-radius: 12px;
+}
+
+.info-item div {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.info-item span {
+  font-weight: 600;
+  color: #374151;
+  margin-top: 0.25rem;
+  display: block;
+}
+
+.info-item .points-value {
+  font-weight: 700;
+  color: #00897b;
+  font-size: 1.1rem;
+}
+
+.info-item .confidence-value {
+    font-weight: 600;
+    color: #374151;
+    margin-top: 0.25rem;
+    display: block;
+}
+
+.reject-reason {
+  margin-top: 0.5rem;
+  padding: 0.75rem;
+  background: #fee2e2;
+  color: #991b1b;
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+.edit-profile-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  z-index: 10000;
+  align-items: center;
+  justify-content: center;
+}
+
+.edit-profile-modal-content {
+  background: white;
+  border-radius: 24px;
+  padding: 2.5rem;
+  max-width: 600px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+
+.edit-profile-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.edit-profile-modal-header h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #00695c;
+}
+
+.close-modal-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #6b7280;
+}
+
+.edit-profile-form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.edit-profile-form input[type="text"],
+.edit-profile-form input[type="email"],
+.edit-profile-form input[type="tel"],
+.edit-profile-form input[type="date"],
+.edit-profile-form textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+
+.edit-profile-form textarea {
+  resize: vertical;
+}
+
+.edit-profile-form .form-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.edit-profile-form .save-btn {
+  flex: 1;
+  padding: 1rem;
+  background: linear-gradient(135deg, #26a69a, #00897b);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.edit-profile-form .cancel-btn {
+  flex: 1;
+  padding: 1rem;
+  background: #f3f4f6;
+  color: #374151;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
 </style>
 </head>
 <body>
@@ -1319,7 +1498,7 @@ body {
         <div class="points-display" id="pointsDisplay">
           ⭐ 0 點數
         </div>
-        <button class="logout-btn" onclick="logout()">登出</button>
+        <button class="logout-btn" onclick="handleLogout(event)">登出</button>
       </div>
       <div class="mobile-nav-toggle" id="mobileNavToggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="mobileMenu">
         <span></span>
@@ -1332,6 +1511,7 @@ body {
       <a href="/howto-page">如何使用</a>
       <a href="/about-page">關於我們</a>
       <a href="/contact-page">聯絡我們</a>
+      
       <div class="user-info-mobile">
         <div class="user-avatar" id="userAvatarMobile">U</div>
         <span class="welcome-text" id="welcomeTextMobile">歡迎！</span>
@@ -1339,7 +1519,7 @@ body {
       <div class="points-display-mobile" id="pointsDisplayMobile">
         ⭐ 0 點數
       </div>
-      <button class="logout-btn logout-btn-mobile" onclick="logout()">登出</button>
+      <button class="logout-btn logout-btn-mobile" onclick="handleLogout(event)">登出</button>
     </div>
   </nav>
 
@@ -1350,7 +1530,7 @@ body {
         <h1>繼續您的環保之旅</h1>
         <p>您已經是我們環保大家庭的一員！現在就開始回收物品賺取點數，兌換精美的環保商品，讓每一個行動都為地球帶來正面影響。</p>
         <div class="hero-buttons">
-          <a href="/recycle-page" class="btn btn-primary">🔄 開始回收</a>
+          <a href="/ai3_0-page" class="btn btn-secondary">🤖AI智慧掃描</a>
           <a href="/shop-page" class="btn btn-secondary">🛍️ 兌換商城</a>
         </div>
       </div>
@@ -1381,6 +1561,26 @@ body {
         <div class="stat-icon">🏆</div>
         <span class="stat-number" id="rankLevel">銅級</span>
         <div class="stat-label">會員等級</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 新增待審核回收記錄區域 -->
+  <section class="features" style="padding: 4rem 2rem; background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="fade-in">我的回收記錄</h2>
+        <p class="fade-in">查看您提交的回收審核狀態</p>
+      </div>
+      
+      <div id="reviewsContainer" class="reviews-grid">
+         <!-- 回收記錄卡片將動態插入這裡 -->
+      </div>
+      
+      <div id="noReviewsMessage" style="display: none; text-align: center; padding: 3rem; color: #6b7280;">
+        <div style="font-size: 3rem; margin-bottom: 1rem;">📦</div>
+        <p style="font-size: 1.2rem;">您還沒有提交任何回收記錄</p>
+        <a href="/ai3_0-page" style="display: inline-block; margin-top: 1.5rem; padding: 0.75rem 2rem; background: linear-gradient(135deg, #26a69a, #00897b); color: white; text-decoration: none; border-radius: 25px; font-weight: 600;">立即開始回收</a>
       </div>
     </div>
   </section>
@@ -1487,51 +1687,344 @@ body {
     </div>
   </footer>
 
+  <!-- 新增編輯個人資料模態框 -->
+  <div id="editProfileModal" class="edit-profile-modal">
+    <div class="edit-profile-modal-content">
+      <div class="edit-profile-modal-header">
+        <h2>編輯個人資料</h2>
+        <button onclick="closeEditProfileModal()" class="close-modal-btn">✕</button>
+      </div>
+      
+      <form id="editProfileForm" class="edit-profile-form">
+        <div>
+          <label>用戶名</label>
+          <input type="text" id="editUsername" required>
+        </div>
+        
+        <div>
+          <label>Email</label>
+          <input type="email" id="editEmail" required>
+        </div>
+        
+        <div>
+          <label>電話</label>
+          <input type="tel" id="editPhone">
+        </div>
+        
+        <div>
+          <label>地址</label>
+          <textarea id="editAddress" rows="3"></textarea>
+        </div>
+        
+        <div>
+          <label>生日</label>
+          <input type="date" id="editBirthday">
+        </div>
+        
+        <div class="form-actions">
+          <button type="submit" class="save-btn">保存修改</button>
+          <button type="button" onclick="closeEditProfileModal()" class="cancel-btn">取消</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <script>
-    // 登出功能
-    function logout() {
-      alert('您已成功登出！將返回首頁。');
-      window.location.href = '/'; // 導向到網站根目錄或登入頁面
+    function handleLogout(event) {
+        event.preventDefault();
+        
+        console.log('[Dashboard] 開始登出流程...');
+        
+        // 清除所有前端儲存
+        localStorage.clear();
+        sessionStorage.clear();
+        
+        // 顯示登出提示
+        showNotification('正在登出...', 'info');
+        
+        // 導向後端登出路由
+        setTimeout(() => {
+            window.location.href = '/logout';
+        }, 500);
+    }
+
+    function showNotification(message, type = 'info') {
+        const colors = {
+            success: '#10b981',
+            error: '#ef4444',
+            warning: '#f59e0b',
+            info: '#3b82f6'
+        };
+        
+        const notification = document.createElement('div');
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: ${colors[type]};
+            color: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            z-index: 10000;
+            font-weight: 500;
+            animation: slideIn 0.3s ease-out;
+        `;
+        notification.textContent = message;
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.style.animation = 'slideOut 0.3s ease-out';
+            setTimeout(() => notification.remove(), 300);
+        }, 2000);
+    }
+
+    async function loadUserData() {
+        try {
+            console.log('[Dashboard] 開始載入用戶資料...');
+            
+            // 1. 檢查後端 session 認證狀態
+            const authResponse = await fetch('/api/check-auth', {
+                method: 'GET',
+                credentials: 'include'
+            });
+            
+            const authData = await authResponse.json();
+            console.log('[Dashboard] 認證檢查結果:', authData);
+            
+            if (!authData.authenticated) {
+                console.warn('[Dashboard] 用戶未登入，重定向到登入頁面');
+                showNotification('請先登入', 'warning');
+                setTimeout(() => {
+                    window.location.href = '/login-page';
+                }, 1500);
+                return;
+            }
+            
+            // 2. 使用後端返回的完整用戶資料
+            const userData = authData.user;
+            
+            // 3. 儲存到 localStorage 供其他頁面使用
+            localStorage.setItem('userData', JSON.stringify(userData));
+            localStorage.setItem('currentUser', userData.username);
+            
+            console.log('[Dashboard] 用戶資料載入成功:', userData);
+            
+            // 4. 更新頁面顯示
+            updatePageWithUserData(userData);
+            
+        } catch (error) {
+            console.error('[Dashboard] 載入用戶資料錯誤:', error);
+            showNotification('載入用戶資料失敗，請重新登入', 'error');
+            setTimeout(() => {
+                window.location.href = '/login-page';
+            }, 2000);
+        }
+    }
+
+    function updatePageWithUserData(userData) {
+        console.log('[Dashboard] 更新頁面顯示:', userData);
+        
+        // 更新桌面版導航欄
+        const userAvatar = document.getElementById('userAvatar');
+        const welcomeText = document.getElementById('welcomeText');
+        const pointsDisplay = document.getElementById('pointsDisplay');
+        const heroWelcome = document.getElementById('heroWelcome');
+        
+        if (userAvatar) userAvatar.textContent = userData.username.charAt(0).toUpperCase();
+        if (welcomeText) {
+            welcomeText.innerHTML = `歡迎, ${userData.username}! <button onclick="openEditProfileModal()" style="margin-left: 0.5rem; padding: 0.25rem 0.75rem; background: rgba(0,137,123,0.1); color: #00897b; border: 1px solid #00897b; border-radius: 12px; font-size: 0.85rem; cursor: pointer; transition: all 0.3s;">✏️ 編輯</button>`;
+        }
+        if (pointsDisplay) pointsDisplay.innerHTML = `⭐ ${userData.points.toLocaleString()} 點數`;
+        if (heroWelcome) heroWelcome.textContent = `歡迎回來, ${userData.username}!`;
+
+        // 更新統計數據
+        const totalPoints = document.getElementById('totalPoints');
+        if (totalPoints) totalPoints.textContent = userData.points.toLocaleString();
+
+        // 更新行動版導航欄
+        const userAvatarMobile = document.getElementById('userAvatarMobile');
+        const welcomeTextMobile = document.getElementById('welcomeTextMobile');
+        const pointsDisplayMobile = document.getElementById('pointsDisplayMobile');
+        
+        if (userAvatarMobile) userAvatarMobile.textContent = userData.username.charAt(0).toUpperCase();
+        if (welcomeTextMobile) welcomeTextMobile.textContent = `歡迎, ${userData.username}!`;
+        if (pointsDisplayMobile) pointsDisplayMobile.innerHTML = `⭐ ${userData.points.toLocaleString()} 點數`;
+        
+        loadUserReviews(userData.id);
+    }
+
+    async function loadUserReviews(userId) {
+        try {
+            const response = await fetch(`/api/recycle/user/${userId}?status=all`, {
+                method: 'GET',
+                credentials: 'include'
+            });
+            
+            const result = await response.json();
+            
+            if (result.success && result.data.length > 0) {
+                displayReviews(result.data);
+                document.getElementById('noReviewsMessage').style.display = 'none';
+            } else {
+                document.getElementById('reviewsContainer').innerHTML = '';
+                document.getElementById('noReviewsMessage').style.display = 'block';
+            }
+        } catch (error) {
+            console.error('[Dashboard] 載入回收記錄失敗:', error);
+            document.getElementById('noReviewsMessage').style.display = 'block';
+        }
+    }
+
+    function displayReviews(reviews) {
+        const container = document.getElementById('reviewsContainer');
+        container.innerHTML = '';
+        
+        reviews.forEach(review => {
+            const statusColors = {
+                'pending': { bg: '#fef3c7', text: '#92400e', label: '待審核' },
+                'approved': { bg: '#d1fae5', text: '#065f46', label: '已通過' },
+                'rejected': { bg: '#fee2e2', text: '#991b1b', label: '已拒絕' }
+            };
+            
+            const status = statusColors[review.status] || statusColors['pending'];
+            
+            const card = document.createElement('div');
+            card.className = 'recycle-record-card';
+            
+            card.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+                    <div>
+                        <div style="font-size: 0.85rem; color: #6b7280; margin-bottom: 0.25rem;">審核編號</div>
+                        <div style="font-weight: 700; color: #00695c; font-size: 1.1rem;">${review.review_id}</div>
+                    </div>
+                    <div class="status-badge status-${review.status}">${status.label}</div>
+                </div>
+                
+                <div class="record-info-section">
+                    <div class="info-item">
+                        <div>物品類型</div>
+                        <span>${review.item_type}</span>
+                    </div>
+                    <div class="info-item">
+                        <div>數量</div>
+                        <span>${review.quantity} 個</span>
+                    </div>
+                    <div class="info-item">
+                        <div>預估點數</div>
+                        <span class="points-value">⭐ ${review.estimated_points}</span>
+                    </div>
+                    <div class="info-item">
+                        <div>信心度</div>
+                        <span class="confidence-value">${(review.confidence || 0).toFixed(1)}%</span>
+                    </div>
+                </div>
+                
+                <div style="font-size: 0.85rem; color: #6b7280;">
+                    <div>提交時間: ${review.submit_time}</div>
+                    ${review.review_time ? `<div style="margin-top: 0.25rem;">審核時間: ${review.review_time}</div>` : ''}
+                    ${review.reject_reason ? `<div class="reject-reason">拒絕原因: ${review.reject_reason}</div>` : ''}
+                </div>
+            `;
+            
+            container.appendChild(card);
+        });
+    }
+
+    function openEditProfileModal() {
+        const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+        
+        document.getElementById('editUsername').value = userData.username || '';
+        document.getElementById('editEmail').value = userData.email || '';
+        document.getElementById('editPhone').value = userData.phone || '';
+        document.getElementById('editAddress').value = userData.address || '';
+        document.getElementById('editBirthday').value = userData.birthday ? userData.birthday.split('T')[0] : ''; // Format for date input
+        
+        const modal = document.getElementById('editProfileModal');
+        modal.style.display = 'flex';
+    }
+
+    function closeEditProfileModal() {
+        document.getElementById('editProfileModal').style.display = 'none';
+    }
+
+    document.getElementById('editProfileForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const formData = {
+            username: document.getElementById('editUsername').value,
+            email: document.getElementById('editEmail').value,
+            phone: document.getElementById('editPhone').value,
+            address: document.getElementById('editAddress').value,
+            birthday: document.getElementById('editBirthday').value
+        };
+        
+        try {
+            const response = await fetch('/api/user/update', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify(formData)
+            });
+            
+            const result = await response.json();
+            
+            if (result.status === 'success') {
+                showNotification('資料更新成功!', 'success');
+                closeEditProfileModal();
+                
+                // 重新載入用戶資料
+                await loadUserData();
+            } else {
+                showNotification(result.message || '更新失敗', 'error');
+            }
+        } catch (error) {
+            console.error('[Dashboard] 更新資料失敗:', error);
+            showNotification('更新失敗,請稍後再試', 'error');
+        }
+    });
+
+    async function updateUserPoints() {
+        try {
+            const authResponse = await fetch('/api/check-auth', {
+                method: 'GET',
+                credentials: 'include'
+            });
+            
+            const authData = await authResponse.json();
+            
+            if (!authData.authenticated) {
+                console.warn('[Dashboard] Session 已過期');
+                return;
+            }
+            
+            const userData = authData.user;
+            
+            // 更新 localStorage
+            localStorage.setItem('userData', JSON.stringify(userData));
+            
+            // 更新頁面顯示
+            const pointsDisplay = document.getElementById('pointsDisplay');
+            const pointsDisplayMobile = document.getElementById('pointsDisplayMobile');
+            const totalPoints = document.getElementById('totalPoints');
+            
+            if (pointsDisplay) pointsDisplay.innerHTML = `⭐ ${userData.points.toLocaleString()} 點數`;
+            if (pointsDisplayMobile) pointsDisplayMobile.innerHTML = `⭐ ${userData.points.toLocaleString()} 點數`;
+            if (totalPoints) totalPoints.textContent = userData.points.toLocaleString();
+            
+            console.log('[Dashboard] 積分已更新:', userData.points);
+        } catch (error) {
+            console.error('[Dashboard] 更新積分失敗:', error);
+        }
     }
 
     // 當整個頁面的 HTML 結構都載入完成後，執行此腳本
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', async () => {
+      await loadUserData();
 
-      // --- 1. 模擬用戶數據 ---
-      const mockUser = {
-        name: '環保員',
-        points: 0,
-        stats: {
-          recycled: 0,
-          exchanged: 0,
-          rank: '銅級'
-        }
-      };
-      
-
-      // --- 2. 動態更新頁面內容 (Navbar and Hero) ---
-      const userAvatar = document.getElementById('userAvatar');
-      const welcomeText = document.getElementById('welcomeText');
-      const pointsDisplay = document.getElementById('pointsDisplay');
-      const heroWelcome = document.getElementById('heroWelcome');
-      
-      if(userAvatar) userAvatar.textContent = mockUser.name.charAt(0);
-      if(welcomeText) welcomeText.textContent = `歡迎，${mockUser.name}！`;
-      if(pointsDisplay) pointsDisplay.innerHTML = `⭐ ${mockUser.points.toLocaleString()} 點數`;
-      if(heroWelcome) heroWelcome.textContent = `歡迎回來，${mockUser.name}！`;
-
-      // --- Update Stats Section ---
-      const totalRecycled = document.getElementById('totalRecycled');
-      const totalPoints = document.getElementById('totalPoints');
-      const itemsExchanged = document.getElementById('itemsExchanged');
-      const rankLevel = document.getElementById('rankLevel');
-
-      if(totalRecycled) totalRecycled.textContent = mockUser.stats.recycled.toLocaleString();
-      if(totalPoints) totalPoints.textContent = mockUser.points.toLocaleString(); // Display total points in stats too
-      if(itemsExchanged) itemsExchanged.textContent = mockUser.stats.exchanged.toLocaleString();
-      if(rankLevel) rankLevel.textContent = mockUser.stats.rank;
-
-      // --- 3. 導航欄滾動特效 ---
+      // 導航欄滾動特效
       const navbar = document.getElementById('navbar');
       if (navbar) {
         window.addEventListener('scroll', () => {
@@ -1543,14 +2036,13 @@ body {
         });
       }
 
-      // --- 4. 滾動時的淡入動畫 ---
+      // 滾動時的淡入動畫
       const fadeInElements = document.querySelectorAll('.fade-in');
       
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
             entry.target.classList.add('visible');
-            // observer.unobserve(entry.target); // Uncomment to trigger animation only once
           }
         });
       }, {
@@ -1561,64 +2053,22 @@ body {
         observer.observe(el);
       });
 
-      // --- 5. 行動裝置導覽列互動 ---
+      // 行動裝置導覽列互動
       const mobileNavToggleButton = document.getElementById('mobileNavToggle');
       const mobileMenuElement = document.getElementById('mobileMenu');
-
-      // Mobile menu user info elements
-      const userAvatarMobile = document.getElementById('userAvatarMobile');
-      const welcomeTextMobile = document.getElementById('welcomeTextMobile');
-      const pointsDisplayMobile = document.getElementById('pointsDisplayMobile');
 
       if (mobileNavToggleButton && mobileMenuElement) {
         mobileNavToggleButton.addEventListener('click', () => {
           mobileNavToggleButton.classList.toggle('active');
           mobileMenuElement.classList.toggle('active');
           
-          // Update aria-expanded attribute
           const isExpanded = mobileNavToggleButton.classList.contains('active');
           mobileNavToggleButton.setAttribute('aria-expanded', isExpanded);
-
-          // If menu is opened, update user info in mobile menu
-          if (isExpanded) {
-            if(userAvatarMobile) userAvatarMobile.textContent = mockUser.name.charAt(0);
-            if(welcomeTextMobile) welcomeTextMobile.textContent = `歡迎，${mockUser.name}！`;
-            if(pointsDisplayMobile) pointsDisplayMobile.innerHTML = `⭐ ${mockUser.points.toLocaleString()} 點數`;
-          }
         });
       }
+      
+      setInterval(updateUserPoints, 30000);
     });
-    async function fetchUserData() {
-            const username = document.getElementById('username').value;
-            const userDataDiv = document.getElementById('userData');
-
-            if (!username) {
-                userDataDiv.innerHTML = '<p>請輸入使用者名稱！</p>';
-                return;
-            }
-
-            try {
-                const response = await fetch(`http://127.0.0.1:5000/api/users?username=${username}`);
-                const data = await response.json();
-
-                if (response.ok) {
-                    userDataDiv.innerHTML = `
-                        <p>id:${data.id}</P>
-                        <p>使用者名稱: ${data.username}</p>
-                        <p>電子郵件: ${data.email}</p>
-                        <p>電話: ${data.phone}</p>
-                        <p>地址: ${data.address || '未提供'}</p>
-                        <p>生日: ${data.birthday || '未提供'}</p>
-                        <p>積分: ${data.points}</p>
-                    `;
-                } else {
-                    userDataDiv.innerHTML = `<p>${data.message}</p>`;
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                userDataDiv.innerHTML = '<p>無法獲取使用者資料，請稍後再試。</p>';
-            }
-        }
   </script>
 </body>
 </html>
