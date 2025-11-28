@@ -145,7 +145,7 @@
                 console.log('[v0] 開始管理員登入:', username);
 
                 // 調用後端 API 進行登入
-                const response = await fetch('http://localhost:5000/api/admin/login', {
+                const response = await fetch('/api/admin/login', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -177,7 +177,7 @@
                     
                     // 延遲跳轉以顯示成功訊息
                     setTimeout(() => {
-                        window.location.href = '/center-page';
+                        window.location.href = '/backmanament-page';
                     }, 500);
                 } else {
                     // 登入失敗

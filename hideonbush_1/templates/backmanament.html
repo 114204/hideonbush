@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -259,7 +260,7 @@
             top: 100%;
             background: var(--popover);
             min-width: 180px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
             border: 1px solid var(--border);
             border-radius: var(--radius);
             z-index: 1000;
@@ -327,10 +328,21 @@
             color: var(--primary-foreground);
         }
 
-        .stat-card-icon.users { background: var(--primary); }
-        .stat-card-icon.orders { background: var(--success); }
-        .stat-card-icon.products { background: var(--warning); }
-        .stat-card-icon.income { background: var(--destructive); }
+        .stat-card-icon.users {
+            background: var(--primary);
+        }
+
+        .stat-card-icon.orders {
+            background: var(--success);
+        }
+
+        .stat-card-icon.products {
+            background: var(--warning);
+        }
+
+        .stat-card-icon.income {
+            background: var(--destructive);
+        }
 
         .stat-info {
             flex: 1;
@@ -387,7 +399,8 @@
             border-collapse: collapse;
         }
 
-        th, td {
+        th,
+        td {
             padding: 16px;
             text-align: left;
             border-bottom: 1px solid var(--border);
@@ -410,21 +423,24 @@
             background-color: var(--accent);
         }
 
-        
-.status {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 48px;      /* 保證寬度一致 */
-    height: 24px;         /* 固定高度 */
-    padding: 0 12px;      /* 左右間距 */
-    border-radius: 9999px;
-    font-size: 0.75rem;
-    font-weight: 500;
-    line-height: 1;
-    text-align: center;
-    white-space: nowrap;
-}
+
+        .status {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 48px;
+            /* 保證寬度一致 */
+            height: 24px;
+            /* 固定高度 */
+            padding: 0 12px;
+            /* 左右間距 */
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            line-height: 1;
+            text-align: center;
+            white-space: nowrap;
+        }
 
 
         .status-active {
@@ -450,13 +466,16 @@
             gap: 8px;
         }
 
-.action-buttons .btn {
-    min-width: 70px;      /* 固定按鈕寬度 */
-    height: 32px;         /* 固定高度 */
-    justify-content: center;
-    text-align: center;
-    padding: 0 12px;      /* 縮小 padding，避免太大 */
-}
+        .action-buttons .btn {
+            min-width: 70px;
+            /* 固定按鈕寬度 */
+            height: 32px;
+            /* 固定高度 */
+            justify-content: center;
+            text-align: center;
+            padding: 0 12px;
+            /* 縮小 padding，避免太大 */
+        }
 
 
         .btn {
@@ -519,7 +538,8 @@
             gap: 8px;
         }
 
-        .pagination a {
+        .pagination a,
+        .pagination-btn {
             color: var(--muted-foreground);
             padding: 8px 12px;
             text-decoration: none;
@@ -527,17 +547,30 @@
             border-radius: var(--radius);
             transition: all 0.2s ease;
             font-size: 0.875rem;
+            display: inline-block;
+            background-color: white;
         }
 
         .pagination a:hover {
             background-color: var(--accent);
             color: var(--foreground);
+            cursor: pointer;
         }
 
         .pagination a.active {
             background-color: var(--primary);
             color: var(--primary-foreground);
             border-color: var(--primary);
+        }
+
+        .pagination-btn {
+            display: inline-block;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+        }
+
+        .pagination-btn[style*="opacity:0.5"] {
+            cursor: not-allowed;
         }
 
         /* 模態框樣式 */
@@ -549,7 +582,7 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.8);
+            background-color: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(4px);
         }
 
@@ -567,7 +600,7 @@
             max-width: 500px;
             max-height: 90vh;
             overflow-y: auto;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
         }
 
         .modal-header {
@@ -613,7 +646,8 @@
             font-size: 0.875rem;
         }
 
-        .form-group input, .form-group select {
+        .form-group input,
+        .form-group select {
             width: 100%;
             padding: 12px;
             border: 1px solid var(--border);
@@ -624,7 +658,8 @@
             transition: border-color 0.2s ease;
         }
 
-        .form-group input:focus, .form-group select:focus {
+        .form-group input:focus,
+        .form-group select:focus {
             outline: none;
             border-color: var(--ring);
             box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.1);
@@ -655,7 +690,7 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.8);
+            background-color: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(4px);
         }
 
@@ -672,7 +707,7 @@
             padding: 32px;
             max-width: 400px;
             text-align: center;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
         }
 
         .logout-confirm-content h3 {
@@ -739,13 +774,16 @@
                 flex-direction: column;
             }
 
-.action-buttons .btn {
-    min-width: 70px;      /* 固定按鈕寬度 */
-    height: 32px;         /* 固定高度 */
-    justify-content: center;
-    text-align: center;
-    padding: 0 12px;      /* 縮小 padding，避免太大 */
-}
+            .action-buttons .btn {
+                min-width: 70px;
+                /* 固定按鈕寬度 */
+                height: 32px;
+                /* 固定高度 */
+                justify-content: center;
+                text-align: center;
+                padding: 0 12px;
+                /* 縮小 padding，避免太大 */
+            }
 
         }
 
@@ -761,7 +799,9 @@
         }
 
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         /* 通知樣式 */
@@ -791,6 +831,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container-fluid">
         <aside class="sidebar">
@@ -844,10 +885,11 @@
                     <button type="button" onclick="searchMembers()"><i class="fas fa-search"></i></button>
                 </div>
                 <div class="user-info">
-                    <img src="https://via.placeholder.com/32" alt="User Avatar"> 
+                    <img src="https://via.placeholder.com/32" alt="User Avatar">
                     <div class="dropdown">
                         <div class="dropdown-toggle">
-                           <span>管理員</span> <i class="fas fa-chevron-down" style="font-size: 0.75em; margin-left: 6px;"></i>
+                            <span>管理員</span> <i class="fas fa-chevron-down"
+                                style="font-size: 0.75em; margin-left: 6px;"></i>
                         </div>
                         <div class="dropdown-content">
                             <a href="#"><i class="fas fa-user-circle"></i> 個人資料</a>
@@ -888,23 +930,27 @@
                             </tr>
                         </thead>
                         <tbody id="memberTableBody">
-                            <tr><td colspan="8" style="text-align:center; padding: 40px;"><div class="loading"></div> 載入中...</td></tr>
+                            <tr>
+                                <td colspan="8" style="text-align:center; padding: 40px;">
+                                    <div class="loading"></div> 載入中...
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
-            </section>
 
-            <nav class="pagination" id="paginationNav">
-                <a href="#" onclick="loadMembers(1, 'prev')">&laquo; 上一頁</a>
-                <a href="#" class="active" onclick="loadMembers(1)">1</a>
-                <a href="#" onclick="loadMembers(2)">2</a>
-                <a href="#" onclick="loadMembers(3)">3</a>
-                <a href="#" onclick="loadMembers(1, 'next')">下一頁 &raquo;</a>
-            </nav>
+                <!-- 分頁控制區域 -->
+                <div style="text-align: center; padding: 20px; margin-top: 20px;">
+                    <nav class="pagination" id="paginationNav"
+                        style="display: flex; justify-content: center; align-items: center; gap: 15px; flex-wrap: wrap;">
+                        <!-- 分頁內容動態生成 -->
+                    </nav>
+                </div>
+            </section>
         </main>
     </div>
 
-     <!-- 新增/編輯會員模態框 --> 
+    <!-- 新增/編輯會員模態框 -->
     <div id="addMemberModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -958,10 +1004,7 @@
         </div>
     </div>
 
-     
-    </div>
-
-     <!-- 登出確認對話框 --> 
+    <!-- 登出確認對話框 -->
     <div id="logoutConfirm" class="logout-confirm">
         <div class="logout-confirm-content">
             <h3><i class="fas fa-sign-out-alt" style="margin-right: 10px; color: var(--destructive);"></i>確認登出</h3>
@@ -973,747 +1016,236 @@
         </div>
     </div>
 
-     <!-- 通知元素 --> 
+    <!-- 通知元素 -->
     <div id="notification" class="notification"></div>
 
     <script>
-        
+        // --- 核心變數設定 ---
         let currentPage = 1;
         const pageSize = 10;
         let totalPages = 1;
         let searchQuery = '';
+        let membersData = []; // 用於儲存當前頁面的會員資料
 
-        const mockDatabase = {
-            members: [
-                {
-                    id: 1,
-                    username: 'testuser',
-                    email: '001@gmail.com',
-                    phone: '090100100',
-                    address: '123456',
-                    birthday: '2025-01-01',
-                    points: 100,
-                    status: 'active',
-                    created_at: '2025-08-03',
-                    password: 'hashed_password_here'
-                },
-                {
-                    id: 2,
-                    username: 'eva',
-                    email: 'eva@gmail.com',
-                    phone: '0913633733',
-                    address: 'kksh',
-                    birthday: '1998-08-06',
-                    points: 100,
-                    status: 'active',
-                    created_at: '2025-08-06',
-                    password: 'pbkdf2:sha256:260000$FTUs5SOMbnXosCe1$edb63c296405a7fcd99c65060cb8478946e89ff5653f518a59acbd622a177c1f'
-                },
-                {
-                    id: 4,
-                    username: 'wei',
-                    email: 'wei@gmail.com',
-                    phone: '0944544644',
-                    address: 'ntu bbb',
-                    birthday: '2002-08-7',
-                    points: 100,
-                    status: 'active',
-                    created_at: '2025-08-07',
-                    password: 'pbkdf2:sha256:260000$HJNQp0Gn404XgleX$7a7d8e872b9459fcc128a2a902b9f09520455f69a58f1d06f196b1cdfe0f176e'
-                },
-                {
-                    id: 6,
-                    username: 'alicechen',
-                    email: 'alice.chen@example.com',
-                    phone: '0912345678',
-                    address: '台北市大安區仁愛路100號',
-                    birthday: '1998-05-21',
-                    points: 100,
-                    status: 'active',
-                    created_at: '2025-08-10',
-                    password: 'pass1234'
-                },
-                {
-                    id: 7,
-                    username: 'brianlin',
-                    email: 'brian.lin@example.com',
-                    phone: '0923456789',
-                    address: '新北市板橋區文化路200號',
-                    birthday: '1995-12-03',
-                    points: 100,
-                    status: 'active',
-                    created_at: '2025-08-10',
-                    password: 'hello5678'
-                },
-                {
-                    id: 8,
-                    username: 'cindywang',
-                    email: 'cindy.wang@example.com',
-                    phone: '0934567890',
-                    address: '桃園市中壢區中央西路10號',
-                    birthday: '2000-01-15',
-                    points: 100,
-                    status: 'active',
-                    created_at: '2025-08-13',
-                    password: 'abc9999'
-                },
-                {
-                    id: 9,
-                    username: 'davidwu',
-                    email: 'david.wu@example.com',
-                    phone: '0966123456',
-                    address: '台中市西屯區台灣大道三段300號',
-                    birthday: '1992-07-09',
-                    points: 100,
-                    status: 'active',
-                    created_at: '2025-08-17',
-                    password: 'qwerty88'
-                },
-                {
-                    id: 10,
-                    username: 'emilyliu',
-                    email: 'emily.liu@example.com',
-                    phone: '0955123456',
-                    address: '高雄市左營區自由三路90號',
-                    birthday: '1997-03-30',
-                    points: 100,
-                    status: 'active',
-                    created_at: '2025-08-18',
-                    password: 'test5678'
-                },
-                {
-                    id: 11,
-                    username: 'frankchou',
-                    email: 'frank.chou@example.com',
-                    phone: '0987654321',
-                    address: '基隆市仁愛區愛三路8號',
-                    birthday: '1994-10-12',
-                    points: 100,
-                    status: 'active',
-                    created_at: '2025-08-19',
-                    password: 'pass9999'
-                },
-                {
-                    id: 12,
-                    username: 'gracehuang',
-                    email: 'grace.huang@example.com',
-                    phone: '0911222333',
-                    address: '新竹市東區光復路二段25號',
-                    birthday: '1999-11-11',
-                    points: 100,
-                    status: 'active',
-                    created_at: '2025-08-19',
-                    password: 'iloveu11'
-                },
-                {
-                    id: 13,
-                    username: 'henrykao',
-                    email: 'henry.kao@example.com',
-                    phone: '0933111222',
-                    address: '台南市中西區民生路一段66號',
-                    birthday: '1993-06-05',
-                    points: 100,
-                    status: 'active',
-                    created_at: '2025-01-11',
-                    password: 'hello000'
-                },
-                {
-                    id: 14,
-                    username: 'ivytsai',
-                    email: 'ivy.tsai@example.com',
-                    phone: '0977555666',
-                    address: '宜蘭縣羅東鎮中山路88號',
-                    birthday: '2001-08-17',
-                    points: 100,
-                    status: 'active',
-                    created_at: '2025-01-12',
-                    password: 'mypwd333'
-                },
-                {
-                    id: 15,
-                    username: 'jasonlee',
-                    email: 'jason.lee@example.com',
-                    phone: '0966888999',
-                    address: '花蓮縣花蓮市中正路5號',
-                    birthday: '1990-09-23',
-                    points: 100,
-                    status: 'active',
-                    created_at: '2025-01-13',
-                    password: 'passpass'
-                },
-                {
-                    id: 16,
-                    username: '001',
-                    email: 'evaluyiwei@gmail.com',
-                    phone: '0932899099',
-                    address: 'kh',
-                    birthday: '2025-04-15',
-                    points: 100,
-                    status: 'active',
-                    created_at: '2025-01-14',
-                    password: 'pbkdf2:sha256:260000$VCunSTVIE7okXcAC$c1636d54872848fd88372f5f4612c7dfeb99bccccc1c41548e72e33c85aee405'
-                },
-                {
-                    id: 17,
-                    username: '002',
-                    email: '11336024@ntub.edu.tw',
-                    phone: '0932899099',
-                    address: 'kh',
-                    birthday: '2025-04-03',
-                    points: 100,
-                    status: 'active',
-                    created_at: '2025-01-15',
-                    password: 'pbkdf2:sha256:260000$8iEQG6BX0u4aag5F$7fc8b25ab7d860277a8f475eb940db982877a526ef61cd6bda9b000112fa3c34'
-                },
-                {
-                    id: 18,
-                    username: '003',
-                    email: '10856034@ntub.edu.tw',
-                    phone: '0932899099',
-                    address: 'kh',
-                    birthday: '2025-04-08',
-                    points: 100,
-                    status: 'active',
-                    created_at: '2025-01-16',
-                    password: '$2b$12$yfS.PrfW14WADJ0fKT5FMu/8m8Ebj9gY9fKrDncHDLTsmxBnmoUKG'
-                },
-                {
-                    id: 19,
-                    username: '004',
-                    email: 'eva@gmail.com',
-                    phone: '0932899099',
-                    address: 'kh',
-                    birthday: '2025-04-17',
-                    points: 100,
-                    status: 'active',
-                    created_at: '2025-01-17',
-                    password: '$2b$12$4102kfbnGe4.n34ow7ZIUOzYlYTKoUcyQWmfKdjs8Zol4BCiJsirq'
-                },
-                {
-                    id: 20,
-                    username: '005',
-                    email: 'test005@example.com',
-                    phone: '0932899099',
-                    address: 'kh',
-                    birthday: '2025-04-18',
-                    points: 100,
-                    status: 'active',
-                    created_at: '2025-01-18',
-                    password: '$2b$12$Y6Hkx...'
-                },
-                {
-                    id: 21,
-                    username: '006',
-                    email: 'test006@example.com',
-                    phone: '0932899099',
-                    address: 'kh',
-                    birthday: '2025-04-19',
-                    points: 100,
-                    status: 'active',
-                    created_at: '2025-01-19',
-                    password: '$2b$12$...'
-                },
-                {
-                    id: 22,
-                    username: '007',
-                    email: 'test007@example.com',
-                    phone: '0932899099',
-                    address: 'kh',
-                    birthday: '2025-04-20',
-                    points: 100,
-                    status: 'active',
-                    created_at: '2025-01-20',
-                    password: '$2b$12$...'
-                },
-                {
-                    id: 23,
-                    username: '008',
-                    email: 'test008@example.com',
-                    phone: '0932899099',
-                    address: 'kh',
-                    birthday: '2025-04-21',
-                    points: 100,
-                    status: 'active',
-                    created_at: '2025-01-21',
-                    password: '$2b$12$...'
-                },
-                {
-                    id: 24,
-                    username: '009',
-                    email: 'test009@example.com',
-                    phone: '0932899099',
-                    address: 'kh',
-                    birthday: '2025-04-22',
-                    points: 100,
-                    status: 'active',
-                    created_at: '2025-01-22',
-                    password: '$2b$12$...'
-                },
-                {
-                    id: 25,
-                    username: '010',
-                    email: 'test010@example.com',
-                    phone: '0932899099',
-                    address: 'kh',
-                    birthday: '2025-04-23',
-                    points: 100,
-                    status: 'active',
-                    created_at: '2025-01-23',
-                    password: '$2b$12$...'
-                },
-                {
-                    id: 26,
-                    username: '011',
-                    email: 'test011@example.com',
-                    phone: '0932899099',
-                    address: 'kh',
-                    birthday: '2025-04-24',
-                    points: 100,
-                    status: 'active',
-                    created_at: '2025-01-24',
-                    password: '$2b$12$...'
-                },
-                {
-                    id: 27,
-                    username: '012',
-                    email: 'test012@example.com',
-                    phone: '0932987987',
-                    address: 'kh',
-                    birthday: '2025-04-24',
-                    points: 100,
-                    status: 'active',
-                    created_at: '2025-01-24',
-                    password: '$2b$12$...'
-                },
-                {
-                    id: 28,
-                    username: '013',
-                    email: 'test014@example.com',
-                    phone: '0959957957',
-                    address: 'kh',
-                    birthday: '2025-04-24',
-                    points: 100,
-                    status: 'active',
-                    created_at: '2025-01-24',
-                    password: '$2b$12$...'
-                },
-                {
-                    id: 29,
-                    username: '013',
-                    email: 'test014@example.com',
-                    phone: '0959957957',
-                    address: 'kh',
-                    birthday: '2025-04-24',
-                    points: 100,
-                    status: 'active',
-                    created_at: '2025-01-24',
-                    password: '$2b$12$...'
-                },
-                {
-                    id: 30,
-                    username: '013',
-                    email: 'test014@example.com',
-                    phone: '0959957957',
-                    address: 'kh',
-                    birthday: '2025-04-24',
-                    points: 100,
-                    status: 'active',
-                    created_at: '2025-08-21',
-                    password: '$2b$12$...'
-                },
-                {
-                    id: 31,
-                    username: '013',
-                    email: 'test014@example.com',
-                    phone: '0959957957',
-                    address: 'kh',
-                    birthday: '2025-04-24',
-                    points: 100,
-                    status: 'active',
-                    created_at: '2025-08-29',
-                    password: '$2b$12$...'
-                },
-                {
-                    id: 32,
-                    username: '013',
-                    email: 'test014@example.com',
-                    phone: '0959957957',
-                    address: 'kh',
-                    birthday: '2025-04-24',
-                    points: 100,
-                    status: 'active',
-                    created_at: '2025-09-20',
-                    password: '$2b$12$...'
-                },
-                {
-                    id: 33,
-                    username: '013',
-                    email: 'test014@example.com',
-                    phone: '0959957957',
-                    address: 'kh',
-                    birthday: '2025-04-24',
-                    points: 100,
-                    status: 'active',
-                    created_at: '2025-09-24',
-                    password: '$2b$12$...'
-                },
-                {
-                    id: 34,
-                    username: '013',
-                    email: 'test014@example.com',
-                    phone: '0959957957',
-                    address: 'kh',
-                    birthday: '2025-04-24',
-                    points: 100,
-                    status: 'active',
-                    created_at: '2025-09-24',
-                    password: '$2b$12$...'
-                },
-                {
-                    id: 35,
-                    username: '014',
-                    email: '014@gmail.com',
-                    phone: '0914914914',
-                    address: '北商大',
-                    birthday: '2004/05/06',
-                    points: 100,
-                    status: 'active',
-                    created_at: '2025-10-15',
-                    password: '$2b$12$...'
-                }
-            ]
-        };
-
-        // 頁面載入
-        window.onload = () => {
-            console.log('[v0] 頁面載入，檢查登入狀態');
-            checkLoginStatus();
-            loadMembers(currentPage);
-            updatePendingReviewCount();
-        };
-
-        function checkLoginStatus() {
-            const isLoggedIn = localStorage.getItem('loggedIn');
-            console.log('[v0] 登入狀態:', isLoggedIn);
-            
-            if (isLoggedIn !== 'true') {
-                console.log('[v0] 未登入，重定向到登入頁面');
-                showNotification('請先登入管理後台', 'warning');
-                setTimeout(() => {
-                    window.location.href = '/admin_login-page';
-                }, 1500);
-                return false;
+        // --- 輔助函數：通用登出處理 ---
+        function handleLogout(message = '登入憑證過期或權限不足，請重新登入。') {
+            console.warn(`[AUTH] 觸發登出: ${message}`);
+            localStorage.removeItem('loggedIn');
+            localStorage.removeItem('adminUsername');
+            alert(message);
+            if (window.location.pathname !== '/admin_login-page') {
+                window.location.href = '/admin_login-page';
             }
-            return true;
         }
 
-        // 載入會員數據
-        async function loadMembers(page, action = '') {
-            console.log('[v0] 載入會員數據，頁面:', page, '動作:', action);
-            
-            if (action === 'prev' && currentPage > 1) {
-                currentPage--;
-            } else if (action === 'next' && currentPage < totalPages) {
-                currentPage++;
-            } else if (page && page > 0) {
-                currentPage = page;
-            }
+        // --- 1. 頁面初始化與管理員權限檢查 ---
+        window.onload = async () => {
+            console.log('[Init] 正在檢查管理員登入狀態...');
 
             try {
-                // 模擬 API 延遲
-                await new Promise(resolve => setTimeout(resolve, 500));
+                const response = await fetch('/api/check-auth', {
+                    method: 'GET',
+                    credentials: 'include'
+                });
+                const json = await response.json();
 
-                // 過濾搜尋結果
-                let filteredMembers = mockDatabase.members;
-                if (searchQuery) {
-                    filteredMembers = mockDatabase.members.filter(member => 
-                        member.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                        member.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                        member.phone.includes(searchQuery)
-                    );
-                }
-
-                // 計算分頁
-                totalPages = Math.ceil(filteredMembers.length / pageSize);
-                const startIndex = (currentPage - 1) * pageSize;
-                const endIndex = startIndex + pageSize;
-                const paginatedMembers = filteredMembers.slice(startIndex, endIndex);
-
-                console.log('[v0] 載入完成，會員數量:', paginatedMembers.length);
-
-                // 更新表格
-                const tbody = document.getElementById('memberTableBody');
-                tbody.innerHTML = '';
-
-                if (paginatedMembers.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding: 40px; color: #64748b;">沒有找到符合條件的會員</td></tr>';
+                if (response.status === 200 && json.authenticated === true && json.is_admin === true) {
+                    console.log('[Init] 管理員認證成功。');
+                    document.querySelector('.dropdown-toggle span').textContent = json.user.username || '管理員';
+                    loadMembers(currentPage);
+                    updatePendingReviewCount();
                 } else {
-                    paginatedMembers.forEach(member => {
-                        const row = document.createElement('tr');
-                        row.innerHTML = `
-                            <td><strong>${member.id}</strong></td>
-                            <td>${member.username}</td>
-                            <td>${member.email || '-'}</td>
-                            <td>${member.phone || '-'}</td>
-                            <td>${member.created_at}</td>
-                            <td><strong>${member.points.toLocaleString()}</strong></td>
-                            <td>
-                                <span class="status status-${member.status}">
-                                    ${member.status === 'active' ? '活躍' : '停用'}
-                                </span>
-                            </td>
-                            <td class="action-buttons">
-                                <button class="btn btn-secondary" onclick="editMember('${member.id}')">
-                                    <i class="fas fa-edit"></i> 編輯
-                                </button>
-                                <button class="btn btn-destructive" onclick="deleteMember('${member.id}')">
-                                    <i class="fas fa-trash"></i> 刪除
-                                </button>
-                            </td>
-                        `;
-                        tbody.appendChild(row);
-                    });
+                    console.error('[Init] 管理員認證失敗或權限不足。');
+                    handleLogout('您沒有管理員權限或登入已過期，請重新登入。');
+                    return;
+                }
+            } catch (error) {
+                console.error('[Init] 檢查認證時發生錯誤:', error);
+                handleLogout('無法連接伺服器或認證失敗。');
+                return;
+            }
+
+            // 設置登出按鈕事件監聽
+            document.getElementById('logoutBtn').addEventListener('click', async function (e) {
+                e.preventDefault();
+                console.log('[Logout] 嘗試登出 (API)');
+                try {
+                    const response = await fetch('/api/logout', { method: 'POST', credentials: 'include' });
+                    const result = await response.json();
+
+                    if (response.ok && result.status === 'success') {
+                        handleLogout('成功登出');
+                    } else {
+                        console.error('[Logout] 後端登出失敗:', result.message);
+                        handleLogout('登出失敗，但已清除本地狀態。');
+                    }
+                } catch (error) {
+                    console.error('[Logout] 登出請求錯誤:', error);
+                    handleLogout('登出請求失敗，請檢查網路。');
+                }
+            });
+
+            // 設置搜尋事件監聽
+            document.getElementById('searchInput').addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    searchMembers();
+                }
+            });
+        };
+
+        // --- 2. 獲取會員資料函數 ---
+        async function loadMembers(page = 1, search = searchQuery) {
+            const tableBody = document.getElementById('memberTableBody');
+            const loadingRow = `<tr class="loading-row"><td colspan="8" class="text-center"><i class="fas fa-spinner fa-spin"></i> 載入中...</td></tr>`;
+            tableBody.innerHTML = loadingRow;
+
+            const url = `/api/members?page=${page}&pageSize=${pageSize}${search ? '&search=' + encodeURIComponent(search) : ''}`;
+            console.log(`[Data] 正在載入第 ${page} 頁會員資料...`);
+
+            try {
+                const response = await fetch(url, {
+                    method: 'GET',
+                    credentials: 'include'
+                });
+
+                if (response.status === 401) {
+                    console.error('[Data] 獲取會員資料失敗: 401 Unauthorized');
+                    handleLogout('獲取會員資料權限不足或登入過期。');
+                    return;
                 }
 
-                updatePagination();
-                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                if (data.status === 'fail' && data.message && data.message.includes('請先登錄')) {
+                    handleLogout(data.message);
+                    return;
+                }
+
+                membersData = data.members;
+                currentPage = data.current_page || data.currentPage;
+                totalPages = data.total_pages || data.totalPages;
+
+                renderMembers(membersData);
+                renderPagination();
+
             } catch (error) {
-                console.error('[v0] 載入會員失敗：', error);
-                showNotification('載入會員數據失敗，請重試', 'error');
-                document.getElementById('memberTableBody').innerHTML = 
-                    '<tr><td colspan="8" style="text-align:center; color: var(--destructive); padding: 40px;">載入失敗，請重試</td></tr>';
+                console.error('[Data] 載入會員資料時發生錯誤:', error);
+                tableBody.innerHTML = `<tr><td colspan="8" class="text-center text-destructive">載入資料失敗：${error.message}</td></tr>`;
             }
         }
 
-        function searchMembers() {
-            searchQuery = document.getElementById('searchInput').value.trim();
-            console.log('[v0] 搜尋會員:', searchQuery);
-            currentPage = 1;
-            loadMembers(currentPage);
+        // --- 3. 渲染與互動函數 ---
+        function renderMembers(members) {
+            const tableBody = document.getElementById('memberTableBody');
+            if (members.length === 0) {
+                tableBody.innerHTML = `<tr><td colspan="8" class="text-center">沒有符合條件的會員資料</td></tr>`;
+                return;
+            }
+
+            tableBody.innerHTML = members.map(member => {
+                // 根據 status 字段顯示相應的狀態標籤
+                const statusText = member.status === 'active' ? '活躍' : '非活躍';
+                const statusClass = member.status === 'active' ? 'status-active' : 'status-inactive';
+
+                return `
+                <tr>
+                    <td>${member.id}</td>
+                    <td>${member.username}</td>
+                    <td>${member.email}</td>
+                    <td>${member.phone || 'N/A'}</td>
+                    <td>${member.created_at || 'N/A'}</td>
+                    <td><strong>${member.points || 0}</strong></td>
+                    <td><span class="status ${statusClass}">${statusText}</span></td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-primary btn-sm" onclick="openEditModal('${member.id}')">編輯</button>
+                            <button class="btn btn-destructive btn-sm" onclick="confirmDelete('${member.id}', '${member.username}')">刪除</button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+            }).join('');
         }
 
-        // 搜尋框回車事件
-        document.getElementById('searchInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                searchMembers();
-            }
-        });
-
-        function updatePagination() {
+        function renderPagination() {
             const pagination = document.getElementById('paginationNav');
+            if (totalPages <= 1) {
+                pagination.innerHTML = '<span style="color: #666;">只有一頁內容</span>';
+                return;
+            }
+
             let paginationHTML = '';
 
             // 上一頁按鈕
-            paginationHTML += `<a href="#" onclick="loadMembers(${currentPage}, 'prev')" ${currentPage <= 1 ? 'style="opacity:0.5;pointer-events:none;"' : ''}>&laquo; 上一頁</a>`;
-
-            // 頁碼按鈕
-            for (let i = 1; i <= totalPages; i++) {
-                if (i === currentPage) {
-                    paginationHTML += `<a href="#" class="active" onclick="loadMembers(${i})">${i}</a>`;
-                } else {
-                    paginationHTML += `<a href="#" onclick="loadMembers(${i})">${i}</a>`;
-                }
+            if (currentPage > 1) {
+                paginationHTML += `<a href="#" onclick="paginate('prev'); return false;" class="pagination-btn">&laquo; 上一頁</a>`;
+            } else {
+                paginationHTML += `<span class="pagination-btn" style="opacity:0.5;cursor:not-allowed;">&laquo; 上一頁</span>`;
             }
 
+            // 頁碼信息
+            paginationHTML += `<span style="font-weight: bold; color: #333; padding: 0 10px;">第 ${currentPage} 頁 / 共 ${totalPages} 頁</span>`;
+
             // 下一頁按鈕
-            paginationHTML += `<a href="#" onclick="loadMembers(${currentPage}, 'next')" ${currentPage >= totalPages ? 'style="opacity:0.5;pointer-events:none;"' : ''}>下一頁 &raquo;</a>`;
+            if (currentPage < totalPages) {
+                paginationHTML += `<a href="#" onclick="paginate('next'); return false;" class="pagination-btn">下一頁 &raquo;</a>`;
+            } else {
+                paginationHTML += `<span class="pagination-btn" style="opacity:0.5;cursor:not-allowed;">下一頁 &raquo;</span>`;
+            }
 
             pagination.innerHTML = paginationHTML;
         }
 
-        function editMember(memberId) {
-            console.log('[v0] 編輯會員:', memberId);
-            const member = mockDatabase.members.find(m => m.id === parseInt(memberId)); // Ensure ID is compared as number
-            if (member) {
-                openModal('addMemberModal', '編輯會員', member);
+        function searchMembers() {
+            const searchInput = document.getElementById('searchInput');
+            searchQuery = searchInput.value.trim();
+            currentPage = 1;
+            loadMembers(currentPage, searchQuery);
+        }
+
+        function paginate(direction) {
+            let newPage = currentPage;
+            if (direction === 'prev' && currentPage > 1) {
+                newPage = currentPage - 1;
+            } else if (direction === 'next' && currentPage < totalPages) {
+                newPage = currentPage + 1;
+            }
+            loadMembers(newPage, searchQuery);
+        }
+
+        function openEditModal(memberId) {
+            const member = membersData.find(m => m.id === memberId);
+            if (!member) return alert('找不到該會員資料');
+
+            alert('編輯功能尚未實現');
+        }
+
+        function confirmDelete(memberId, username) {
+            if (confirm(`確定要刪除會員 ${username} (ID: ${memberId}) 嗎？此操作不可逆！`)) {
+                deleteMember(memberId);
             }
         }
 
-        function openModal(modalId, title, data = null) {
-            console.log('[v0] 打開模態框:', modalId, title);
-            
-            if (modalId === 'addMemberModal') {
-                document.getElementById('modalTitle').textContent = title;
-                const form = document.getElementById('memberForm');
-
-                if (data) {
-                    // 編輯模式
-                    document.getElementById('memberId').value = data.id;
-                    document.getElementById('memberName').value = data.username;
-                    document.getElementById('memberEmail').value = data.email;
-                    document.getElementById('memberPhone').value = data.phone || '';
-                    document.getElementById('memberAddress').value = data.address || '';
-                    document.getElementById('memberBirthday').value = data.birthday || '';
-                    document.getElementById('memberPoints').value = data.points || 0;
-                    document.getElementById('memberPassword').value = '';
-                    document.getElementById('memberStatus').value = data.status;
-                } else {
-                    // 新增模式
-                    form.reset();
-                    document.getElementById('memberId').value = '';
-                    document.getElementById('memberPoints').value = 0;
-                    document.getElementById('memberStatus').value = 'active';
-                }
-            }
-            
+        // --- 4. 模態框與操作 ---
+        function openModal(modalId) {
             document.getElementById(modalId).classList.add('show');
         }
 
         function closeModal(modalId) {
-            console.log('[v0] 關閉模態框:', modalId);
             document.getElementById(modalId).classList.remove('show');
         }
 
-        document.getElementById('memberForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            console.log('[v0] 提交會員表單');
-
-            const submitBtn = document.getElementById('submitBtn');
-            const btnText = submitBtn.querySelector('.btn-text');
-            const originalText = btnText.textContent;
-
-            // 顯示載入狀態
-            btnText.innerHTML = '<div class="loading"></div> 處理中...';
-            submitBtn.disabled = true;
-
-            try {
-                const memberId = document.getElementById('memberId').value.trim();
-                const memberData = {
-                    username: document.getElementById('memberName').value.trim(),
-                    email: document.getElementById('memberEmail').value.trim(),
-                    phone: document.getElementById('memberPhone').value.trim(),
-                    address: document.getElementById('memberAddress').value.trim(),
-                    birthday: document.getElementById('memberBirthday').value,
-                    points: parseInt(document.getElementById('memberPoints').value) || 0,
-                    status: document.getElementById('memberStatus').value
-                };
-
-                const password = document.getElementById('memberPassword').value;
-                if (password) {
-                    memberData.password = password;
-                }
-
-                // 模擬 API 延遲
-                await new Promise(resolve => setTimeout(resolve, 1000));
-
-                if (memberId) {
-                    // 編輯現有會員
-                    const memberIndex = mockDatabase.members.findIndex(m => m.id === parseInt(memberId)); // Ensure ID is compared as number
-                    if (memberIndex !== -1) {
-                        mockDatabase.members[memberIndex] = {
-                            ...mockDatabase.members[memberIndex],
-                            ...memberData
-                        };
-                        showNotification('會員資料更新成功！', 'success');
-                    }
-                } else {
-                    // 新增會員
-                    const newId = mockDatabase.members.length > 0 ? Math.max(...mockDatabase.members.map(m => m.id)) + 1 : 1;
-                    const newMember = {
-                        id: newId,
-                        ...memberData,
-                        created_at: new Date().toISOString().split('T')[0],
-                        password: 'hashed_password_new' // Placeholder for actual hashing
-                    };
-                    mockDatabase.members.push(newMember);
-                    showNotification('新會員新增成功！', 'success');
-                }
-
-                closeModal('addMemberModal');
-                await loadMembers(currentPage);
-
-            } catch (error) {
-                console.error('[v0] 保存會員失敗：', error);
-                showNotification('操作失敗，請重試', 'error');
-            } finally {
-                // 恢復按鈕狀態
-                btnText.textContent = originalText;
-                submitBtn.disabled = false;
-            }
-        });
-
         async function deleteMember(memberId) {
-            console.log('[v0] 刪除會員:', memberId);
-            
-            if (!confirm('確定要刪除這個會員嗎？此操作無法復原。')) {
-                return;
-            }
-
-            try {
-                // 模擬 API 延遲
-                await new Promise(resolve => setTimeout(resolve, 500));
-
-                const memberIndex = mockDatabase.members.findIndex(m => m.id === parseInt(memberId)); // Ensure ID is compared as number
-                if (memberIndex !== -1) {
-                    const memberName = mockDatabase.members[memberIndex].username;
-                    mockDatabase.members.splice(memberIndex, 1);
-                    showNotification(`會員 ${memberName} 已成功刪除`, 'success');
-                    await loadMembers(currentPage);
-                } else {
-                    showNotification('找不到指定的會員', 'error');
-                }
-
-            } catch (error) {
-                console.error('[v0] 刪除會員失敗：', error);
-                showNotification('刪除失敗，請重試', 'error');
-            }
+            alert(`刪除功能尚未實現 ID: ${memberId}`);
         }
 
-        // 通知系統
-        function showNotification(message, type = 'success') {
-            console.log('[v0] 顯示通知:', message, type);
-            
-            // 移除現有通知
-            const existingNotification = document.getElementById('notification');
-            if (existingNotification && existingNotification.classList.contains('show')) {
-                existingNotification.classList.remove('show');
-                setTimeout(() => {
-                    existingNotification.textContent = message;
-                    existingNotification.className = `notification ${type}`;
-                    existingNotification.classList.add('show');
-                }, 300); // Wait for fade out before updating
-            } else {
-                existingNotification.textContent = message;
-                existingNotification.className = `notification ${type}`;
-                existingNotification.classList.add('show');
-            }
-            
-            setTimeout(() => {
-                existingNotification.classList.remove('show');
-            }, 3000);
-        }
-
-        // 登出功能
-        document.getElementById('logoutBtn').addEventListener('click', function(e) {
-            e.preventDefault();
-            console.log('[v0] 點擊登出按鈕');
-            openModal('logoutConfirm');
-        });
-
-        function performLogout() {
-            console.log('[v0] 執行登出');
-            showNotification('正在登出...', 'warning');
-            
-            // 清除登入狀態
-            localStorage.removeItem('loggedIn');
-            localStorage.removeItem('adminUser');
-            
-            // 延遲跳轉，讓用戶看到通知
-            setTimeout(() => {
-                window.location.href = '/admin_login-page';
-            }, 1000);
-        }
-
-        // 側邊欄切換
-        document.getElementById('menuToggle').addEventListener('click', function() {
-            console.log('[v0] 切換側邊欄');
-            document.querySelector('.sidebar').classList.toggle('show');
-        });
-
-        // 更新待審核數量
         function updatePendingReviewCount() {
             setTimeout(() => {
-                const pendingCount = 0; // 模擬待審核數量
+                const pendingCount = 5;
                 const badge = document.getElementById('pendingReviewCount');
                 if (pendingCount > 0) {
                     badge.textContent = pendingCount;
@@ -1722,15 +1254,12 @@
             }, 1000);
         }
 
-        // 回收審核功能
-        document.getElementById('recycleReviewLink').addEventListener('click', function(e) {
-            e.preventDefault();
-            console.log('[v0] 打開回收審核');
-            openModal('recycleReviewModal');
+        // --- 5. 通用 UI 互動 ---
+        document.getElementById('menuToggle').addEventListener('click', function () {
+            document.querySelector('.sidebar').classList.toggle('show');
         });
 
-        // 點擊外部關閉模態框
-        window.addEventListener('click', function(e) {
+        window.addEventListener('click', function (e) {
             const modals = document.querySelectorAll('.modal.show');
             modals.forEach(modal => {
                 if (e.target === modal) {
@@ -1739,8 +1268,7 @@
             });
         });
 
-        // ESC 鍵關閉模態框
-        document.addEventListener('keydown', function(e) {
+        document.addEventListener('keydown', function (e) {
             if (e.key === 'Escape') {
                 const openModals = document.querySelectorAll('.modal.show');
                 openModals.forEach(modal => {
@@ -1749,7 +1277,7 @@
             }
         });
 
-        console.log('[v0] 會員管理系統初始化完成');
     </script>
 </body>
+
 </html>

@@ -33,6 +33,11 @@ CORS(app, supports_credentials=True, resources={
 
 app.config['JWT_SECRET_KEY'] = 'supersecret'
 app.secret_key = 'another_secret'
+# 配置 session - 確保 cookie 可以在不同域名之間傳遞
+app.config['SESSION_COOKIE_SECURE'] = False  # 開發環境不使用 HTTPS
+app.config['SESSION_COOKIE_HTTPONLY'] = True  # 防止 JS 訪問
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'  # 允許跨站請求時傳遞 cookie
+app.config['PERMANENT_SESSION_LIFETIME'] = 86400 * 7  # 7 天
 jwt = JWTManager(app)
 app.logger = logging.getLogger(__name__)
 
@@ -337,36 +342,69 @@ def get_user():
 def check_auth():
     if 'user_id' in session:
         try:
-            conn = get_db_connection()
-            with conn.cursor() as cursor:
-                cursor.execute("""
-                    SELECT id, username, email, phone, points, address, birthday, status
-                    FROM users WHERE id = %s
-                """, (session['user_id'],))
-                user = cursor.fetchone()
+            # 檢查是否為管理員
+            is_admin = session.get('is_admin', False)
+            
+            if is_admin:
+                # 查詢 admins 表
+                conn = get_db_connection()
+                try:
+                    with conn.cursor() as cursor:
+                        cursor.execute("""
+                            SELECT admin_id as id, username, email
+                            FROM admins WHERE admin_id = %s
+                        """, (session['user_id'],))
+                        user = cursor.fetchone()
 
-                if user:
-                    return jsonify({
-                        'authenticated': True,
-                        'user': {
-                            'id': user['id'],
-                            'username': user['username'],
-                            'email': user['email'],
-                            'phone': user['phone'],
-                            'points': user['points'],
-                            'address': user['address'],
-                            'birthday': str(user['birthday']) if user['birthday'] else None,
-                            'status': user['status']
-                        }
-                    })
-                else:
-                    session.clear()
-                    return jsonify({'authenticated': False})
+                        if user:
+                            return jsonify({
+                                'authenticated': True,
+                                'is_admin': True,
+                                'user': {
+                                    'id': user['id'],
+                                    'username': user['username'],
+                                    'email': user['email']
+                                }
+                            })
+                        else:
+                            session.clear()
+                            return jsonify({'authenticated': False})
+                finally:
+                    conn.close()
+            else:
+                # 查詢 users 表（普通用戶）
+                conn = get_db_connection()
+                try:
+                    with conn.cursor() as cursor:
+                        cursor.execute("""
+                            SELECT id, username, email, phone, points, address, birthday, status
+                            FROM users WHERE id = %s
+                        """, (session['user_id'],))
+                        user = cursor.fetchone()
+
+                        if user:
+                            return jsonify({
+                                'authenticated': True,
+                                'is_admin': False,
+                                'user': {
+                                    'id': user['id'],
+                                    'username': user['username'],
+                                    'email': user['email'],
+                                    'phone': user['phone'],
+                                    'points': user['points'],
+                                    'address': user['address'],
+                                    'birthday': str(user['birthday']) if user['birthday'] else None,
+                                    'status': user['status']
+                                }
+                            })
+                        else:
+                            session.clear()
+                            return jsonify({'authenticated': False})
+                finally:
+                    conn.close()
         except Exception as e:
-            app.logger.error(f"檢查認證失敗: {str(e)}")
-            return jsonify({'authenticated': False})
-        finally:
-            conn.close()
+            app.logger.error(f"檢查認證失敗: {str(e)}", exc_info=True)
+            return jsonify({'authenticated': False}), 500
     else:
         return jsonify({'authenticated': False})
     
@@ -559,6 +597,7 @@ def admin_login():
                         app.logger.warning(f"[v0] 使用第一個欄位作為 ID: {admin_id}")
                     
                     # 設置 session
+                    session.permanent = True  # 使 session 永久性
                     session['user_id'] = admin_id
                     session['username'] = username
                     session['is_admin'] = True
@@ -1161,7 +1200,7 @@ def update_user_profile():
 
 # ========= 會員管理 API =========
 @app.route('/api/members', methods=['GET'])
-@login_required
+@admin_login_required
 def get_members_paginated():
     try:
         page = int(request.args.get('page', 1))
@@ -1190,12 +1229,14 @@ def get_members_paginated():
                     username,
                     email,
                     phone,
+                    address,
                     points,
-                    DATE_FORMAT(created_at, '%Y-%m-%d') AS created_at,
+                    DATE_FORMAT(created_at, '%%Y-%%m-%%d') AS created_at,
+                    DATE_FORMAT(birthday, '%%Y-%%m-%%d') AS birthday,
                     CASE WHEN status = 1 THEN 'active' ELSE 'inactive' END AS status
                 FROM users
                 {where_clause}
-                ORDER BY created_at DESC
+                ORDER BY id DESC
                 LIMIT %s OFFSET %s
             """
             cursor.execute(query, params + [page_size, offset])
@@ -1207,7 +1248,7 @@ def get_members_paginated():
                     'username': member['username'],
                     'email': member['email'],
                     'phone': member['phone'],
-                    'points': member['points'] or 0,  # 新增 points 欄位
+                    'points': member['points'] or 0,
                     'created_at': member['created_at'],
                     'status': member['status']
                 }
@@ -1218,8 +1259,8 @@ def get_members_paginated():
         
         return jsonify({
             'members': formatted_members,
-            'totalPages': total_pages,
-            'currentPage': page
+            'total_pages': total_pages,
+            'current_page': page
         }), 200
 
     except Exception as e:
@@ -1229,7 +1270,7 @@ def get_members_paginated():
         conn.close()
 
 @app.route('/api/members', methods=['POST'])
-@login_required
+@admin_login_required
 def add_member():
     try:
         data = request.get_json()
@@ -1258,7 +1299,7 @@ def add_member():
         conn.close()
 
 @app.route('/api/members/<string:member_id>', methods=['PUT'])
-@login_required
+@admin_login_required
 def update_member(member_id):
     try:
         numeric_id = int(member_id.replace('MEM', ''))
@@ -1293,7 +1334,7 @@ def update_member(member_id):
         conn.close()
 
 @app.route('/api/members/<string:member_id>', methods=['DELETE'])
-@login_required
+@admin_login_required
 def delete_member(member_id):
     try:
         numeric_id = int(member_id.replace('MEM', ''))
@@ -1313,7 +1354,7 @@ def delete_member(member_id):
 
 # ========= 儀表板統計 API =========
 @app.route('/api/dashboard/stats', methods=['GET'])
-@login_required
+@admin_login_required
 def get_dashboard_stats():
     """獲取儀表板統計數據"""
     try:
@@ -1357,7 +1398,7 @@ def get_dashboard_stats():
         }), 500
 
 @app.route('/api/dashboard/activities', methods=['GET'])
-@login_required
+@admin_login_required
 def get_dashboard_activities():
     """獲取最近活動記錄"""
     try:

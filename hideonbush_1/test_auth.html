@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Auth Test</title>
+    <style>
+        body { font-family: monospace; padding: 20px; background: #1a1a1a; color: #fff; }
+        .log { margin: 10px 0; padding: 10px; background: #2a2a2a; border-radius: 5px; }
+        .success { color: #22c55e; }
+        .error { color: #ef4444; }
+        .info { color: #3b82f6; }
+    </style>
+</head>
+<body>
+    <h1>Authentication Test</h1>
+    <div id="logs"></div>
+    
+    <script>
+        const logsDiv = document.getElementById('logs');
+        
+        function log(message, type = 'info') {
+            const entry = document.createElement('div');
+            entry.className = `log ${type}`;
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logsDiv.appendChild(entry);
+            console.log(message);
+        }
+        
+        async function testAuth() {
+            log('開始認證測試...', 'info');
+            
+            try {
+                // Step 1: Login
+                log('Step 1: 登入 admin/admin123', 'info');
+                const loginResp = await fetch('/api/admin/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify({ username: 'admin', password: 'admin123' })
+                });
+                log(`登入響應狀態: ${loginResp.status}`, loginResp.status === 200 ? 'success' : 'error');
+                const loginData = await loginResp.json();
+                log(`登入響應: ${JSON.stringify(loginData)}`, 'info');
+                
+                // Step 2: Check auth
+                log('Step 2: 檢查認證狀態...', 'info');
+                const authResp = await fetch('/api/check-auth', {
+                    method: 'GET',
+                    credentials: 'include'
+                });
+                log(`認證響應狀態: ${authResp.status}`, authResp.status === 200 ? 'success' : 'error');
+                const authData = await authResp.json();
+                log(`認證響應: ${JSON.stringify(authData)}`, 'info');
+                log(`authenticated 欄位: ${authData.authenticated} (${typeof authData.authenticated})`, authData.authenticated === true ? 'success' : 'error');
+                
+                // Step 3: Get members
+                log('Step 3: 獲取會員列表...', 'info');
+                const membersResp = await fetch('/api/members?page=1&pageSize=3', {
+                    method: 'GET',
+                    credentials: 'include'
+                });
+                log(`會員響應狀態: ${membersResp.status}`, membersResp.status === 200 ? 'success' : 'error');
+                const membersData = await membersResp.json();
+                log(`會員數量: ${membersData.members?.length || 0}`, membersData.members?.length > 0 ? 'success' : 'error');
+                
+                log('✓ 所有測試完成!', 'success');
+            } catch (error) {
+                log(`✗ 錯誤: ${error.message}`, 'error');
+                log(`堆疊: ${error.stack}`, 'error');
+            }
+        }
+        
+        // Auto-run on load
+        window.addEventListener('load', testAuth);
+    </script>
+</body>
+</html>

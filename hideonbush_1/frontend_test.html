@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>前端测试 - 会员管理页面</title>
+</head>
+<body>
+    <h1>前端测试结果</h1>
+    <div id="results"></div>
+    
+    <script>
+        async function testFrontend() {
+            const results = [];
+            
+            try {
+                // 1. 测试登录
+                results.push('✓ 页面加载成功');
+                
+                // 2. 验证 API 响应
+                const loginResp = await fetch('/api/admin/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify({ username: 'admin', password: 'admin123' })
+                });
+                
+                if (loginResp.ok) {
+                    results.push('✓ 登录 API 响应正常');
+                }
+                
+                // 3. 获取会员数据
+                const membersResp = await fetch('/api/members?page=1&pageSize=5', {
+                    method: 'GET',
+                    credentials: 'include'
+                });
+                
+                const membersData = await membersResp.json();
+                
+                if (membersData.members && Array.isArray(membersData.members)) {
+                    results.push(`✓ 会员数据加载成功 (${membersData.members.length} 条)`);
+                    
+                    // 检查会员字段
+                    const member = membersData.members[0];
+                    const requiredFields = ['id', 'username', 'email', 'phone', 'created_at', 'points', 'status'];
+                    const hasAllFields = requiredFields.every(field => field in member);
+                    
+                    if (hasAllFields) {
+                        results.push('✓ 会员数据包含所有必要字段');
+                    } else {
+                        const missingFields = requiredFields.filter(f => !(f in member));
+                        results.push(`✗ 缺少字段: ${missingFields.join(', ')}`);
+                    }
+                    
+                    results.push(`✓ 总页数: ${membersData.totalPages}`);
+                    results.push(`✓ 当前页: ${membersData.currentPage}`);
+                }
+                
+                // 4. 显示结果
+                document.getElementById('results').innerHTML = results
+                    .map(r => `<p>${r}</p>`)
+                    .join('');
+                    
+            } catch (error) {
+                document.getElementById('results').innerHTML = `<p style="color: red;">✗ 错误: ${error.message}</p>`;
+            }
+        }
+        
+        // 页面加载时运行测试
+        window.addEventListener('load', testFrontend);
+    </script>
+</body>
+</html>
