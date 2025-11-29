@@ -1852,15 +1852,39 @@
                 return;
             }
 
-            const stats = [
-                { type: '塑膠瓶', count: 45, points: 540 },
-                { type: '鋁罐', count: 32, points: 384 },
-                { type: '紙類', count: 28, points: 336 },
-                { type: '玻璃瓶', count: 15, points: 225 }
-            ];
-            
-            AppState.cache.stats = stats;
-            renderStats(stats);
+            try {
+                console.log('[Shop] 開始載入統計數據...');
+                const response = await fetch('/api/shop/user-recycling-stats', {
+                    method: 'GET',
+                    credentials: 'include'
+                });
+
+                console.log('[Shop] 統計API狀態碼:', response.status);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                console.log('[Shop] 統計數據:', result);
+
+                if (result.success && result.data && result.data.length > 0) {
+                    AppState.cache.stats = result.data;
+                    renderStats(result.data);
+                } else {
+                    // 如果沒有數據，顯示空狀態
+                    console.log('[Shop] 無統計數據或結果不成功');
+                    const emptyStats = [];
+                    renderStats(emptyStats);
+                    // 显示空状态消息
+                    if (DOM.recyclingStats) {
+                        DOM.recyclingStats.innerHTML = '<div style="padding: 2rem; text-align: center; color: #999;">暫無回收記錄</div>';
+                    }
+                }
+            } catch (error) {
+                console.error('[Shop] 載入統計數據失敗:', error);
+                showNotification('載入統計數據失敗，請稍後再試', 'error');
+            }
         }
 
         function renderStats(stats) {
@@ -1893,16 +1917,39 @@
                 return;
             }
 
-            const leaderboard = [
-                { rank: 1, name: '環保小王子', points: 3280, items: 156 },
-                { rank: 2, name: '綠色生活家', points: 2890, items: 134 },
-                { rank: 3, name: '回收達人', points: 2580, items: 120, isCurrentUser: true },
-                { rank: 4, name: '地球守護者', points: 2340, items: 108 },
-                { rank: 5, name: '環保新星', points: 2100, items: 95 }
-            ];
-            
-            AppState.cache.leaderboard = leaderboard;
-            renderLeaderboard(leaderboard);
+            try {
+                console.log('[Shop] 開始載入排行榜數據...');
+                const response = await fetch('/api/shop/leaderboard', {
+                    method: 'GET',
+                    credentials: 'include'
+                });
+
+                console.log('[Shop] 排行榜API狀態碼:', response.status);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                console.log('[Shop] 排行榜數據:', result);
+
+                if (result.success && result.data && result.data.length > 0) {
+                    AppState.cache.leaderboard = result.data;
+                    renderLeaderboard(result.data);
+                } else {
+                    // 如果沒有數據，顯示空狀態
+                    console.log('[Shop] 無排行榜數據或結果不成功');
+                    const emptyLeaderboard = [];
+                    renderLeaderboard(emptyLeaderboard);
+                    // 显示空状态消息
+                    if (DOM.leaderboardList) {
+                        DOM.leaderboardList.innerHTML = '<div style="padding: 2rem; text-align: center; color: #999;">暫無排行榜數據</div>';
+                    }
+                }
+            } catch (error) {
+                console.error('[Shop] 載入排行榜失敗:', error);
+                showNotification('載入排行榜失敗，請稍後再試', 'error');
+            }
         }
 
         function renderLeaderboard(leaderboard) {

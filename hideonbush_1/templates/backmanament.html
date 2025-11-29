@@ -397,13 +397,18 @@
         table {
             width: 100%;
             border-collapse: collapse;
+            min-width: max-content;
         }
 
         th,
         td {
-            padding: 16px;
+            padding: 12px 8px;
             text-align: left;
             border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-size: 0.9rem;
         }
 
         th {
@@ -467,14 +472,12 @@
         }
 
         .action-buttons .btn {
-            min-width: 70px;
-            /* 固定按鈕寬度 */
-            height: 32px;
-            /* 固定高度 */
+            min-width: 60px;
+            height: 28px;
             justify-content: center;
             text-align: center;
-            padding: 0 12px;
-            /* 縮小 padding，避免太大 */
+            padding: 0 8px;
+            font-size: 0.8rem;
         }
 
 
@@ -919,6 +922,7 @@
                     <table>
                         <thead>
                             <tr>
+                                <th>頭像</th>
                                 <th>會員ID</th>
                                 <th>姓名</th>
                                 <th>Email</th>
@@ -931,7 +935,7 @@
                         </thead>
                         <tbody id="memberTableBody">
                             <tr>
-                                <td colspan="8" style="text-align:center; padding: 40px;">
+                                <td colspan="9" style="text-align:center; padding: 40px;">
                                     <div class="loading"></div> 載入中...
                                 </td>
                             </tr>
@@ -986,6 +990,16 @@
                 <div class="form-group">
                     <label for="memberPassword">密碼 (編輯時留空表示不修改):</label>
                     <input type="password" id="memberPassword" name="memberPassword">
+                </div>
+                <div class="form-group">
+                    <label for="memberAvatar">頭像:</label>
+                    <div style="display: flex; gap: 10px; align-items: flex-start;">
+                        <div style="flex: 1;">
+                            <input type="file" id="memberAvatar" name="memberAvatar" accept="image/*" onchange="previewAvatar(this)">
+                            <small style="color: #666;">支持 JPG、PNG、GIF 格式，最大 5MB</small>
+                        </div>
+                        <img id="avatarPreview" src="" alt="頭像預覽" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover; display: none; border: 2px solid #ddd;">
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="memberStatus">狀態:</label>
@@ -1142,7 +1156,7 @@
         function renderMembers(members) {
             const tableBody = document.getElementById('memberTableBody');
             if (members.length === 0) {
-                tableBody.innerHTML = `<tr><td colspan="8" class="text-center">沒有符合條件的會員資料</td></tr>`;
+                tableBody.innerHTML = `<tr><td colspan="9" class="text-center">沒有符合條件的會員資料</td></tr>`;
                 return;
             }
 
@@ -1150,9 +1164,14 @@
                 // 根據 status 字段顯示相應的狀態標籤
                 const statusText = member.status === 'active' ? '活躍' : '非活躍';
                 const statusClass = member.status === 'active' ? 'status-active' : 'status-inactive';
+                const avatarUrl = member.avatar || `https://ui-avatars.com/api/?name=${member.username}&background=random`;
 
                 return `
                 <tr>
+                    <td style="text-align: center;">
+                        <img src="${avatarUrl}" alt="${member.username}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; cursor: pointer;" 
+                             onclick="editMember('${member.id}')" title="點擊編輯">
+                    </td>
                     <td>${member.id}</td>
                     <td>${member.username}</td>
                     <td>${member.email}</td>
@@ -1162,7 +1181,7 @@
                     <td><span class="status ${statusClass}">${statusText}</span></td>
                     <td>
                         <div class="action-buttons">
-                            <button class="btn btn-primary btn-sm" onclick="openEditModal('${member.id}')">編輯</button>
+                            <button class="btn btn-primary btn-sm" onclick="editMember('${member.id}')">編輯</button>
                             <button class="btn btn-destructive btn-sm" onclick="confirmDelete('${member.id}', '${member.username}')">刪除</button>
                         </div>
                     </td>
@@ -1217,11 +1236,55 @@
             loadMembers(newPage, searchQuery);
         }
 
-        function openEditModal(memberId) {
+        function editMember(memberId) {
+            console.log('[Edit] 編輯會員 ID:', memberId, '當前資料:', membersData);
             const member = membersData.find(m => m.id === memberId);
-            if (!member) return alert('找不到該會員資料');
+            if (!member) {
+                console.error('[Edit] 找不到該會員:', memberId);
+                return alert('找不到該會員資料');
+            }
 
-            alert('編輯功能尚未實現');
+            console.log('[Edit] 找到會員:', member);
+            
+            // 填入表單數據
+            document.getElementById('memberId').value = member.id;
+            document.getElementById('memberName').value = member.username;
+            document.getElementById('memberEmail').value = member.email;
+            document.getElementById('memberPhone').value = member.phone || '';
+            document.getElementById('memberPoints').value = member.points || 0;
+            document.getElementById('memberStatus').value = member.status;
+            document.getElementById('modalTitle').textContent = `編輯會員：${member.username}`;
+            
+            // 顯示頭像預覽
+            const preview = document.getElementById('avatarPreview');
+            if (member.avatar) {
+                preview.src = member.avatar;
+                preview.style.display = 'block';
+            } else {
+                preview.style.display = 'none';
+            }
+            
+            // 清空文件輸入
+            document.getElementById('memberAvatar').value = '';
+            
+            console.log('[Edit] 打開編輯模態框');
+            openModal('addMemberModal');
+        }
+
+        function openEditModal(memberId) {
+            editMember(memberId);
+        }
+
+        function previewAvatar(input) {
+            const preview = document.getElementById('avatarPreview');
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
         }
 
         function confirmDelete(memberId, username) {
@@ -1240,8 +1303,96 @@
         }
 
         async function deleteMember(memberId) {
-            alert(`刪除功能尚未實現 ID: ${memberId}`);
+            try {
+                const response = await fetch(`/api/members/${memberId}`, {
+                    method: 'DELETE',
+                    credentials: 'include'
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok && result.status === 'success') {
+                    alert('會員刪除成功');
+                    loadMembers(currentPage, searchQuery);
+                } else {
+                    alert(`刪除失敗：${result.message || '未知錯誤'}`);
+                }
+            } catch (error) {
+                console.error('刪除會員錯誤：', error);
+                alert('刪除會員失敗，請檢查網絡連接');
+            }
         }
+
+        // 表單提交事件
+        document.getElementById('memberForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const memberId = document.getElementById('memberId').value;
+            const memberName = document.getElementById('memberName').value;
+            const memberEmail = document.getElementById('memberEmail').value;
+            const memberPhone = document.getElementById('memberPhone').value;
+            const memberPoints = parseInt(document.getElementById('memberPoints').value) || 0;
+            const memberStatus = document.getElementById('memberStatus').value;
+            const avatarFile = document.getElementById('memberAvatar').files[0];
+            
+            // 驗證必填欄位
+            if (!memberName || !memberEmail) {
+                alert('姓名和 Email 為必填項');
+                return;
+            }
+            
+            // 如果選擇了圖片，轉換為 Base64
+            let avatarData = null;
+            if (avatarFile) {
+                if (avatarFile.size > 5 * 1024 * 1024) { // 5MB
+                    alert('圖片大小不能超過 5MB');
+                    return;
+                }
+                
+                const reader = new FileReader();
+                avatarData = await new Promise((resolve) => {
+                    reader.onload = (e) => resolve(e.target.result);
+                    reader.readAsDataURL(avatarFile);
+                });
+            }
+            
+            const formData = {
+                username: memberName,
+                email: memberEmail,
+                phone: memberPhone,
+                points: memberPoints,
+                status: memberStatus === 'active' ? 'active' : 'inactive',
+                avatar: avatarData
+            };
+            
+            try {
+                const method = memberId ? 'PUT' : 'POST';
+                const url = memberId ? `/api/members/${memberId}` : '/api/members';
+                
+                const response = await fetch(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData),
+                    credentials: 'include'
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok && result.status === 'success') {
+                    alert(memberId ? '會員資料更新成功' : '會員新增成功');
+                    closeModal('addMemberModal');
+                    document.getElementById('memberForm').reset();
+                    loadMembers(currentPage, searchQuery);
+                } else {
+                    alert(`操作失敗：${result.message || '未知錯誤'}`);
+                }
+            } catch (error) {
+                console.error('表單提交錯誤：', error);
+                alert('操作失敗，請檢查網絡連接');
+            }
+        });
 
         function updatePendingReviewCount() {
             setTimeout(() => {

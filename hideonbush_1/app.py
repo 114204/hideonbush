@@ -85,6 +85,10 @@ def admin_login_page():
 def backmanament_page():
     return render_template('backmanament.html')
 
+@app.route('/test-avatar')
+def test_avatar():
+    return render_template('test_avatar.html')
+
 @app.route('/login-page')
 def login_page():
     return render_template('login.html')
@@ -293,8 +297,10 @@ def register():
                     return jsonify({'status': 'error', 'message': '註冊處理錯誤'}), 500
                 
                 # 登入用戶 (設置session)
+                session.permanent = True  # 設置會話為持久性
                 session['user_id'] = user['id']
                 session['username'] = username
+                session['is_admin'] = False  # 明確標記為普通用戶
                 
                 # 產生JWT token
                 token = create_access_token(identity=username)
@@ -377,25 +383,76 @@ def check_auth():
                 try:
                     with conn.cursor() as cursor:
                         cursor.execute("""
-                            SELECT id, username, email, phone, points, address, birthday, status
+                            SELECT id, username, email, phone, points, avatar, status
                             FROM users WHERE id = %s
                         """, (session['user_id'],))
                         user = cursor.fetchone()
 
                         if user:
+                            # 構建基本使用者資訊
+                            user_info = {
+                                'id': user['id'],
+                                'username': user['username'],
+                                'email': user['email'],
+                                'phone': user['phone'],
+                                'points': user['points'],
+                                'avatar': user['avatar'] or f"https://ui-avatars.com/api/?name={user['username']}&background=random",
+                                'status': user['status']
+                            }
+
+                            # 嘗試取得使用者統計資料（non-blocking - 若失敗仍回傳 auth 結果）
+                            stats = None
+                            try:
+                                # 累積回收物數量（已批准）
+                                cursor.execute("""
+                                    SELECT COALESCE(SUM(quantity), 0) as total 
+                                    FROM recycle_reviews 
+                                    WHERE member_id = %s AND status = 'approved'
+                                """, (user['id'],))
+                                total_recycled = cursor.fetchone()['total']
+
+                                # 已兌換商品數量
+                                cursor.execute("""
+                                    SELECT COUNT(*) as total 
+                                    FROM orders 
+                                    WHERE member_id = %s AND status != 'cancelled'
+                                """, (user['id'],))
+                                items_exchanged_result = cursor.fetchone()
+                                items_exchanged = items_exchanged_result['total'] if items_exchanged_result else 0
+
+                                # 用戶點數（使用資料庫為主）
+                                cursor.execute("""
+                                    SELECT points 
+                                    FROM users 
+                                    WHERE id = %s
+                                """, (user['id'],))
+                                user_points_result = cursor.fetchone()
+                                user_points = user_points_result['points'] if user_points_result else user['points']
+
+                                # 等級計算
+                                if user_points >= 1000:
+                                    rank_level = "鑽石級"
+                                elif user_points >= 500:
+                                    rank_level = "金級"
+                                elif user_points >= 200:
+                                    rank_level = "銀級"
+                                else:
+                                    rank_level = "銅級"
+
+                                stats = {
+                                    'totalRecycled': int(total_recycled),
+                                    'itemsExchanged': int(items_exchanged),
+                                    'totalPoints': int(user_points),
+                                    'rankLevel': rank_level
+                                }
+                            except Exception as e:
+                                app.logger.debug(f"取得使用者統計失敗 (非致命): {e}")
+
                             return jsonify({
                                 'authenticated': True,
                                 'is_admin': False,
-                                'user': {
-                                    'id': user['id'],
-                                    'username': user['username'],
-                                    'email': user['email'],
-                                    'phone': user['phone'],
-                                    'points': user['points'],
-                                    'address': user['address'],
-                                    'birthday': str(user['birthday']) if user['birthday'] else None,
-                                    'status': user['status']
-                                }
+                                'user': user_info,
+                                'stats': stats
                             })
                         else:
                             session.clear()
@@ -465,8 +522,10 @@ def login():
                 if is_valid:
                     app.logger.info(f"用戶 {username} 登入成功")
 
+                    session.permanent = True  # 設置會話為持久性
                     session['user_id'] = user['id']
                     session['username'] = username
+                    session['is_admin'] = False  # 明確標記為普通用戶
 
                     token = create_access_token(identity=username)
 
@@ -751,6 +810,21 @@ def init_db():
                 """)
                 app.logger.info("創建users表成功")
 
+            # 檢查 avatar 列是否存在，如不存在則添加
+            cursor.execute("""
+                SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS
+                WHERE TABLE_SCHEMA = 'eco_db' AND TABLE_NAME = 'users' AND COLUMN_NAME = 'avatar'
+            """)
+            if not cursor.fetchone():
+                try:
+                    cursor.execute("""
+                        ALTER TABLE users ADD COLUMN avatar LONGTEXT DEFAULT NULL
+                    """)
+                    conn.commit()
+                    app.logger.info("添加avatar列成功")
+                except Exception as e:
+                    app.logger.warning(f"添加avatar列失敗: {str(e)}")
+
             # 創建 products 表
             cursor.execute("SHOW TABLES LIKE 'products'")
             if not cursor.fetchone():
@@ -984,6 +1058,72 @@ def get_user_reviews(user_id):
             'message': f'獲取記錄失敗: {str(e)}'
         }), 500
 
+@app.route('/api/user/stats', methods=['GET'])
+@login_required
+def get_user_stats():
+    """獲取當前用戶的個人統計數據"""
+    try:
+        user_id = session.get('user_id')
+        
+        conn = get_db_connection()
+        try:
+            with conn.cursor() as cursor:
+                # 獲取累積回收物數量（已批准的）
+                cursor.execute("""
+                    SELECT COALESCE(SUM(quantity), 0) as total 
+                    FROM recycle_reviews 
+                    WHERE member_id = %s AND status = 'approved'
+                """, (user_id,))
+                total_recycled = cursor.fetchone()['total']
+                
+                # 獲取已兌換商品數量
+                cursor.execute("""
+                    SELECT COUNT(*) as total 
+                    FROM orders 
+                    WHERE member_id = %s AND status != 'cancelled'
+                """, (user_id,))
+                items_exchanged_result = cursor.fetchone()
+                items_exchanged = items_exchanged_result['total'] if items_exchanged_result else 0
+                
+                # 獲取用戶當前點數
+                cursor.execute("""
+                    SELECT points 
+                    FROM users 
+                    WHERE id = %s
+                """, (user_id,))
+                user_points_result = cursor.fetchone()
+                user_points = user_points_result['points'] if user_points_result else 0
+                
+                # 計算會員等級（根據點數）
+                if user_points >= 1000:
+                    rank_level = "鑽石級"
+                elif user_points >= 500:
+                    rank_level = "金級"
+                elif user_points >= 200:
+                    rank_level = "銀級"
+                else:
+                    rank_level = "銅級"
+                
+                return jsonify({
+                    'success': True,
+                    'data': {
+                        'totalRecycled': int(total_recycled),
+                        'itemsExchanged': items_exchanged,
+                        'totalPoints': user_points,
+                        'rankLevel': rank_level
+                    }
+                }), 200
+                
+        finally:
+            conn.close()
+            
+    except Exception as e:
+        app.logger.error(f"獲取用戶統計失敗: {str(e)}")
+        return jsonify({
+            'success': False,
+            'message': f'獲取統計失敗: {str(e)}'
+        }), 500
+
 @app.route('/api/recycle/pending', methods=['GET'])
 def get_pending_reviews():
     try:
@@ -1146,7 +1286,7 @@ def update_user_profile():
         conn = get_db_connection()
         try:
             with conn.cursor() as cursor:
-                # 檢查 email 作詞是否被其他用戶使用
+                # 檢查 email 是否被其他用戶使用
                 cursor.execute("""
                     SELECT id FROM users
                     WHERE email = %s AND id != %s
@@ -1158,24 +1298,41 @@ def update_user_profile():
                         'message': '該Email已被其他用戶使用'
                     }), 409
 
-                # 更新用戶資料
-                cursor.execute("""
-                    UPDATE users
-                    SET username = %s,
-                        email = %s,
-                        phone = %s,
-                        address = %s,
-                        birthday = %s
-                    WHERE id = %s
-                """, (
-                    data['username'],
-                    data['email'],
-                    data.get('phone', ''),
-                    data.get('address', ''),
-                    data.get('birthday', None),
-                    user_id
-                ))
+                # 構建動態 SQL 更新語句
+                update_fields = []
+                update_values = []
 
+                # 基本欄位
+                update_fields.append("username = %s")
+                update_values.append(data['username'])
+                
+                update_fields.append("email = %s")
+                update_values.append(data['email'])
+                
+                update_fields.append("phone = %s")
+                update_values.append(data.get('phone', ''))
+                
+                update_fields.append("address = %s")
+                update_values.append(data.get('address', ''))
+                
+                update_fields.append("birthday = %s")
+                update_values.append(data.get('birthday', None))
+
+                # 頭像欄位（如果提供）
+                if data.get('avatar'):
+                    update_fields.append("avatar = %s")
+                    update_values.append(data['avatar'])
+
+                update_values.append(user_id)
+
+                # 更新用戶資料
+                update_sql = f"""
+                    UPDATE users
+                    SET {', '.join(update_fields)}
+                    WHERE id = %s
+                """
+                
+                cursor.execute(update_sql, tuple(update_values))
                 conn.commit()
 
                 # 更新 session 中的 username
@@ -1192,7 +1349,7 @@ def update_user_profile():
             conn.close()
 
     except Exception as e:
-        app.logger.error(f"更新用戶資料失敗: {str(e)}")
+        app.logger.error(f"更新用戶資料失敗: {str(e)}", exc_info=True)
         return jsonify({
             'status': 'error',
             'message': '更新失敗,請稍後再試'
@@ -1202,6 +1359,7 @@ def update_user_profile():
 @app.route('/api/members', methods=['GET'])
 @admin_login_required
 def get_members_paginated():
+    conn = None
     try:
         page = int(request.args.get('page', 1))
         page_size = int(request.args.get('pageSize', 10))
@@ -1229,10 +1387,8 @@ def get_members_paginated():
                     username,
                     email,
                     phone,
-                    address,
+                    avatar,
                     points,
-                    DATE_FORMAT(created_at, '%%Y-%%m-%%d') AS created_at,
-                    DATE_FORMAT(birthday, '%%Y-%%m-%%d') AS birthday,
                     CASE WHEN status = 1 THEN 'active' ELSE 'inactive' END AS status
                 FROM users
                 {where_clause}
@@ -1248,8 +1404,9 @@ def get_members_paginated():
                     'username': member['username'],
                     'email': member['email'],
                     'phone': member['phone'],
+                    'avatar': member['avatar'] or f"https://ui-avatars.com/api/?name={member['username']}&background=random",
                     'points': member['points'] or 0,
-                    'created_at': member['created_at'],
+                    'created_at': '2025-01-01',  # 預設值
                     'status': member['status']
                 }
                 for member in members
@@ -1264,14 +1421,16 @@ def get_members_paginated():
         }), 200
 
     except Exception as e:
-        app.logger.error(f"分頁查詢會員錯誤: {str(e)}")
-        return jsonify({'status': 'fail', 'message': '加載會員失敗'}), 500
+        app.logger.error(f"分頁查詢會員錯誤: {str(e)}", exc_info=True)
+        return jsonify({'status': 'fail', 'message': f'加載會員失敗: {str(e)}'}), 500
     finally:
-        conn.close()
+        if conn:
+            conn.close()
 
 @app.route('/api/members', methods=['POST'])
 @admin_login_required
 def add_member():
+    conn = None
     try:
         data = request.get_json()
         if not all(k in data for k in ['username', 'email']):
@@ -1293,10 +1452,11 @@ def add_member():
         return jsonify({'status': 'success', 'message': '會員新增成功'}), 201
 
     except Exception as e:
-        app.logger.error(f"新增會員錯誤: {str(e)}")
-        return jsonify({'status': 'fail', 'message': '新增會員失敗'}), 500
+        app.logger.error(f"新增會員錯誤: {str(e)}", exc_info=True)
+        return jsonify({'status': 'fail', 'message': f'新增會員失敗: {str(e)}'}), 500
     finally:
-        conn.close()
+        if conn:
+            conn.close()
 
 @app.route('/api/members/<string:member_id>', methods=['PUT'])
 @admin_login_required
@@ -1318,17 +1478,34 @@ def update_member(member_id):
                 return jsonify({'status': 'fail', 'message': '該Email已被使用'}), 409
 
             status = 1 if data.get('status') == 'active' else 0
-            cursor.execute("""
+            points = int(data.get('points', 0)) if data.get('points') is not None else None
+            avatar = data.get('avatar')  # Base64 或 URL
+            
+            update_query = """
                 UPDATE users
                 SET username = %s, email = %s, phone = %s, status = %s
-                WHERE id = %s
-            """, (data['username'], data['email'], data.get('phone', ''), status, numeric_id))
+            """
+            update_params = [data['username'], data['email'], data.get('phone', ''), status]
+            
+            # 有條件地添加 points 和 avatar
+            if points is not None:
+                update_query += ", points = %s"
+                update_params.append(points)
+            
+            if avatar:
+                update_query += ", avatar = %s"
+                update_params.append(avatar)
+            
+            update_query += " WHERE id = %s"
+            update_params.append(numeric_id)
+            
+            cursor.execute(update_query, update_params)
             conn.commit()
 
         return jsonify({'status': 'success', 'message': '會員更新成功'}), 200
 
     except Exception as e:
-        app.logger.error(f"編輯會員錯誤: {str(e)}")
+        app.logger.error(f"編輯會員錯誤: {str(e)}", exc_info=True)
         return jsonify({'status': 'fail', 'message': '更新會員失敗'}), 500
     finally:
         conn.close()
@@ -1354,7 +1531,7 @@ def delete_member(member_id):
 
 # ========= 儀表板統計 API =========
 @app.route('/api/dashboard/stats', methods=['GET'])
-@admin_login_required
+@login_required
 def get_dashboard_stats():
     """獲取儀表板統計數據"""
     try:
@@ -1398,7 +1575,7 @@ def get_dashboard_stats():
         }), 500
 
 @app.route('/api/dashboard/activities', methods=['GET'])
-@admin_login_required
+@login_required
 def get_dashboard_activities():
     """獲取最近活動記錄"""
     try:
@@ -2109,11 +2286,155 @@ def init_shop_products():
             'message': f'初始化失敗: {str(e)}'
         }), 500
 
+# ========= 統計與排行榜 API =========
+@app.route('/api/shop/user-recycling-stats', methods=['GET'])
+@login_required
+def get_user_recycling_stats():
+    """獲取當前用戶的回收統計數據"""
+    try:
+        user_id = session['user_id']
+        conn = get_db_connection()
+        try:
+            with conn.cursor() as cursor:
+                # 按類型統計用戶的回收物品（包括所有已處理的狀態）
+                cursor.execute("""
+                    SELECT 
+                        item_type as type,
+                        COUNT(*) as count,
+                        SUM(estimated_points) as points
+                    FROM recycle_reviews
+                    WHERE member_id = %s AND status IN ('approved', 'completed', 'verified')
+                    GROUP BY item_type
+                    ORDER BY count DESC
+                """, (user_id,))
+                
+                stats = []
+                for row in cursor.fetchall():
+                    if row['type']:  # 只有在 type 不為 None 時才添加
+                        stats.append({
+                            'type': row['type'],
+                            'count': row['count'] or 0,
+                            'points': row['points'] or 0
+                        })
+
+                # 如果沒有統計數據，返回空陣列
+                return jsonify({
+                    'success': True,
+                    'data': stats
+                }), 200
+
+        finally:
+            conn.close()
+
+    except Exception as e:
+        app.logger.error(f"獲取回收統計失敗: {str(e)}")
+        return jsonify({
+            'success': False,
+            'message': '獲取統計數據失敗'
+        }), 500
+
+@app.route('/api/shop/leaderboard', methods=['GET'])
+@login_required
+def get_shop_leaderboard():
+    """獲取本月環保英雄排行榜"""
+    try:
+        user_id = session['user_id']
+        conn = get_db_connection()
+        try:
+            with conn.cursor() as cursor:
+                # 獲取用戶的排名和數據（包括所有已處理的狀態）
+                cursor.execute("""
+                    SELECT 
+                        u.id,
+                        u.username,
+                        COUNT(rr.review_id) as items_count,
+                        COALESCE(SUM(rr.estimated_points), 0) as total_points
+                    FROM users u
+                    LEFT JOIN recycle_reviews rr ON u.id = rr.member_id 
+                        AND rr.status IN ('approved', 'completed', 'verified')
+                        AND MONTH(rr.submit_time) = MONTH(NOW())
+                        AND YEAR(rr.submit_time) = YEAR(NOW())
+                    WHERE u.status = 1
+                    GROUP BY u.id, u.username
+                    ORDER BY total_points DESC, items_count DESC
+                    LIMIT 10
+                """)
+                
+                leaderboard = []
+                for rank, row in enumerate(cursor.fetchall(), 1):
+                    if row['username']:  # 確保有用戶名
+                        leaderboard.append({
+                            'rank': rank,
+                            'name': row['username'],
+                            'points': int(row['total_points']) if row['total_points'] else 0,
+                            'items': row['items_count'] or 0,
+                            'isCurrentUser': row['id'] == user_id
+                        })
+
+                return jsonify({
+                    'success': True,
+                    'data': leaderboard
+                }), 200
+
+        finally:
+            conn.close()
+
+    except Exception as e:
+        app.logger.error(f"獲取排行榜失敗: {str(e)}")
+        return jsonify({
+            'success': False,
+            'message': '獲取排行榜失敗'
+        }), 500
+
+# ========= 測試數據生成 API =========
+@app.route('/api/shop/generate-test-stats', methods=['GET'])
+@login_required
+def generate_test_stats():
+    """為當前用戶生成測試回收數據（開發模式）"""
+    if not app.debug:
+        return jsonify({'status': 'error', 'message': '此功能僅在開發模式可用'}), 403
+    
+    try:
+        user_id = session['user_id']
+        conn = get_db_connection()
+        try:
+            with conn.cursor() as cursor:
+                # 清除現有的測試數據
+                cursor.execute("DELETE FROM recycle_reviews WHERE member_id = %s", (user_id,))
+                
+                # 為當前用戶添加測試回收數據
+                test_data = [
+                    (f'REC_TEST_{user_id}_001', user_id, '寶特瓶', 15, 150, 'approved'),
+                    (f'REC_TEST_{user_id}_002', user_id, '鋁罐', 8, 80, 'approved'),
+                    (f'REC_TEST_{user_id}_003', user_id, '紙類', 12, 120, 'approved'),
+                    (f'REC_TEST_{user_id}_004', user_id, '玻璃瓶', 5, 100, 'approved'),
+                ]
+                
+                for review_id, member_id, item_type, quantity, points, status in test_data:
+                    cursor.execute("""
+                        INSERT INTO recycle_reviews 
+                        (review_id, member_id, item_type, quantity, estimated_points, status, submit_time)
+                        VALUES (%s, %s, %s, %s, %s, %s, NOW())
+                    """, (review_id, member_id, item_type, quantity, points, status))
+                
+                conn.commit()
+                
+                return jsonify({
+                    'success': True,
+                    'message': '測試數據生成成功'
+                }), 200
+        finally:
+            conn.close()
+    except Exception as e:
+        app.logger.error(f"生成測試數據失敗: {str(e)}")
+        return jsonify({
+            'success': False,
+            'message': f'生成失敗: {str(e)}'
+        }), 500
 
 if __name__ == '__main__':
     print("\n可用路由：")
     for rule in app.url_map.iter_rules():
         print(f"  {rule}")
     print()
-
     app.run(debug=True, host='0.0.0.0', port=5000)

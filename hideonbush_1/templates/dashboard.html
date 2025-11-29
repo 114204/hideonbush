@@ -1,67 +1,70 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>環保回收兌換系統 - 會員主頁</title>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
   <style>
-  * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-body {
-  font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  color: #2d3748;
-  line-height: 1.6;
-  background-color: #ffffff;
-  overflow-x: hidden;
-}
+    body {
+      font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: #2d3748;
+      line-height: 1.6;
+      background-color: #ffffff;
+      overflow-x: hidden;
+    }
 
-/* 導航欄 */
-.navbar {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  z-index: 1000;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(226, 232, 240, 0.5);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
+    /* 導航欄 */
+    .navbar {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
 
-.navbar.scrolled {
-  background: rgba(255, 255, 255, 0.98);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-}
+    .navbar.scrolled {
+      background: rgba(255, 255, 255, 0.98);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    }
 
-.nav-container {
-  max-width: 1400px;
-  margin: 0 auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 2rem;
-  height: 80px;
-}
+    .nav-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 2rem;
+      height: 80px;
+    }
 
-.logo {
-  display: flex;
-  align-items: center;
-  text-decoration: none;
-  font-weight: 700;
-  font-size: 1.5rem;
-  color: #00695c; /* Changed */
-  transition: transform 0.3s ease;
-}
+    .logo {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: #00695c;
+      /* Changed */
+      transition: transform 0.3s ease;
+    }
 
-.logo:hover {
-  transform: scale(1.02);
-}
+    .logo:hover {
+      transform: scale(1.02);
+    }
 
-.logo-icon {
+    .logo-icon {
       width: clamp(36px, 6vw, 48px);
       height: clamp(40px, 7vh, 54px);
       background-image: url('/static/S__3825671.png');
@@ -78,1405 +81,1561 @@ body {
       overflow: hidden;
     }
 
-.logo-icon::before {
-  font-size: 24px;
-  animation: pulse 2s ease-in-out infinite;
-}
+    .logo-icon::before {
+      font-size: 24px;
+      animation: pulse 2s ease-in-out infinite;
+    }
 
-.logo-icon::after {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
-  transform: rotate(45deg);
-  animation: shine 3s ease-in-out infinite;
-}
+    .logo-icon::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transform: rotate(45deg);
+      animation: shine 3s ease-in-out infinite;
+    }
 
-@keyframes shine {
-  0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-  50% { transform: translateX(100%) translateY(100%) rotate(45deg); }
-  100% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-}
+    @keyframes shine {
+      0% {
+        transform: translateX(-100%) translateY(-100%) rotate(45deg);
+      }
 
-.nav-links {
-  display: flex;
-  gap: 2rem;
-  align-items: center;
-}
+      50% {
+        transform: translateX(100%) translateY(100%) rotate(45deg);
+      }
 
-.nav-links a {
-  text-decoration: none;
-  color: #374151;
-  font-weight: 500;
-  position: relative;
-  padding: 0.5rem 1rem;
-  border-radius: 25px;
-  transition: all 0.3s ease;
-}
+      100% {
+        transform: translateX(-100%) translateY(-100%) rotate(45deg);
+      }
+    }
 
-.nav-links a:hover {
-  color: #00897b; /* Changed */
-  background: rgba(0, 137, 123, 0.08); /* Changed */
-  transform: translateY(-1px);
-}
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
 
-/* 用戶區域 */
-.user-section {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
+    .nav-links a {
+      text-decoration: none;
+      color: #374151;
+      font-weight: 500;
+      position: relative;
+      padding: 0.5rem 1rem;
+      border-radius: 25px;
+      transition: all 0.3s ease;
+    }
 
-.user-info {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem 1.25rem;
-  background: linear-gradient(135deg, #e0f2f1, #b2dfdb); /* Changed */
-  border-radius: 30px;
-  border: 1px solid rgba(0, 137, 123, 0.2); /* Changed */
-  box-shadow: 0 4px 12px rgba(0, 137, 123, 0.15); /* Changed */
-  transition: transform 0.3s ease;
-}
+    .nav-links a:hover {
+      color: #00897b;
+      /* Changed */
+      background: rgba(0, 137, 123, 0.08);
+      /* Changed */
+      transform: translateY(-1px);
+    }
 
-.user-info:hover {
-  transform: translateY(-2px);
-}
+    /* 用戶區域 */
+    .user-section {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
 
-.user-avatar {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #26a69a, #00897b); /* Changed */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-weight: 600;
-  font-size: 0.9rem;
-  box-shadow: 0 2px 8px rgba(0, 137, 123, 0.3); /* Changed */
-}
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1.25rem;
+      background: linear-gradient(135deg, #e0f2f1, #b2dfdb);
+      /* Changed */
+      border-radius: 30px;
+      border: 1px solid rgba(0, 137, 123, 0.2);
+      /* Changed */
+      box-shadow: 0 4px 12px rgba(0, 137, 123, 0.15);
+      /* Changed */
+      transition: transform 0.3s ease;
+    }
 
-.welcome-text {
-  color: #00695c; /* Changed */
-  font-weight: 600;
-  font-size: 0.95rem;
-}
+    .user-info:hover {
+      transform: translateY(-2px);
+    }
 
-.points-display {
-  background: linear-gradient(135deg, #fef3c7, #fcd34d);
-  color: #92400e;
-  padding: 0.75rem 1.25rem;
-  border-radius: 25px;
-  font-weight: 700;
-  font-size: 0.95rem;
-  border: 1px solid rgba(245, 158, 11, 0.3);
-  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2);
-  transition: transform 0.3s ease;
-}
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #26a69a, #00897b);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+      font-size: 0.9rem;
+      box-shadow: 0 2px 8px rgba(0, 137, 123, 0.3);
+      overflow: hidden;
+      object-fit: cover;
+    }
 
-.points-display:hover {
-  transform: translateY(-2px);
-}
+    .user-avatar-fallback {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #26a69a, #00897b);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+      font-size: 0.9rem;
+      box-shadow: 0 2px 8px rgba(0, 137, 123, 0.3);
+    }
 
-.logout-btn {
-  background: linear-gradient(135deg, #fee2e2, #fecaca);
-  color: #dc2626;
-  border: 1px solid rgba(220, 38, 38, 0.3);
-  padding: 0.75rem 1.25rem;
-  border-radius: 25px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.15);
-  position: center;
-}
+    .welcome-text {
+      color: #00695c;
+      /* Changed */
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
 
-.logout-btn:hover {
-  background: linear-gradient(135deg, #dc2626, #b91c1c);
-  color: white;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(220, 38, 38, 0.25);
-}
+    .points-display {
+      background: linear-gradient(135deg, #fef3c7, #fcd34d);
+      color: #92400e;
+      padding: 0.75rem 1.25rem;
+      border-radius: 25px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2);
+      transition: transform 0.3s ease;
+    }
 
-/* 移動端導航按鈕 */
-.mobile-nav-toggle {
-  display: none; /* Hidden by default, shown in media query */
-  flex-direction: column;
-  justify-content: space-around; /* Adjusted for better spacing */
-  width: 30px; /* Slightly larger for easier tap */
-  height: 30px; /* Slightly larger for easier tap */
-  cursor: pointer;
-  padding: 0; /* Padding handled by spacing */
-  border-radius: 8px;
-  transition: all 0.3s ease;
-  z-index: 1001; /* Ensure it's above other nav items if overlapping */
-}
+    .points-display:hover {
+      transform: translateY(-2px);
+    }
 
-.mobile-nav-toggle:hover {
-  background: rgba(0, 137, 123, 0.1); /* Changed */
-}
+    .logout-btn {
+      background: linear-gradient(135deg, #fee2e2, #fecaca);
+      color: #dc2626;
+      border: 1px solid rgba(220, 38, 38, 0.3);
+      padding: 0.75rem 1.25rem;
+      border-radius: 25px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(220, 38, 38, 0.15);
+      position: center;
+    }
 
-.mobile-nav-toggle span {
-  width: 24px;
-  height: 3px;
-  background: #00897b; /* Changed */
-  margin: 2px 0; /* Original margin */
-  transition: all 0.3s ease;
-  border-radius: 2px;
-  display: block; /* Ensure spans are block */
-}
+    .logout-btn:hover {
+      background: linear-gradient(135deg, #dc2626, #b91c1c);
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(220, 38, 38, 0.25);
+    }
 
-/* Active state for hamburger to X */
-.mobile-nav-toggle.active span:nth-child(1) {
-  transform: translateY(7px) rotate(45deg); /* Adjusted translate for centering */
-}
+    /* 移動端導航按鈕 */
+    .mobile-nav-toggle {
+      display: none;
+      /* Hidden by default, shown in media query */
+      flex-direction: column;
+      justify-content: space-around;
+      /* Adjusted for better spacing */
+      width: 30px;
+      /* Slightly larger for easier tap */
+      height: 30px;
+      /* Slightly larger for easier tap */
+      cursor: pointer;
+      padding: 0;
+      /* Padding handled by spacing */
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      z-index: 1001;
+      /* Ensure it's above other nav items if overlapping */
+    }
 
-.mobile-nav-toggle.active span:nth-child(2) {
-  opacity: 0;
-}
+    .mobile-nav-toggle:hover {
+      background: rgba(0, 137, 123, 0.1);
+      /* Changed */
+    }
 
-.mobile-nav-toggle.active span:nth-child(3) {
-  transform: translateY(-7px) rotate(-45deg); /* Adjusted translate for centering */
-}
+    .mobile-nav-toggle span {
+      width: 24px;
+      height: 3px;
+      background: #00897b;
+      /* Changed */
+      margin: 2px 0;
+      /* Original margin */
+      transition: all 0.3s ease;
+      border-radius: 2px;
+      display: block;
+      /* Ensure spans are block */
+    }
 
-/* Mobile Navigation Menu */
-.mobile-nav-menu {
-  display: none;
-  flex-direction: column;
-  position: absolute;
-  top: 70px; /* Height of navbar on mobile, adjust if navbar height changes */
-  left: 0;
-  width: 100%;
-  background: rgba(255, 255, 255, 0.98);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-  padding: 0.5rem 0; 
-  z-index: 999; 
-  border-top: 1px solid rgba(226, 232, 240, 0.5);
-}
+    /* Active state for hamburger to X */
+    .mobile-nav-toggle.active span:nth-child(1) {
+      transform: translateY(7px) rotate(45deg);
+      /* Adjusted translate for centering */
+    }
 
-.mobile-nav-menu.active {
-  display: flex;
-}
+    .mobile-nav-toggle.active span:nth-child(2) {
+      opacity: 0;
+    }
 
-.mobile-nav-menu a,
-.mobile-nav-menu .user-info-mobile,
-.mobile-nav-menu .points-display-mobile,
-.mobile-nav-menu .logout-btn-mobile {
-  padding: 0.8rem 1.5rem;
-  color: #374151;
-  text-decoration: none;
-  display: flex; 
-  align-items: center;
-  gap: 0.75rem;
-  border-bottom: 1px solid #eef2f7;
-}
+    .mobile-nav-toggle.active span:nth-child(3) {
+      transform: translateY(-7px) rotate(-45deg);
+      /* Adjusted translate for centering */
+    }
 
-.mobile-nav-menu a:last-of-type { /* Last nav link before user info */
-    border-bottom: 1px solid #eef2f7;
-}
-.mobile-nav-menu .logout-btn-mobile {
-    border-bottom: none; /* No border for the last item */
-}
+    /* Mobile Navigation Menu */
+    .mobile-nav-menu {
+      display: none;
+      flex-direction: column;
+      position: absolute;
+      top: 70px;
+      /* Height of navbar on mobile, adjust if navbar height changes */
+      left: 0;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+      padding: 0.5rem 0;
+      z-index: 999;
+      border-top: 1px solid rgba(226, 232, 240, 0.5);
+    }
+
+    .mobile-nav-menu.active {
+      display: flex;
+    }
+
+    .mobile-nav-menu a,
+    .mobile-nav-menu .user-info-mobile,
+    .mobile-nav-menu .points-display-mobile,
+    .mobile-nav-menu .logout-btn-mobile {
+      padding: 0.8rem 1.5rem;
+      color: #374151;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      border-bottom: 1px solid #eef2f7;
+    }
+
+    .mobile-nav-menu a:last-of-type {
+      /* Last nav link before user info */
+      border-bottom: 1px solid #eef2f7;
+    }
+
+    .mobile-nav-menu .logout-btn-mobile {
+      border-bottom: none;
+      /* No border for the last item */
+    }
 
 
-.mobile-nav-menu a:hover {
-  background-color: rgba(0, 137, 123, 0.08);
-  color: #00897b;
-}
+    .mobile-nav-menu a:hover {
+      background-color: rgba(0, 137, 123, 0.08);
+      color: #00897b;
+    }
 
-.mobile-nav-menu .logout-btn-mobile {
-  background: transparent;
-  color: #dc2626;
-  border: none;
-  font-weight: 600;
-  /* justify-content: center; /* No, keep alignment with other items */
-  cursor: pointer;
-  width: 100%; /* Make it take full width for consistent padding */
-  text-align: left; /* Align text with other items */
-}
-.mobile-nav-menu .logout-btn-mobile:hover {
-    background-color: rgba(220, 38, 38, 0.1);
-}
+    .mobile-nav-menu .logout-btn-mobile {
+      background: transparent;
+      color: #dc2626;
+      border: none;
+      font-weight: 600;
+      /* justify-content: center; /* No, keep alignment with other items */
+      cursor: pointer;
+      width: 100%;
+      /* Make it take full width for consistent padding */
+      text-align: left;
+      /* Align text with other items */
+    }
 
-.mobile-nav-menu .user-info-mobile .user-avatar {
-  width: 30px;
-  height: 30px;
-  font-size: 0.8rem;
-  /* Re-use .user-avatar styles if applicable or define here */
-  border-radius: 50%;
-  background: linear-gradient(135deg, #26a69a, #00897b);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-weight: 600;
-}
-  .mobile-nav-menu .user-info-mobile .welcome-text{
+    .mobile-nav-menu .logout-btn-mobile:hover {
+      background-color: rgba(220, 38, 38, 0.1);
+    }
+
+    .mobile-nav-menu .user-info-mobile .user-avatar {
+      width: 30px;
+      height: 30px;
+      font-size: 0.8rem;
+      /* Re-use .user-avatar styles if applicable or define here */
+      border-radius: 50%;
+      background: linear-gradient(135deg, #26a69a, #00897b);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+    }
+
+    .mobile-nav-menu .user-info-mobile .welcome-text {
       color: #00695c;
       font-weight: 600;
-  }
-
-.mobile-nav-menu .points-display-mobile {
-    font-weight: 700;
-    color: #92400e;
-}
-
-/* 主視覺區域 */
-.hero {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #e0f7fa 0%, #e0f2f1 30%, #b2dfdb 70%, #80cbc4 100%); /* Changed */
-  display: flex;
-  align-items: center;
-  position: relative;
-  overflow: hidden;
-  padding-top: 80px;
-}
-
-.hero::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  right: -30%;
-  width: 80%;
-  height: 150%;
-  background: radial-gradient(circle, rgba(0, 137, 123, 0.15) 0%, rgba(0, 137, 123, 0.05) 40%, transparent 70%); /* Changed */
-  animation: float 15s ease-in-out infinite;
-}
-
-.hero::after {
-  content: '';
-  position: absolute;
-  bottom: -30%;
-  left: -20%;
-  width: 60%;
-  height: 100%;
-  background: radial-gradient(circle, rgba(0, 105, 92, 0.1) 0%, transparent 60%); /* Changed */
-  animation: float 20s ease-in-out infinite reverse;
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0px) rotate(0deg) scale(1); }
-  33% { transform: translateY(-20px) rotate(2deg) scale(1.05); }
-  66% { transform: translateY(10px) rotate(-1deg) scale(0.95); }
-}
-
-.hero-container {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 2rem;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4rem;
-  align-items: center;
-  position: relative;
-  z-index: 2;
-}
-
-.hero-content h1 {
-  font-size: clamp(2.5rem, 5vw, 4.5rem);
-  font-weight: 800;
-  color: #00695c; /* Changed */
-  margin-bottom: 1.5rem;
-  background: linear-gradient(135deg, #00695c, #00897b, #26a69a); /* Changed */
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  line-height: 1.2;
-}
-
-.hero-welcome {
-  font-size: clamp(1.25rem, 3vw, 1.75rem);
-  color: #00695c; /* Changed */
-  margin-bottom: 1.5rem;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.hero-welcome::before {
-  content: "👋";
-  font-size: 1.5em;
-  animation: wave 2s ease-in-out infinite;
-}
-
-@keyframes wave {
-  0%, 100% { transform: rotate(0deg); }
-  25% { transform: rotate(20deg); }
-  75% { transform: rotate(-10deg); }
-}
-
-.hero-content p {
-  font-size: clamp(1.1rem, 2.5vw, 1.35rem);
-  color: #4b5563;
-  margin-bottom: 3rem;
-  line-height: 1.8;
-}
-
-.hero-buttons {
-  display: flex;
-  gap: 1.5rem;
-  flex-wrap: wrap;
-}
-
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 1.25rem 2.5rem;
-  border-radius: 50px;
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 1.1rem;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  cursor: pointer;
-  border: none;
-  position: relative;
-  overflow: hidden;
-}
-
-.btn::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-  transition: left 0.5s;
-}
-
-.btn:hover::before {
-  left: 100%;
-}
-
-.btn-primary {
-  background: linear-gradient(135deg, #26a69a, #00897b); /* Changed */
-  color: white;
-  box-shadow: 0 10px 30px rgba(0, 137, 123, 0.4); /* Changed */
-}
-
-.btn-primary:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 15px 40px rgba(0, 137, 123, 0.5); /* Changed */
-}
-
-.btn-secondary {
-  background: rgba(255, 255, 255, 0.9);
-  color: #00897b; /* Changed */
-  border: 2px solid #26a69a; /* Changed */
-  box-shadow: 0 8px 25px rgba(0, 137, 123, 0.2); /* Changed */
-}
-
-.btn-secondary:hover {
-  background: #26a69a; /* Changed */
-  color: white;
-  transform: translateY(-3px);
-  box-shadow: 0 12px 35px rgba(0, 137, 123, 0.4); /* Changed */
-}
-
-.hero-visual {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.hero-circle {
-  width: 450px;
-  height: 450px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #26a69a, #00897b, #00695c); /* Changed */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 
-    0 30px 80px rgba(0, 137, 123, 0.4), /* Changed */
-    0 0 0 20px rgba(0, 137, 123, 0.1), /* Changed */
-    0 0 0 40px rgba(0, 137, 123, 0.05); /* Changed */
-  animation: pulse 4s ease-in-out infinite;
-  position: relative;
-  overflow: hidden;
-}
-
-.hero-circle::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: conic-gradient(from 0deg, transparent, rgba(255,255,255,0.1), transparent);
-  animation: rotate 8s linear infinite;
-}
-
-.hero-circle::after {
-  content: '♻️';
-  font-size: 9rem;
-  animation: rotate 12s linear infinite reverse;
-  z-index: 2;
-  position: relative;
-  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
-}
-
-@keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-}
-
-@keyframes rotate {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-/* 快速數據區域 */
-.stats-section {
-  background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
-  padding: 4rem 2rem;
-  border-bottom: 1px solid #e5e7eb;
-  position: relative;
-}
-
-.stats-section::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, #26a69a, transparent); /* Changed */
-}
-
-.stats-container {
-  max-width: 1400px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 2rem;
-}
-
-.stat-card {
-  text-align: center;
-  padding: 2.5rem 2rem;
-  border-radius: 24px;
-  background: linear-gradient(135deg, #ffffff, #f8fafc);
-  border: 1px solid rgba(226, 232, 240, 0.8);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  overflow: hidden;
-}
-
-.stat-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, #26a69a, #00897b); /* Changed */
-  transform: scaleX(0);
-  transition: transform 0.3s ease;
-}
-
-.stat-card:hover::before {
-  transform: scaleX(1);
-}
-
-.stat-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
-  border-color: rgba(0, 137, 123, 0.3); /* Changed */
-}
-
-.stat-number {
-  font-size: clamp(2rem, 4vw, 3rem);
-  font-weight: 800;
-  color: #00897b; /* Changed */
-  display: block;
-  margin: 1rem 0;
-  background: linear-gradient(135deg, #00897b, #26a69a); /* Changed */
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.stat-label {
-  color: #6b7280;
-  font-size: 1rem;
-  font-weight: 500;
-  margin-top: 0.5rem;
-}
-
-.stat-icon {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-  display: inline-block;
-  animation: bounce 2s ease-in-out infinite;
-}
-
-@keyframes bounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-}
-
-/* 特色功能區域 */
-.features {
-  padding: 6rem 2rem;
-  background: linear-gradient(135deg, #f8fafc 0%, #ffffff 50%, #f1f5f9 100%);
-}
-
-.container {
-  max-width: 1400px;
-  margin: 0 auto;
-}
-
-.section-header {
-  text-align: center;
-  margin-bottom: 5rem;
-}
-
-.section-header h2 {
-  font-size: clamp(2.5rem, 5vw, 3.5rem);
-  font-weight: 800;
-  color: #00695c; /* Changed */
-  margin-bottom: 1.5rem;
-  background: linear-gradient(135deg, #00695c, #00897b, #26a69a); /* Changed */
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.section-header p {
-  font-size: clamp(1.1rem, 2.5vw, 1.3rem);
-  color: #6b7280;
-  max-width: 700px;
-  margin: 0 auto;
-  line-height: 1.8;
-}
-
-.features-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 2.5rem;
-}
-
-.feature-card {
-  background: linear-gradient(135deg, #ffffff, #f9fafb);
-  padding: 3rem 2.5rem;
-  border-radius: 28px;
-  box-shadow: 0 12px 50px rgba(0, 0, 0, 0.08);
-  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  border: 1px solid rgba(229, 231, 235, 0.6);
-  position: relative;
-  overflow: hidden;
-}
-
-.feature-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 6px;
-  background: linear-gradient(90deg, #26a69a, #00897b, #00695c); /* Changed */
-  transform: scaleX(0);
-  transition: transform 0.4s ease;
-}
-
-.feature-card:hover::before {
-  transform: scaleX(1);
-}
-
-.feature-card:hover {
-  transform: translateY(-12px);
-  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.15);
-}
-
-.feature-icon {
-  width: 90px;
-  height: 90px;
-  border-radius: 24px;
-  background: linear-gradient(135deg, #e0f2f1, #b2dfdb); /* Changed */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 2rem;
-  transition: all 0.4s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.feature-icon::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(45deg, transparent, rgba(0, 137, 123, 0.1), transparent); /* Changed */
-  transform: rotate(45deg);
-  transition: transform 0.6s ease;
-}
-
-.feature-card:hover .feature-icon::before {
-  transform: rotate(45deg) translate(100%, 100%);
-}
-
-.feature-card:hover .feature-icon {
-  transform: scale(1.15) rotate(5deg);
-  background: linear-gradient(135deg, #b2dfdb, #80cbc4); /* Changed */
-}
-
-.feature-icon svg {
-  width: 45px;
-  height: 45px;
-  stroke: #00897b; /* Changed */
-  stroke-width: 2.5;
-  z-index: 2;
-  position: relative;
-}
-
-.feature-card h3 {
-  font-size: 1.75rem;
-  font-weight: 700;
-  color: #00695c; /* Changed */
-  margin-bottom: 1.5rem;
-  line-height: 1.3;
-}
-
-.feature-card p {
-  color: #6b7280;
-  line-height: 1.8;
-  font-size: 1.1rem;
-}
-
-/* CTA 區域 */
-.cta-section {
-  background: linear-gradient(135deg, #00695c, #004d40, #00897b); /* Changed */
-  padding: 8rem 2rem;
-  position: relative;
-  overflow: hidden;
-}
-
-.cta-section::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: 
-    radial-gradient(circle at 20% 50%, rgba(0, 137, 123, 0.3) 0%, transparent 50%), /* Changed */
-    radial-gradient(circle at 80% 20%, rgba(0, 105, 92, 0.3) 0%, transparent 50%), /* Changed */
-    radial-gradient(circle at 40% 80%, rgba(0, 77, 64, 0.3) 0%, transparent 50%); /* Changed */
-  animation: float 20s ease-in-out infinite;
-}
-
-.cta-content {
-  max-width: 900px;
-  margin: 0 auto;
-  text-align: center;
-  position: relative;
-  z-index: 2;
-}
-
-.cta-content h2 {
-  font-size: clamp(2.5rem, 5vw, 3.5rem);
-  font-weight: 800;
-  color: white;
-  margin-bottom: 2rem;
-  line-height: 1.2;
-}
-
-.cta-content p {
-  font-size: clamp(1.2rem, 3vw, 1.4rem);
-  color: rgba(255, 255, 255, 0.9);
-  margin-bottom: 3rem;
-  line-height: 1.8;
-}
-
-.btn-cta {
-  background: linear-gradient(135deg, #ffffff, #f8fafc);
-  color: #00897b; /* Changed */
-  padding: 1.5rem 3.5rem;
-  font-size: 1.2rem;
-  font-weight: 700;
-  border-radius: 50px;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
-  transition: all 0.4s ease;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
-  position: relative;
-  overflow: hidden;
-}
-
-.btn-cta::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(0, 137, 123, 0.2), transparent); /* Changed */
-  transition: left 0.6s;
-}
-
-.btn-cta:hover::before {
-  left: 100%;
-}
-
-.btn-cta:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 16px 50px rgba(0, 0, 0, 0.3);
-}
-
-/* 頁腳 */
-.footer {
-  background: linear-gradient(135deg, #1f2937, #111827);
-  color: white;
-  padding: 5rem 2rem 2rem;
-  position: relative;
-  overflow: hidden;
-}
-
-.footer::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, #26a69a, transparent); /* Changed */
-}
-
-.footer-content {
-  max-width: 1400px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr;
-  gap: 4rem;
-}
-
-.footer-brand h3 {
-  font-size: 1.75rem;
-  font-weight: 800;
-  margin-bottom: 1.5rem;
-  color: #26a69a; /* Changed */
-}
-
-.footer-brand p {
-  color: #9ca3af;
-  line-height: 1.8;
-  margin-bottom: 1.5rem;
-  font-size: 1.05rem;
-}
-
-.footer-section h4 {
-  font-size: 1.2rem;
-  font-weight: 700;
-  margin-bottom: 2rem;
-  color: white;
-  position: relative;
-}
-
-.footer-section h4::after {
-  content: '';
-  position: absolute;
-  bottom: -8px;
-  left: 0;
-  width: 30px;
-  height: 3px;
-  background: linear-gradient(90deg, #26a69a, #00897b); /* Changed */
-  border-radius: 2px;
-}
-
-.footer-section ul {
-  list-style: none;
-}
-
-.footer-section li {
-  margin-bottom: 1rem;
-}
-
-.footer-section a {
-  color: #9ca3af;
-  text-decoration: none;
-  transition: all 0.3s ease;
-  font-size: 1.05rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.footer-section a:hover {
-  color: #26a69a; /* Changed */
-  transform: translateX(5px);
-}
-
-.footer-bottom {
-  border-top: 1px solid #374151;
-  margin-top: 4rem;
-  padding-top: 2.5rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 1.5rem;
-}
-
-.copyright {
-  color: #9ca3af;
-  font-size: 1rem;
-}
-
-.social-links {
-  display: flex;
-  gap: 1.5rem;
-}
-
-.social-links a {
-  width: 45px;
-  height: 45px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #374151, #4b5563);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #9ca3af;
-  text-decoration: none;
-  transition: all 0.4s ease;
-  font-size: 1.2rem;
-}
-
-.social-links a:hover {
-  background: linear-gradient(135deg, #26a69a, #00897b); /* Changed */
-  color: white;
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(0, 137, 123, 0.4); /* Changed */
-}
-
-/* 響應式設計 */
-@media (max-width: 1200px) {
-  .nav-container {
-    padding: 0 1.5rem;
-  }
-
-  .hero-container {
-    grid-template-columns: 1fr;
-    gap: 3rem;
-    padding: 2rem;
-    text-align: center;
-  }
-
-  .hero-visual {
-    order: -1;
-    margin-bottom: 2rem;
-  }
-
-  .hero-circle {
-    width: 380px;
-    height: 380px;
-  }
-
-  .hero-circle::after {
-    font-size: 7rem;
-  }
-
-  .hero-content h1 {
-    font-size: clamp(2rem, 6vw, 3.8rem);
-  }
-
-  .hero-welcome {
-    justify-content: center;
-  }
-
-  .hero-content p {
-    font-size: clamp(1rem, 2.5vw, 1.25rem);
-    margin-bottom: 2rem;
-  }
-
-  .hero-buttons {
-    justify-content: center;
-    gap: 1rem;
-  }
-
-  .btn {
-    padding: 1rem 2rem;
-    font-size: 1rem;
-  }
-
-  .features-grid {
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  }
-
-  .feature-card {
-    padding: 2.5rem 2rem;
-  }
-
-  .feature-icon {
-    width: 80px;
-    height: 80px;
-    margin-bottom: 1.5rem;
-  }
-
-  .feature-icon svg {
-    width: 40px;
-    height: 40px;
-  }
-
-  .feature-card h3 {
-    font-size: 1.5rem;
-  }
-
-  .feature-card p {
-    font-size: 1rem;
-  }
-
-  .cta-content h2 {
-    font-size: clamp(2rem, 6vw, 3rem);
-  }
-
-  .cta-content p {
-    font-size: clamp(1.1rem, 3vw, 1.3rem);
-  }
-
-  .btn-cta {
-    padding: 1.2rem 2.8rem;
-    font-size: 1.1rem;
-  }
-
-  .footer-content {
-    grid-template-columns: 1fr 1fr;
-    gap: 3rem;
-  }
-
-  .footer-bottom {
-    flex-direction: column;
-    text-align: center;
-    gap: 1rem;
-  }
-}
-
-@media (max-width: 992px) {
-  .nav-links,
-  .user-section {
-    display: none; /* Hide original nav links and user section */
-  }
-
-  .mobile-nav-toggle {
-    display: flex; /* Show hamburger icon */
-  }
-  
-  .navbar {
-    /* height: 70px; /* Adjust if mobile menu top position depends on this */
-  }
-
-  .nav-container {
-    padding: 0 1rem;
-    height: 70px; /* Explicit height for mobile */
-  }
-
-  .logo {
-    font-size: 1.3rem;
-  }
-
-  .logo-icon {
-    width: 40px;
-    height: 40px; /* Maintain aspect ratio or square */
-    background-size: 32px; /* Adjust icon size */
-    margin-right: 8px;
-  }
-
-
-  .hero {
-    min-height: auto;
-    padding-top: 70px; /* Match navbar height */
-  }
-
-  .hero-container {
-    padding: 1.5rem;
-  }
-
-  .hero-circle {
-    width: 300px;
-    height: 300px;
-    box-shadow:
-      0 20px 60px rgba(0, 137, 123, 0.4), /* Changed */
-      0 0 0 15px rgba(0, 137, 123, 0.1), /* Changed */
-      0 0 0 30px rgba(0, 137, 123, 0.05); /* Changed */
-  }
-
-  .hero-circle::after {
-    font-size: 5rem;
-  }
-
-  .stats-section {
-    padding: 3rem 1rem;
-  }
-
-  .stats-container {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
-
-  .stat-card {
-    padding: 2rem 1.5rem;
-  }
-
-  .stat-number {
-    font-size: clamp(1.8rem, 5vw, 2.5rem);
-  }
-
-  .stat-label {
-    font-size: 0.9rem;
-  }
-
-  .stat-icon {
-    font-size: 2rem;
-  }
-
-  .features {
-    padding: 4rem 1rem;
-  }
-
-  .section-header {
-    margin-bottom: 3rem;
-  }
-
-  .section-header h2 {
-    font-size: clamp(2rem, 6vw, 3rem);
-  }
-
-  .section-header p {
-    font-size: clamp(1rem, 2.5vw, 1.15rem);
-  }
-
-  .features-grid {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-  }
-
-  .cta-section {
-    padding: 6rem 1rem;
-  }
-
-  .cta-content h2 {
-    font-size: clamp(1.8rem, 6vw, 2.5rem);
-  }
-
-  .cta-content p {
-    font-size: clamp(1rem, 3vw, 1.2rem);
-  }
-
-  .btn-cta {
-    padding: 1rem 2.5rem;
-    font-size: 1rem;
-  }
-
-  .footer {
-    padding: 4rem 1rem 1.5rem;
-  }
-
-  .footer-content {
-    grid-template-columns: 1fr;
-    gap: 2.5rem;
-    text-align: center;
-  }
-
-  .footer-brand h3 {
-    font-size: 1.5rem;
-  }
-
-  .footer-brand p {
-    font-size: 0.95rem;
-  }
-
-  .footer-section h4 {
-    text-align: center;
-    margin-bottom: 1.5rem;
-  }
-
-  .footer-section h4::after {
-    left: 50%;
-    transform: translateX(-50%);
-  }
-
-  .footer-section ul {
-    padding-left: 0;
-  }
-
-  .footer-section li {
-    margin-bottom: 0.8rem;
-  }
-
-  .footer-section a {
-    justify-content: center;
-    font-size: 0.95rem;
-  }
-
-  .footer-bottom {
-    margin-top: 3rem;
-    padding-top: 2rem;
-  }
-
-  .copyright {
-    font-size: 0.9rem;
-  }
-
-  .social-links {
-    justify-content: center;
-    gap: 1rem;
-  }
-
-  .social-links a {
-    width: 40px;
-    height: 40px;
-    font-size: 1rem;
-  }
-}
-
-@media (max-width: 768px) {
-  .hero-circle {
-    width: 250px;
-    height: 250px;
-  }
-
-  .hero-circle::after {
-    font-size: 4rem;
-  }
-
-  .btn {
-    width: 100%;
-    justify-content: center;
-  }
-}
-
-@media (max-width: 480px) {
-  .hero-buttons {
-    flex-direction: column;
-  }
-
-  .stats-container {
-    padding: 0 0.5rem;
-  }
-
-  .feature-card {
-    padding: 2rem 1.2rem;
-  }
-
-  .cta-section {
-    padding: 4rem 0.5rem;
-  }
-
-  .btn-cta {
-    width: 100%;
-    justify-content: center;
-  }
-
-  .footer {
-    padding: 3rem 0.5rem 1rem;
-  }
-}
-
-/* Fade-in animation (already present in original HTML) */
-.fade-in {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-}
-.fade-in.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Added Styles for Recycle Records and Edit Profile Modal */
-.reviews-grid { /* Renamed from features-grid to be more specific */
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 2rem;
-  margin-top: 2rem;
-}
-
-.recycle-record-card {
-  background: linear-gradient(135deg, #ffffff, #f9fafb);
-  border-radius: 20px;
-  padding: 2rem;
-  box-shadow: 0 8px 30px rgba(0,0,0,0.08);
-  border: 1px solid #e5e7eb;
-  transition: transform 0.3s, box-shadow 0.3s;
-}
-
-.recycle-record-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 40px rgba(0,0,0,0.12);
-}
-
-.status-badge {
-  padding: 0.5rem 1rem;
-  border-radius: 20px;
-  font-weight: 600;
-  font-size: 0.9rem;
-}
-
-.status-pending { background: #fef3c7; color: #92400e; }
-.status-approved { background: #d1fae5; color: #065f46; }
-.status-rejected { background: #fee2e2; color: #991b1b; }
-
-.record-info-section {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Adjusted for better layout */
-  gap: 1rem;
-  margin: 1.5rem 0;
-  padding: 1rem;
-  background: rgba(0,137,123,0.05);
-  border-radius: 12px;
-}
-
-.info-item div {
-  font-size: 0.85rem;
-  color: #6b7280;
-}
-
-.info-item span {
-  font-weight: 600;
-  color: #374151;
-  margin-top: 0.25rem;
-  display: block;
-}
-
-.info-item .points-value {
-  font-weight: 700;
-  color: #00897b;
-  font-size: 1.1rem;
-}
-
-.info-item .confidence-value {
-    font-weight: 600;
-    color: #374151;
-    margin-top: 0.25rem;
-    display: block;
-}
-
-.reject-reason {
-  margin-top: 0.5rem;
-  padding: 0.75rem;
-  background: #fee2e2;
-  color: #991b1b;
-  border-radius: 8px;
-  font-size: 0.9rem;
-}
-
-.edit-profile-modal {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.5);
-  z-index: 10000;
-  align-items: center;
-  justify-content: center;
-}
-
-.edit-profile-modal-content {
-  background: white;
-  border-radius: 24px;
-  padding: 2.5rem;
-  max-width: 600px;
-  width: 90%;
-  max-height: 90vh;
-  overflow-y: auto;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-}
-
-.edit-profile-modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 2rem;
-}
-
-.edit-profile-modal-header h2 {
-  font-size: 1.75rem;
-  font-weight: 700;
-  color: #00695c;
-}
-
-.close-modal-btn {
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-  color: #6b7280;
-}
-
-.edit-profile-form label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 600;
-  color: #374151;
-}
-
-.edit-profile-form input[type="text"],
-.edit-profile-form input[type="email"],
-.edit-profile-form input[type="tel"],
-.edit-profile-form input[type="date"],
-.edit-profile-form textarea {
-  width: 100%;
-  padding: 0.75rem 1rem;
-  border: 2px solid #e5e7eb;
-  border-radius: 12px;
-  font-size: 1rem;
-  transition: border-color 0.3s;
-}
-
-.edit-profile-form textarea {
-  resize: vertical;
-}
-
-.edit-profile-form .form-actions {
-  display: flex;
-  gap: 1rem;
-  margin-top: 1rem;
-}
-
-.edit-profile-form .save-btn {
-  flex: 1;
-  padding: 1rem;
-  background: linear-gradient(135deg, #26a69a, #00897b);
-  color: white;
-  border: none;
-  border-radius: 12px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.3s;
-}
-
-.edit-profile-form .cancel-btn {
-  flex: 1;
-  padding: 1rem;
-  background: #f3f4f6;
-  color: #374151;
-  border: none;
-  border-radius: 12px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-</style>
+    }
+
+    .mobile-nav-menu .points-display-mobile {
+      font-weight: 700;
+      color: #92400e;
+    }
+
+    /* 主視覺區域 */
+    .hero {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #e0f7fa 0%, #e0f2f1 30%, #b2dfdb 70%, #80cbc4 100%);
+      /* Changed */
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      padding-top: 80px;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -30%;
+      width: 80%;
+      height: 150%;
+      background: radial-gradient(circle, rgba(0, 137, 123, 0.15) 0%, rgba(0, 137, 123, 0.05) 40%, transparent 70%);
+      /* Changed */
+      animation: float 15s ease-in-out infinite;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -30%;
+      left: -20%;
+      width: 60%;
+      height: 100%;
+      background: radial-gradient(circle, rgba(0, 105, 92, 0.1) 0%, transparent 60%);
+      /* Changed */
+      animation: float 20s ease-in-out infinite reverse;
+    }
+
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translateY(0px) rotate(0deg) scale(1);
+      }
+
+      33% {
+        transform: translateY(-20px) rotate(2deg) scale(1.05);
+      }
+
+      66% {
+        transform: translateY(10px) rotate(-1deg) scale(0.95);
+      }
+    }
+
+    .hero-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-content h1 {
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      font-weight: 800;
+      color: #00695c;
+      /* Changed */
+      margin-bottom: 1.5rem;
+      background: linear-gradient(135deg, #00695c, #00897b, #26a69a);
+      /* Changed */
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.2;
+    }
+
+    .hero-welcome {
+      font-size: clamp(1.25rem, 3vw, 1.75rem);
+      color: #00695c;
+      /* Changed */
+      margin-bottom: 1.5rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .hero-welcome::before {
+      content: "👋";
+      font-size: 1.5em;
+      animation: wave 2s ease-in-out infinite;
+    }
+
+    @keyframes wave {
+
+      0%,
+      100% {
+        transform: rotate(0deg);
+      }
+
+      25% {
+        transform: rotate(20deg);
+      }
+
+      75% {
+        transform: rotate(-10deg);
+      }
+    }
+
+    .hero-content p {
+      font-size: clamp(1.1rem, 2.5vw, 1.35rem);
+      color: #4b5563;
+      margin-bottom: 3rem;
+      line-height: 1.8;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1.25rem 2.5rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.1rem;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+      border: none;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .btn:hover::before {
+      left: 100%;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #26a69a, #00897b);
+      /* Changed */
+      color: white;
+      box-shadow: 0 10px 30px rgba(0, 137, 123, 0.4);
+      /* Changed */
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 40px rgba(0, 137, 123, 0.5);
+      /* Changed */
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.9);
+      color: #00897b;
+      /* Changed */
+      border: 2px solid #26a69a;
+      /* Changed */
+      box-shadow: 0 8px 25px rgba(0, 137, 123, 0.2);
+      /* Changed */
+    }
+
+    .btn-secondary:hover {
+      background: #26a69a;
+      /* Changed */
+      color: white;
+      transform: translateY(-3px);
+      box-shadow: 0 12px 35px rgba(0, 137, 123, 0.4);
+      /* Changed */
+    }
+
+    .hero-visual {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .hero-circle {
+      width: 450px;
+      height: 450px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #26a69a, #00897b, #00695c);
+      /* Changed */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow:
+        0 30px 80px rgba(0, 137, 123, 0.4),
+        /* Changed */
+        0 0 0 20px rgba(0, 137, 123, 0.1),
+        /* Changed */
+        0 0 0 40px rgba(0, 137, 123, 0.05);
+      /* Changed */
+      animation: pulse 4s ease-in-out infinite;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-circle::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: conic-gradient(from 0deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      animation: rotate 8s linear infinite;
+    }
+
+    .hero-circle::after {
+      content: '♻️';
+      font-size: 9rem;
+      animation: rotate 12s linear infinite reverse;
+      z-index: 2;
+      position: relative;
+      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.05);
+      }
+    }
+
+    @keyframes rotate {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* 快速數據區域 */
+    .stats-section {
+      background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+      padding: 4rem 2rem;
+      border-bottom: 1px solid #e5e7eb;
+      position: relative;
+    }
+
+    .stats-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #26a69a, transparent);
+      /* Changed */
+    }
+
+    .stats-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+
+    .stat-card {
+      text-align: center;
+      padding: 2.5rem 2rem;
+      border-radius: 24px;
+      background: linear-gradient(135deg, #ffffff, #f8fafc);
+      border: 1px solid rgba(226, 232, 240, 0.8);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #26a69a, #00897b);
+      /* Changed */
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+
+    .stat-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .stat-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+      border-color: rgba(0, 137, 123, 0.3);
+      /* Changed */
+    }
+
+    .stat-number {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 800;
+      color: #00897b;
+      /* Changed */
+      display: block;
+      margin: 1rem 0;
+      background: linear-gradient(135deg, #00897b, #26a69a);
+      /* Changed */
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .stat-label {
+      color: #6b7280;
+      font-size: 1rem;
+      font-weight: 500;
+      margin-top: 0.5rem;
+    }
+
+    .stat-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      display: inline-block;
+      animation: bounce 2s ease-in-out infinite;
+    }
+
+    @keyframes bounce {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    /* 特色功能區域 */
+    .features {
+      padding: 6rem 2rem;
+      background: linear-gradient(135deg, #f8fafc 0%, #ffffff 50%, #f1f5f9 100%);
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 5rem;
+    }
+
+    .section-header h2 {
+      font-size: clamp(2.5rem, 5vw, 3.5rem);
+      font-weight: 800;
+      color: #00695c;
+      /* Changed */
+      margin-bottom: 1.5rem;
+      background: linear-gradient(135deg, #00695c, #00897b, #26a69a);
+      /* Changed */
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .section-header p {
+      font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+      color: #6b7280;
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.8;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 2.5rem;
+    }
+
+    .feature-card {
+      background: linear-gradient(135deg, #ffffff, #f9fafb);
+      padding: 3rem 2.5rem;
+      border-radius: 28px;
+      box-shadow: 0 12px 50px rgba(0, 0, 0, 0.08);
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 1px solid rgba(229, 231, 235, 0.6);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 6px;
+      background: linear-gradient(90deg, #26a69a, #00897b, #00695c);
+      /* Changed */
+      transform: scaleX(0);
+      transition: transform 0.4s ease;
+    }
+
+    .feature-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .feature-card:hover {
+      transform: translateY(-12px);
+      box-shadow: 0 25px 80px rgba(0, 0, 0, 0.15);
+    }
+
+    .feature-icon {
+      width: 90px;
+      height: 90px;
+      border-radius: 24px;
+      background: linear-gradient(135deg, #e0f2f1, #b2dfdb);
+      /* Changed */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 2rem;
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-icon::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(0, 137, 123, 0.1), transparent);
+      /* Changed */
+      transform: rotate(45deg);
+      transition: transform 0.6s ease;
+    }
+
+    .feature-card:hover .feature-icon::before {
+      transform: rotate(45deg) translate(100%, 100%);
+    }
+
+    .feature-card:hover .feature-icon {
+      transform: scale(1.15) rotate(5deg);
+      background: linear-gradient(135deg, #b2dfdb, #80cbc4);
+      /* Changed */
+    }
+
+    .feature-icon svg {
+      width: 45px;
+      height: 45px;
+      stroke: #00897b;
+      /* Changed */
+      stroke-width: 2.5;
+      z-index: 2;
+      position: relative;
+    }
+
+    .feature-card h3 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #00695c;
+      /* Changed */
+      margin-bottom: 1.5rem;
+      line-height: 1.3;
+    }
+
+    .feature-card p {
+      color: #6b7280;
+      line-height: 1.8;
+      font-size: 1.1rem;
+    }
+
+    /* CTA 區域 */
+    .cta-section {
+      background: linear-gradient(135deg, #00695c, #004d40, #00897b);
+      /* Changed */
+      padding: 8rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background:
+        radial-gradient(circle at 20% 50%, rgba(0, 137, 123, 0.3) 0%, transparent 50%),
+        /* Changed */
+        radial-gradient(circle at 80% 20%, rgba(0, 105, 92, 0.3) 0%, transparent 50%),
+        /* Changed */
+        radial-gradient(circle at 40% 80%, rgba(0, 77, 64, 0.3) 0%, transparent 50%);
+      /* Changed */
+      animation: float 20s ease-in-out infinite;
+    }
+
+    .cta-content {
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .cta-content h2 {
+      font-size: clamp(2.5rem, 5vw, 3.5rem);
+      font-weight: 800;
+      color: white;
+      margin-bottom: 2rem;
+      line-height: 1.2;
+    }
+
+    .cta-content p {
+      font-size: clamp(1.2rem, 3vw, 1.4rem);
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 3rem;
+      line-height: 1.8;
+    }
+
+    .btn-cta {
+      background: linear-gradient(135deg, #ffffff, #f8fafc);
+      color: #00897b;
+      /* Changed */
+      padding: 1.5rem 3.5rem;
+      font-size: 1.2rem;
+      font-weight: 700;
+      border-radius: 50px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      transition: all 0.4s ease;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-cta::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0, 137, 123, 0.2), transparent);
+      /* Changed */
+      transition: left 0.6s;
+    }
+
+    .btn-cta:hover::before {
+      left: 100%;
+    }
+
+    .btn-cta:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 50px rgba(0, 0, 0, 0.3);
+    }
+
+    /* 頁腳 */
+    .footer {
+      background: linear-gradient(135deg, #1f2937, #111827);
+      color: white;
+      padding: 5rem 2rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .footer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #26a69a, transparent);
+      /* Changed */
+    }
+
+    .footer-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 4rem;
+    }
+
+    .footer-brand h3 {
+      font-size: 1.75rem;
+      font-weight: 800;
+      margin-bottom: 1.5rem;
+      color: #26a69a;
+      /* Changed */
+    }
+
+    .footer-brand p {
+      color: #9ca3af;
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+      font-size: 1.05rem;
+    }
+
+    .footer-section h4 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 2rem;
+      color: white;
+      position: relative;
+    }
+
+    .footer-section h4::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 30px;
+      height: 3px;
+      background: linear-gradient(90deg, #26a69a, #00897b);
+      /* Changed */
+      border-radius: 2px;
+    }
+
+    .footer-section ul {
+      list-style: none;
+    }
+
+    .footer-section li {
+      margin-bottom: 1rem;
+    }
+
+    .footer-section a {
+      color: #9ca3af;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      font-size: 1.05rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .footer-section a:hover {
+      color: #26a69a;
+      /* Changed */
+      transform: translateX(5px);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid #374151;
+      margin-top: 4rem;
+      padding-top: 2.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+
+    .copyright {
+      color: #9ca3af;
+      font-size: 1rem;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .social-links a {
+      width: 45px;
+      height: 45px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #374151, #4b5563);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #9ca3af;
+      text-decoration: none;
+      transition: all 0.4s ease;
+      font-size: 1.2rem;
+    }
+
+    .social-links a:hover {
+      background: linear-gradient(135deg, #26a69a, #00897b);
+      /* Changed */
+      color: white;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(0, 137, 123, 0.4);
+      /* Changed */
+    }
+
+    /* 響應式設計 */
+    @media (max-width: 1200px) {
+      .nav-container {
+        padding: 0 1.5rem;
+      }
+
+      .hero-container {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+        padding: 2rem;
+        text-align: center;
+      }
+
+      .hero-visual {
+        order: -1;
+        margin-bottom: 2rem;
+      }
+
+      .hero-circle {
+        width: 380px;
+        height: 380px;
+      }
+
+      .hero-circle::after {
+        font-size: 7rem;
+      }
+
+      .hero-content h1 {
+        font-size: clamp(2rem, 6vw, 3.8rem);
+      }
+
+      .hero-welcome {
+        justify-content: center;
+      }
+
+      .hero-content p {
+        font-size: clamp(1rem, 2.5vw, 1.25rem);
+        margin-bottom: 2rem;
+      }
+
+      .hero-buttons {
+        justify-content: center;
+        gap: 1rem;
+      }
+
+      .btn {
+        padding: 1rem 2rem;
+        font-size: 1rem;
+      }
+
+      .features-grid {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      }
+
+      .feature-card {
+        padding: 2.5rem 2rem;
+      }
+
+      .feature-icon {
+        width: 80px;
+        height: 80px;
+        margin-bottom: 1.5rem;
+      }
+
+      .feature-icon svg {
+        width: 40px;
+        height: 40px;
+      }
+
+      .feature-card h3 {
+        font-size: 1.5rem;
+      }
+
+      .feature-card p {
+        font-size: 1rem;
+      }
+
+      .cta-content h2 {
+        font-size: clamp(2rem, 6vw, 3rem);
+      }
+
+      .cta-content p {
+        font-size: clamp(1.1rem, 3vw, 1.3rem);
+      }
+
+      .btn-cta {
+        padding: 1.2rem 2.8rem;
+        font-size: 1.1rem;
+      }
+
+      .footer-content {
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+      }
+    }
+
+    @media (max-width: 992px) {
+
+      .nav-links,
+      .user-section {
+        display: none;
+        /* Hide original nav links and user section */
+      }
+
+      .mobile-nav-toggle {
+        display: flex;
+        /* Show hamburger icon */
+      }
+
+      .navbar {
+        /* height: 70px; /* Adjust if mobile menu top position depends on this */
+      }
+
+      .nav-container {
+        padding: 0 1rem;
+        height: 70px;
+        /* Explicit height for mobile */
+      }
+
+      .logo {
+        font-size: 1.3rem;
+      }
+
+      .logo-icon {
+        width: 40px;
+        height: 40px;
+        /* Maintain aspect ratio or square */
+        background-size: 32px;
+        /* Adjust icon size */
+        margin-right: 8px;
+      }
+
+
+      .hero {
+        min-height: auto;
+        padding-top: 70px;
+        /* Match navbar height */
+      }
+
+      .hero-container {
+        padding: 1.5rem;
+      }
+
+      .hero-circle {
+        width: 300px;
+        height: 300px;
+        box-shadow:
+          0 20px 60px rgba(0, 137, 123, 0.4),
+          /* Changed */
+          0 0 0 15px rgba(0, 137, 123, 0.1),
+          /* Changed */
+          0 0 0 30px rgba(0, 137, 123, 0.05);
+        /* Changed */
+      }
+
+      .hero-circle::after {
+        font-size: 5rem;
+      }
+
+      .stats-section {
+        padding: 3rem 1rem;
+      }
+
+      .stats-container {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+
+      .stat-card {
+        padding: 2rem 1.5rem;
+      }
+
+      .stat-number {
+        font-size: clamp(1.8rem, 5vw, 2.5rem);
+      }
+
+      .stat-label {
+        font-size: 0.9rem;
+      }
+
+      .stat-icon {
+        font-size: 2rem;
+      }
+
+      .features {
+        padding: 4rem 1rem;
+      }
+
+      .section-header {
+        margin-bottom: 3rem;
+      }
+
+      .section-header h2 {
+        font-size: clamp(2rem, 6vw, 3rem);
+      }
+
+      .section-header p {
+        font-size: clamp(1rem, 2.5vw, 1.15rem);
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .cta-section {
+        padding: 6rem 1rem;
+      }
+
+      .cta-content h2 {
+        font-size: clamp(1.8rem, 6vw, 2.5rem);
+      }
+
+      .cta-content p {
+        font-size: clamp(1rem, 3vw, 1.2rem);
+      }
+
+      .btn-cta {
+        padding: 1rem 2.5rem;
+        font-size: 1rem;
+      }
+
+      .footer {
+        padding: 4rem 1rem 1.5rem;
+      }
+
+      .footer-content {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+        text-align: center;
+      }
+
+      .footer-brand h3 {
+        font-size: 1.5rem;
+      }
+
+      .footer-brand p {
+        font-size: 0.95rem;
+      }
+
+      .footer-section h4 {
+        text-align: center;
+        margin-bottom: 1.5rem;
+      }
+
+      .footer-section h4::after {
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      .footer-section ul {
+        padding-left: 0;
+      }
+
+      .footer-section li {
+        margin-bottom: 0.8rem;
+      }
+
+      .footer-section a {
+        justify-content: center;
+        font-size: 0.95rem;
+      }
+
+      .footer-bottom {
+        margin-top: 3rem;
+        padding-top: 2rem;
+      }
+
+      .copyright {
+        font-size: 0.9rem;
+      }
+
+      .social-links {
+        justify-content: center;
+        gap: 1rem;
+      }
+
+      .social-links a {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .hero-circle {
+        width: 250px;
+        height: 250px;
+      }
+
+      .hero-circle::after {
+        font-size: 4rem;
+      }
+
+      .btn {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero-buttons {
+        flex-direction: column;
+      }
+
+      .stats-container {
+        padding: 0 0.5rem;
+      }
+
+      .feature-card {
+        padding: 2rem 1.2rem;
+      }
+
+      .cta-section {
+        padding: 4rem 0.5rem;
+      }
+
+      .btn-cta {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .footer {
+        padding: 3rem 0.5rem 1rem;
+      }
+    }
+
+    /* Fade-in animation (already present in original HTML) */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Added Styles for Recycle Records and Edit Profile Modal */
+    .reviews-grid {
+      /* Renamed from features-grid to be more specific */
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .recycle-record-card {
+      background: linear-gradient(135deg, #ffffff, #f9fafb);
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+      border: 1px solid #e5e7eb;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .recycle-record-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+    }
+
+    .status-badge {
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .status-pending {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .status-approved {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    .status-rejected {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .record-info-section {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      /* Adjusted for better layout */
+      gap: 1rem;
+      margin: 1.5rem 0;
+      padding: 1rem;
+      background: rgba(0, 137, 123, 0.05);
+      border-radius: 12px;
+    }
+
+    .info-item div {
+      font-size: 0.85rem;
+      color: #6b7280;
+    }
+
+    .info-item span {
+      font-weight: 600;
+      color: #374151;
+      margin-top: 0.25rem;
+      display: block;
+    }
+
+    .info-item .points-value {
+      font-weight: 700;
+      color: #00897b;
+      font-size: 1.1rem;
+    }
+
+    .info-item .confidence-value {
+      font-weight: 600;
+      color: #374151;
+      margin-top: 0.25rem;
+      display: block;
+    }
+
+    .reject-reason {
+      margin-top: 0.5rem;
+      padding: 0.75rem;
+      background: #fee2e2;
+      color: #991b1b;
+      border-radius: 8px;
+      font-size: 0.9rem;
+    }
+
+    .edit-profile-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 10000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .edit-profile-modal-content {
+      background: white;
+      border-radius: 24px;
+      padding: 2.5rem;
+      max-width: 600px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .edit-profile-modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .edit-profile-modal-header h2 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #00695c;
+    }
+
+    .close-modal-btn {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #6b7280;
+    }
+
+    .edit-profile-form label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: #374151;
+    }
+
+    .edit-profile-form input[type="text"],
+    .edit-profile-form input[type="email"],
+    .edit-profile-form input[type="tel"],
+    .edit-profile-form input[type="date"],
+    .edit-profile-form textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      font-size: 1rem;
+      transition: border-color 0.3s;
+    }
+
+    .edit-profile-form textarea {
+      resize: vertical;
+    }
+
+    .edit-profile-form .form-actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .edit-profile-form .save-btn {
+      flex: 1;
+      padding: 1rem;
+      background: linear-gradient(135deg, #26a69a, #00897b);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+
+    .edit-profile-form .cancel-btn {
+      flex: 1;
+      padding: 1rem;
+      background: #f3f4f6;
+      color: #374151;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+  </style>
 </head>
+
 <body>
   <nav class="navbar" id="navbar">
     <div class="nav-container">
@@ -1492,7 +1651,9 @@ body {
       </div>
       <div class="user-section">
         <div class="user-info">
-          <div class="user-avatar" id="userAvatar">U</div>
+          <img class="user-avatar" id="userAvatar" src="" alt="用戶頭像"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="user-avatar-fallback" id="userAvatarFallback" style="display: none;">U</div>
           <span class="welcome-text" id="welcomeText">歡迎回來！</span>
         </div>
         <div class="points-display" id="pointsDisplay">
@@ -1500,7 +1661,8 @@ body {
         </div>
         <button class="logout-btn" onclick="handleLogout(event)">登出</button>
       </div>
-      <div class="mobile-nav-toggle" id="mobileNavToggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="mobileMenu">
+      <div class="mobile-nav-toggle" id="mobileNavToggle" aria-label="Toggle navigation" aria-expanded="false"
+        aria-controls="mobileMenu">
         <span></span>
         <span></span>
         <span></span>
@@ -1511,9 +1673,11 @@ body {
       <a href="/howto-page">如何使用</a>
       <a href="/about-page">關於我們</a>
       <a href="/contact-page">聯絡我們</a>
-      
+
       <div class="user-info-mobile">
-        <div class="user-avatar" id="userAvatarMobile">U</div>
+        <img class="user-avatar" id="userAvatarMobile" src="" alt="用戶頭像"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div class="user-avatar-fallback" id="userAvatarMobileFallback" style="display: none;">U</div>
         <span class="welcome-text" id="welcomeTextMobile">歡迎！</span>
       </div>
       <div class="points-display-mobile" id="pointsDisplayMobile">
@@ -1544,22 +1708,22 @@ body {
     <div class="stats-container">
       <div class="stat-card fade-in">
         <div class="stat-icon">🌍</div>
-        <span class="stat-number" id="totalRecycled">0</span>
+        <span class="stat-number" id="totalRecycled" aria-live="polite">0</span>
         <div class="stat-label">累積回收物件</div>
       </div>
       <div class="stat-card fade-in">
         <div class="stat-icon">⭐</div>
-        <span class="stat-number" id="totalPoints">0</span>
+        <span class="stat-number" id="totalPoints" aria-live="polite">0</span>
         <div class="stat-label">累積環保點數</div>
       </div>
       <div class="stat-card fade-in">
         <div class="stat-icon">🎁</div>
-        <span class="stat-number" id="itemsExchanged">0</span>
+        <span class="stat-number" id="itemsExchanged" aria-live="polite">0</span>
         <div class="stat-label">已兌換商品</div>
       </div>
       <div class="stat-card fade-in">
         <div class="stat-icon">🏆</div>
-        <span class="stat-number" id="rankLevel">銅級</span>
+        <span class="stat-number" id="rankLevel" aria-live="polite">銅級</span>
         <div class="stat-label">會員等級</div>
       </div>
     </div>
@@ -1572,15 +1736,16 @@ body {
         <h2 class="fade-in">我的回收記錄</h2>
         <p class="fade-in">查看您提交的回收審核狀態</p>
       </div>
-      
+
       <div id="reviewsContainer" class="reviews-grid">
-         <!-- 回收記錄卡片將動態插入這裡 -->
+        <!-- 回收記錄卡片將動態插入這裡 -->
       </div>
-      
+
       <div id="noReviewsMessage" style="display: none; text-align: center; padding: 3rem; color: #6b7280;">
         <div style="font-size: 3rem; margin-bottom: 1rem;">📦</div>
         <p style="font-size: 1.2rem;">您還沒有提交任何回收記錄</p>
-        <a href="/ai3_0-page" style="display: inline-block; margin-top: 1.5rem; padding: 0.75rem 2rem; background: linear-gradient(135deg, #26a69a, #00897b); color: white; text-decoration: none; border-radius: 25px; font-weight: 600;">立即開始回收</a>
+        <a href="/ai3_0-page"
+          style="display: inline-block; margin-top: 1.5rem; padding: 0.75rem 2rem; background: linear-gradient(135deg, #26a69a, #00897b); color: white; text-decoration: none; border-radius: 25px; font-weight: 600;">立即開始回收</a>
       </div>
     </div>
   </section>
@@ -1595,7 +1760,9 @@ body {
         <div class="feature-card fade-in">
           <div class="feature-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"></path>
+              <path
+                d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z">
+              </path>
               <line x1="12" x2="12" y1="8" y2="16"></line>
               <line x1="8" x2="16" y1="12" y2="12"></line>
             </svg>
@@ -1615,7 +1782,7 @@ body {
           <h3>瀏覽兌換商城</h3>
           <p>使用您累積的環保點數，兌換精選的環保生活用品、時尚配件和限量商品，讓環保生活更有樂趣。</p>
         </div>
-        
+
         <div class="feature-card fade-in">
           <div class="feature-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
@@ -1637,7 +1804,7 @@ body {
       <a href="/goals-page" class="btn-cta">📊 設定我的目標</a>
     </div>
   </section>
-  
+
   <footer class="footer">
     <div class="footer-content">
       <div class="footer-brand">
@@ -1645,7 +1812,7 @@ body {
         <p>透過創新的點數回饋機制與智慧科技應用，鼓勵全民積極參與環保回收行動，共同建立永續發展的美好未來，為下一代留下更潔淨的地球。</p>
         <p><strong>📧 聯絡我們：</strong> eco@recycling.com</p>
       </div>
-      
+
       <div class="footer-section">
         <h4>快速連結</h4>
         <ul>
@@ -1655,7 +1822,7 @@ body {
           <li><a href="#">🛍️ 兌換商城</a></li>
         </ul>
       </div>
-      
+
       <div class="footer-section">
         <h4>關於我們</h4>
         <ul>
@@ -1665,7 +1832,7 @@ body {
           <li><a href="#">📰 最新消息</a></li>
         </ul>
       </div>
-      
+
       <div class="footer-section">
         <h4>幫助中心</h4>
         <ul>
@@ -1676,7 +1843,7 @@ body {
         </ul>
       </div>
     </div>
-    
+
     <div class="footer-bottom">
       <div class="copyright">© 2025 環保回收兌換系統 版權所有</div>
       <div class="social-links">
@@ -1694,33 +1861,45 @@ body {
         <h2>編輯個人資料</h2>
         <button onclick="closeEditProfileModal()" class="close-modal-btn">✕</button>
       </div>
-      
+
       <form id="editProfileForm" class="edit-profile-form">
+        <div>
+          <label>頭像</label>
+          <div style="display: flex; align-items: center; gap: 1rem;">
+            <img id="avatarPreview" src="" alt="頭像預覽"
+              style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid #00897b; display: none;">
+            <div id="avatarFallbackPreview"
+              style="width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, #26a69a, #00897b); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 1.5rem; border: 2px solid #00897b;">
+              U</div>
+            <input type="file" id="avatarFile" accept="image/*" style="padding: 0.5rem;">
+          </div>
+        </div>
+
         <div>
           <label>用戶名</label>
           <input type="text" id="editUsername" required>
         </div>
-        
+
         <div>
           <label>Email</label>
           <input type="email" id="editEmail" required>
         </div>
-        
+
         <div>
           <label>電話</label>
           <input type="tel" id="editPhone">
         </div>
-        
+
         <div>
           <label>地址</label>
           <textarea id="editAddress" rows="3"></textarea>
         </div>
-        
+
         <div>
           <label>生日</label>
           <input type="date" id="editBirthday">
         </div>
-        
+
         <div class="form-actions">
           <button type="submit" class="save-btn">保存修改</button>
           <button type="button" onclick="closeEditProfileModal()" class="cancel-btn">取消</button>
@@ -1731,33 +1910,33 @@ body {
 
   <script>
     function handleLogout(event) {
-        event.preventDefault();
-        
-        console.log('[Dashboard] 開始登出流程...');
-        
-        // 清除所有前端儲存
-        localStorage.clear();
-        sessionStorage.clear();
-        
-        // 顯示登出提示
-        showNotification('正在登出...', 'info');
-        
-        // 導向後端登出路由
-        setTimeout(() => {
-            window.location.href = '/logout';
-        }, 500);
+      event.preventDefault();
+
+      console.log('[Dashboard] 開始登出流程...');
+
+      // 清除所有前端儲存
+      localStorage.clear();
+      sessionStorage.clear();
+
+      // 顯示登出提示
+      showNotification('正在登出...', 'info');
+
+      // 導向後端登出路由
+      setTimeout(() => {
+        window.location.href = '/logout';
+      }, 500);
     }
 
     function showNotification(message, type = 'info') {
-        const colors = {
-            success: '#10b981',
-            error: '#ef4444',
-            warning: '#f59e0b',
-            info: '#3b82f6'
-        };
-        
-        const notification = document.createElement('div');
-        notification.style.cssText = `
+      const colors = {
+        success: '#10b981',
+        error: '#ef4444',
+        warning: '#f59e0b',
+        info: '#3b82f6'
+      };
+
+      const notification = document.createElement('div');
+      notification.style.cssText = `
             position: fixed;
             top: 20px;
             right: 20px;
@@ -1770,254 +1949,298 @@ body {
             font-weight: 500;
             animation: slideIn 0.3s ease-out;
         `;
-        notification.textContent = message;
-        document.body.appendChild(notification);
-        
-        setTimeout(() => {
-            notification.style.animation = 'slideOut 0.3s ease-out';
-            setTimeout(() => notification.remove(), 300);
-        }, 2000);
+      notification.textContent = message;
+      document.body.appendChild(notification);
+
+      setTimeout(() => {
+        notification.style.animation = 'slideOut 0.3s ease-out';
+        setTimeout(() => notification.remove(), 300);
+      }, 2000);
     }
 
     async function loadUserData() {
-        try {
-            console.log('[Dashboard] 開始載入用戶資料...');
-            
-            // 1. 檢查後端 session 認證狀態
-            const authResponse = await fetch('/api/check-auth', {
-                method: 'GET',
-                credentials: 'include'
-            });
-            
-            const authData = await authResponse.json();
-            console.log('[Dashboard] 認證檢查結果:', authData);
-            
-            if (!authData.authenticated) {
-                console.warn('[Dashboard] 用戶未登入，重定向到登入頁面');
-                showNotification('請先登入', 'warning');
-                setTimeout(() => {
-                    window.location.href = '/login-page';
-                }, 1500);
-                return;
-            }
-            
-            // 2. 使用後端返回的完整用戶資料
-            const userData = authData.user;
-            
-            // 3. 儲存到 localStorage 供其他頁面使用
-            localStorage.setItem('userData', JSON.stringify(userData));
-            localStorage.setItem('currentUser', userData.username);
-            
-            console.log('[Dashboard] 用戶資料載入成功:', userData);
-            
-            // 4. 更新頁面顯示
-            updatePageWithUserData(userData);
-            
-        } catch (error) {
-            console.error('[Dashboard] 載入用戶資料錯誤:', error);
-            showNotification('載入用戶資料失敗，請重新登入', 'error');
-            setTimeout(() => {
-                window.location.href = '/login-page';
-            }, 2000);
-        }
-    }
+      try {
+        console.log('[Dashboard] 開始載入用戶資料...');
 
-    function updatePageWithUserData(userData) {
-        console.log('[Dashboard] 更新頁面顯示:', userData);
-        
-        // 更新桌面版導航欄
-        const userAvatar = document.getElementById('userAvatar');
-        const welcomeText = document.getElementById('welcomeText');
-        const pointsDisplay = document.getElementById('pointsDisplay');
-        const heroWelcome = document.getElementById('heroWelcome');
-        
-        if (userAvatar) userAvatar.textContent = userData.username.charAt(0).toUpperCase();
-        if (welcomeText) {
-            welcomeText.innerHTML = `歡迎, ${userData.username}! <button onclick="openEditProfileModal()" style="margin-left: 0.5rem; padding: 0.25rem 0.75rem; background: rgba(0,137,123,0.1); color: #00897b; border: 1px solid #00897b; border-radius: 12px; font-size: 0.85rem; cursor: pointer; transition: all 0.3s;">✏️ 編輯</button>`;
-        }
-        if (pointsDisplay) pointsDisplay.innerHTML = `⭐ ${userData.points.toLocaleString()} 點數`;
-        if (heroWelcome) heroWelcome.textContent = `歡迎回來, ${userData.username}!`;
-
-        // 更新統計數據
-        const totalPoints = document.getElementById('totalPoints');
-        if (totalPoints) totalPoints.textContent = userData.points.toLocaleString();
-
-        // 更新行動版導航欄
-        const userAvatarMobile = document.getElementById('userAvatarMobile');
-        const welcomeTextMobile = document.getElementById('welcomeTextMobile');
-        const pointsDisplayMobile = document.getElementById('pointsDisplayMobile');
-        
-        if (userAvatarMobile) userAvatarMobile.textContent = userData.username.charAt(0).toUpperCase();
-        if (welcomeTextMobile) welcomeTextMobile.textContent = `歡迎, ${userData.username}!`;
-        if (pointsDisplayMobile) pointsDisplayMobile.innerHTML = `⭐ ${userData.points.toLocaleString()} 點數`;
-        
-        loadUserReviews(userData.id);
-    }
-
-    async function loadUserReviews(userId) {
-        try {
-            const response = await fetch(`/api/recycle/user/${userId}?status=all`, {
-                method: 'GET',
-                credentials: 'include'
-            });
-            
-            const result = await response.json();
-            
-            if (result.success && result.data.length > 0) {
-                displayReviews(result.data);
-                document.getElementById('noReviewsMessage').style.display = 'none';
-            } else {
-                document.getElementById('reviewsContainer').innerHTML = '';
-                document.getElementById('noReviewsMessage').style.display = 'block';
-            }
-        } catch (error) {
-            console.error('[Dashboard] 載入回收記錄失敗:', error);
-            document.getElementById('noReviewsMessage').style.display = 'block';
-        }
-    }
-
-    function displayReviews(reviews) {
-        const container = document.getElementById('reviewsContainer');
-        container.innerHTML = '';
-        
-        reviews.forEach(review => {
-            const statusColors = {
-                'pending': { bg: '#fef3c7', text: '#92400e', label: '待審核' },
-                'approved': { bg: '#d1fae5', text: '#065f46', label: '已通過' },
-                'rejected': { bg: '#fee2e2', text: '#991b1b', label: '已拒絕' }
-            };
-            
-            const status = statusColors[review.status] || statusColors['pending'];
-            
-            const card = document.createElement('div');
-            card.className = 'recycle-record-card';
-            
-            card.innerHTML = `
-                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
-                    <div>
-                        <div style="font-size: 0.85rem; color: #6b7280; margin-bottom: 0.25rem;">審核編號</div>
-                        <div style="font-weight: 700; color: #00695c; font-size: 1.1rem;">${review.review_id}</div>
-                    </div>
-                    <div class="status-badge status-${review.status}">${status.label}</div>
-                </div>
-                
-                <div class="record-info-section">
-                    <div class="info-item">
-                        <div>物品類型</div>
-                        <span>${review.item_type}</span>
-                    </div>
-                    <div class="info-item">
-                        <div>數量</div>
-                        <span>${review.quantity} 個</span>
-                    </div>
-                    <div class="info-item">
-                        <div>預估點數</div>
-                        <span class="points-value">⭐ ${review.estimated_points}</span>
-                    </div>
-                    <div class="info-item">
-                        <div>信心度</div>
-                        <span class="confidence-value">${(review.confidence || 0).toFixed(1)}%</span>
-                    </div>
-                </div>
-                
-                <div style="font-size: 0.85rem; color: #6b7280;">
-                    <div>提交時間: ${review.submit_time}</div>
-                    ${review.review_time ? `<div style="margin-top: 0.25rem;">審核時間: ${review.review_time}</div>` : ''}
-                    ${review.reject_reason ? `<div class="reject-reason">拒絕原因: ${review.reject_reason}</div>` : ''}
-                </div>
-            `;
-            
-            container.appendChild(card);
+        // 1. 檢查後端 session 認證狀態
+        const authResponse = await fetch('/api/check-auth', {
+          method: 'GET',
+          credentials: 'include'
         });
+
+        const authData = await authResponse.json();
+        console.log('[Dashboard] 認證檢查結果:', authData);
+
+        if (!authData.authenticated) {
+          console.warn('[Dashboard] 用戶未登入，重定向到登入頁面');
+          showNotification('請先登入', 'warning');
+          setTimeout(() => {
+            window.location.href = '/login-page';
+          }, 1500);
+          return;
+        }
+
+        // 2. 使用後端返回的完整用戶資料
+        const userData = authData.user;
+
+        // 3. 儲存到 localStorage 供其他頁面使用
+        localStorage.setItem('userData', JSON.stringify(userData));
+        localStorage.setItem('currentUser', userData.username);
+
+        console.log('[Dashboard] 用戶資料載入成功:', userData);
+
+        // 4. 更新頁面顯示（若後端回傳 stats 一併傳入）
+        updatePageWithUserData(userData, authData.stats || null);
+
+      } catch (error) {
+        console.error('[Dashboard] 載入用戶資料錯誤:', error);
+        showNotification('載入用戶資料失敗，請重新登入', 'error');
+        setTimeout(() => {
+          window.location.href = '/login-page';
+        }, 2000);
+      }
+    }
+
+    function updatePageWithUserData(userData, stats) {
+      console.log('[Dashboard] 更新頁面顯示:', userData, stats);
+
+      // 保留最近一次用戶資料以便 modal 使用
+      window.currentUserData = userData || {};
+      window.currentUserStats = stats || null;
+
+      // 更新桌面版導航欄
+      const userAvatar = document.getElementById('userAvatar');
+      const userAvatarFallback = document.getElementById('userAvatarFallback');
+      const welcomeText = document.getElementById('welcomeText');
+      const pointsDisplay = document.getElementById('pointsDisplay');
+      const heroWelcome = document.getElementById('heroWelcome');
+
+      // 設定頭像
+      if (userAvatar && userData.avatar) {
+        userAvatar.src = userData.avatar;
+        userAvatar.style.display = 'block';
+        if (userAvatarFallback) userAvatarFallback.style.display = 'none';
+      } else {
+        if (userAvatar) userAvatar.style.display = 'none';
+        if (userAvatarFallback) {
+          userAvatarFallback.textContent = userData.username ? userData.username.charAt(0).toUpperCase() : 'U';
+          userAvatarFallback.style.display = 'flex';
+        }
+      }
+
+      if (welcomeText) {
+        welcomeText.innerHTML = `歡迎, ${userData.username}! <button onclick="openEditProfileModal()" style="margin-left: 0.5rem; padding: 0.25rem 0.75rem; background: rgba(0,137,123,0.1); color: #00897b; border: 1px solid #00897b; border-radius: 12px; font-size: 0.85rem; cursor: pointer; transition: all 0.3s;">✏️ 編輯</button>`;
+      }
+      if (pointsDisplay) pointsDisplay.innerHTML = `⭐ ${Number(userData.points || 0).toLocaleString()} 點數`;
+      if (heroWelcome) heroWelcome.textContent = `歡迎回來, ${userData.username}!`;
+
+      // 更新統計數據
+      const totalRecycledEl = document.getElementById('totalRecycled');
+      const totalPointsEl = document.getElementById('totalPoints');
+      const itemsExchangedEl = document.getElementById('itemsExchanged');
+      const rankLevelEl = document.getElementById('rankLevel');
+
+      function applyStats(s) {
+        if (!s) {
+          if (totalRecycledEl) totalRecycledEl.textContent = '—';
+          if (totalPointsEl) totalPointsEl.textContent = '—';
+          if (itemsExchangedEl) itemsExchangedEl.textContent = '—';
+          if (rankLevelEl) rankLevelEl.textContent = '—';
+          return;
+        }
+
+        if (totalRecycledEl) totalRecycledEl.textContent = s.totalRecycled;
+        if (totalPointsEl) totalPointsEl.textContent = Number(s.totalPoints || 0).toLocaleString();
+        if (itemsExchangedEl) itemsExchangedEl.textContent = s.itemsExchanged;
+        if (rankLevelEl) rankLevelEl.textContent = s.rankLevel;
+      }
+
+      if (stats) {
+        applyStats(stats);
+      } else {
+        // fallback: 呼叫 /api/user/stats
+        try {
+          fetch('/api/user/stats', { method: 'GET', credentials: 'include' })
+            .then(res => res.json())
+            .then(data => {
+              if (data && data.success && data.data) {
+                applyStats(data.data);
+                window.currentUserStats = data.data;
+              } else {
+                applyStats(null);
+              }
+            })
+            .catch(err => {
+              console.error('[Dashboard] 取得 stats 失敗:', err);
+              applyStats(null);
+            });
+        } catch (e) {
+          console.error('[Dashboard] 取得 stats 例外:', e);
+          applyStats(null);
+        }
+      }
     }
 
     function openEditProfileModal() {
-        const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-        
-        document.getElementById('editUsername').value = userData.username || '';
-        document.getElementById('editEmail').value = userData.email || '';
-        document.getElementById('editPhone').value = userData.phone || '';
-        document.getElementById('editAddress').value = userData.address || '';
-        document.getElementById('editBirthday').value = userData.birthday ? userData.birthday.split('T')[0] : ''; // Format for date input
-        
-        const modal = document.getElementById('editProfileModal');
-        modal.style.display = 'flex';
+      const user = window.currentUserData || {};
+      // 將資料填入 modal 表單
+      document.getElementById('editUsername').value = user.username || '';
+      document.getElementById('editEmail').value = user.email || '';
+      document.getElementById('editPhone').value = user.phone || '';
+      // 預覽頭像
+      const avatarPreview = document.getElementById('avatarPreview');
+      const avatarFallbackPreview = document.getElementById('avatarFallbackPreview');
+      if (user.avatar) {
+        avatarPreview.src = user.avatar;
+        avatarPreview.style.display = 'block';
+        avatarFallbackPreview.style.display = 'none';
+      } else {
+        avatarPreview.style.display = 'none';
+        avatarFallbackPreview.textContent = user.username ? user.username.charAt(0).toUpperCase() : 'U';
+        avatarFallbackPreview.style.display = 'flex';
+      }
+
+      document.getElementById('editProfileModal').style.display = 'flex';
     }
 
     function closeEditProfileModal() {
-        document.getElementById('editProfileModal').style.display = 'none';
+      document.getElementById('editProfileModal').style.display = 'none';
     }
 
     document.getElementById('editProfileForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        const formData = {
-            username: document.getElementById('editUsername').value,
-            email: document.getElementById('editEmail').value,
-            phone: document.getElementById('editPhone').value,
-            address: document.getElementById('editAddress').value,
-            birthday: document.getElementById('editBirthday').value
-        };
-        
+      e.preventDefault();
+
+      const formData = {
+        username: document.getElementById('editUsername').value,
+        email: document.getElementById('editEmail').value,
+        phone: document.getElementById('editPhone').value,
+        address: document.getElementById('editAddress').value,
+        birthday: document.getElementById('editBirthday').value
+      };
+
+      // 處理頭像上傳
+      const avatarFile = document.getElementById('avatarFile').files[0];
+      if (avatarFile) {
         try {
-            const response = await fetch('/api/user/update', {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                credentials: 'include',
-                body: JSON.stringify(formData)
-            });
-            
-            const result = await response.json();
-            
-            if (result.status === 'success') {
-                showNotification('資料更新成功!', 'success');
-                closeEditProfileModal();
-                
-                // 重新載入用戶資料
-                await loadUserData();
-            } else {
-                showNotification(result.message || '更新失敗', 'error');
-            }
+          const reader = new FileReader();
+          reader.onload = async (event) => {
+            const base64Avatar = event.target.result;
+            console.log('[Dashboard] 頭像大小:', base64Avatar.length);
+            formData.avatar = base64Avatar;
+
+            // 發送包含頭像的表單數據
+            await sendProfileUpdate(formData);
+          };
+          reader.onerror = () => {
+            console.error('[Dashboard] 檔案讀取失敗');
+            showNotification('檔案讀取失敗', 'error');
+          };
+          reader.readAsDataURL(avatarFile);
         } catch (error) {
-            console.error('[Dashboard] 更新資料失敗:', error);
-            showNotification('更新失敗,請稍後再試', 'error');
+          console.error('[Dashboard] 頭像轉換失敗:', error);
+          showNotification('頭像轉換失敗', 'error');
         }
+      } else {
+        // 沒有上傳新頭像，直接發送
+        await sendProfileUpdate(formData);
+      }
+    });
+
+    async function sendProfileUpdate(formData) {
+      try {
+        console.log('[Dashboard] 發送更新資料:', {
+          username: formData.username,
+          email: formData.email,
+          phone: formData.phone,
+          address: formData.address,
+          birthday: formData.birthday,
+          hasAvatar: !!formData.avatar,
+          avatarSize: formData.avatar ? formData.avatar.length : 0
+        });
+
+        const response = await fetch('/api/user/update', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          credentials: 'include',
+          body: JSON.stringify(formData)
+        });
+
+        console.log('[Dashboard] 收到回應狀態:', response.status);
+        const result = await response.json();
+        console.log('[Dashboard] 收到回應內容:', result);
+
+        if (result.status === 'success') {
+          showNotification('資料更新成功!', 'success');
+          closeEditProfileModal();
+
+          // 重新載入用戶資料
+          await loadUserData();
+        } else {
+          showNotification(result.message || '更新失敗', 'error');
+        }
+      } catch (error) {
+        console.error('[Dashboard] 更新資料失敗:', error);
+        showNotification('更新失敗,請稍後再試', 'error');
+      }
+    }
+
+    // 頭像預覽功能
+    document.getElementById('avatarFile').addEventListener('change', function (e) {
+      const file = e.target.files[0];
+      if (file) {
+        // 驗證檔案大小 (限制5MB)
+        if (file.size > 5 * 1024 * 1024) {
+          showNotification('檔案大小不能超過 5MB', 'error');
+          this.value = '';
+          return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function (event) {
+          const avatarPreview = document.getElementById('avatarPreview');
+          const avatarFallbackPreview = document.getElementById('avatarFallbackPreview');
+          avatarPreview.src = event.target.result;
+          avatarPreview.style.display = 'block';
+          avatarFallbackPreview.style.display = 'none';
+        };
+        reader.readAsDataURL(file);
+      }
     });
 
     async function updateUserPoints() {
-        try {
-            const authResponse = await fetch('/api/check-auth', {
-                method: 'GET',
-                credentials: 'include'
-            });
-            
-            const authData = await authResponse.json();
-            
-            if (!authData.authenticated) {
-                console.warn('[Dashboard] Session 已過期');
-                return;
-            }
-            
-            const userData = authData.user;
-            
-            // 更新 localStorage
-            localStorage.setItem('userData', JSON.stringify(userData));
-            
-            // 更新頁面顯示
-            const pointsDisplay = document.getElementById('pointsDisplay');
-            const pointsDisplayMobile = document.getElementById('pointsDisplayMobile');
-            const totalPoints = document.getElementById('totalPoints');
-            
-            if (pointsDisplay) pointsDisplay.innerHTML = `⭐ ${userData.points.toLocaleString()} 點數`;
-            if (pointsDisplayMobile) pointsDisplayMobile.innerHTML = `⭐ ${userData.points.toLocaleString()} 點數`;
-            if (totalPoints) totalPoints.textContent = userData.points.toLocaleString();
-            
-            console.log('[Dashboard] 積分已更新:', userData.points);
-        } catch (error) {
-            console.error('[Dashboard] 更新積分失敗:', error);
+      try {
+        const authResponse = await fetch('/api/check-auth', {
+          method: 'GET',
+          credentials: 'include'
+        });
+
+        const authData = await authResponse.json();
+
+        if (!authData.authenticated) {
+          console.warn('[Dashboard] Session 已過期');
+          return;
         }
+
+        const userData = authData.user;
+
+        // 更新 localStorage
+        localStorage.setItem('userData', JSON.stringify(userData));
+
+        // 更新頁面顯示
+        const pointsDisplay = document.getElementById('pointsDisplay');
+        const pointsDisplayMobile = document.getElementById('pointsDisplayMobile');
+        const totalPoints = document.getElementById('totalPoints');
+
+        if (pointsDisplay) pointsDisplay.innerHTML = `⭐ ${userData.points.toLocaleString()} 點數`;
+        if (pointsDisplayMobile) pointsDisplayMobile.innerHTML = `⭐ ${userData.points.toLocaleString()} 點數`;
+        if (totalPoints) totalPoints.textContent = userData.points.toLocaleString();
+
+        console.log('[Dashboard] 積分已更新:', userData.points);
+      } catch (error) {
+        console.error('[Dashboard] 更新積分失敗:', error);
+      }
     }
 
     // 當整個頁面的 HTML 結構都載入完成後，執行此腳本
@@ -2038,7 +2261,7 @@ body {
 
       // 滾動時的淡入動畫
       const fadeInElements = document.querySelectorAll('.fade-in');
-      
+
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
@@ -2046,7 +2269,7 @@ body {
           }
         });
       }, {
-        threshold: 0.1 
+        threshold: 0.1
       });
 
       fadeInElements.forEach(el => {
@@ -2061,14 +2284,15 @@ body {
         mobileNavToggleButton.addEventListener('click', () => {
           mobileNavToggleButton.classList.toggle('active');
           mobileMenuElement.classList.toggle('active');
-          
+
           const isExpanded = mobileNavToggleButton.classList.contains('active');
           mobileNavToggleButton.setAttribute('aria-expanded', isExpanded);
         });
       }
-      
+
       setInterval(updateUserPoints, 30000);
     });
   </script>
 </body>
+
 </html>

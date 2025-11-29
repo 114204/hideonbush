@@ -671,105 +671,78 @@
     </div>
 
     <script>
-        // <CHANGE> 將 SQL 資料轉換為 JavaScript 陣列
-        const pointsData = [
-            {id: 1, user_id: 20, points_change: 2, reason: '回收紙盒/紙箱 x1', created_at: '2025-10-13 01:22:47'},
-            {id: 2, user_id: 20, points_change: 2, reason: '回收紙盒/紙箱 x1', created_at: '2025-10-13 01:28:40'},
-            {id: 3, user_id: 20, points_change: 3, reason: '回收鋁罐 x1', created_at: '2025-10-13 01:36:34'},
-            {id: 4, user_id: 20, points_change: 10, reason: '回收寶特瓶 x1', created_at: '2025-10-13 02:57:19'},
-            {id: 5, user_id: 20, points_change: 3, reason: '回收鋁罐 x1', created_at: '2025-10-13 03:32:40'},
-            {id: 6, user_id: 20, points_change: 2, reason: '回收紙盒/紙箱 x1', created_at: '2025-10-13 03:32:44'},
-            {id: 7, user_id: 20, points_change: -120, reason: '兌換商品：有機蔬菜種子包 x1', created_at: '2025-10-13 03:32:54'},
-            {id: 8, user_id: 20, points_change: 2, reason: '回收紙盒/紙箱 x1', created_at: '2025-10-13 04:58:36'},
-            {id: 9, user_id: 20, points_change: 2, reason: '回收紙盒/紙箱 x1', created_at: '2025-10-14 02:01:32'},
-            {id: 10, user_id: 20, points_change: 2, reason: '回收紙盒/紙箱 x1', created_at: '2025-10-14 17:18:20'},
-            {id: 11, user_id: 20, points_change: 200, reason: '回收紙盒/紙箱 x100', created_at: '2025-10-14 17:19:52'},
-            {id: 12, user_id: 20, points_change: -120, reason: '兌換商品：有機蔬菜種子包 x1', created_at: '2025-10-14 17:20:10'},
-            {id: 13, user_id: 33, points_change: 2, reason: '回收紙盒/紙箱 x1', created_at: '2025-10-14 17:26:47'},
-            {id: 14, user_id: 33, points_change: 200, reason: '回收紙盒/紙箱 x100', created_at: '2025-10-14 17:27:58'},
-            {id: 15, user_id: 33, points_change: -150, reason: '兌換商品：環保購物袋 x1', created_at: '2025-10-14 17:28:20'}
-        ];
-
-        // <CHANGE> 模擬會員名稱對應
-        const userNames = {
-            20: '005',
-            33: '015'
-        };
-
         let currentPage = 1;
         const pageSize = 10;
         let totalPages = 1;
         let searchQuery = '';
-        let filteredData = [];
+        let allData = [];
 
-        // <CHANGE> 修改 loadPoints 函數以使用本地資料
-        function loadPoints(page, action = '') {
-            if (action === 'prev' && currentPage > 1) {
-                currentPage--;
-            } else if (action === 'next' && currentPage < totalPages) {
-                currentPage++;
-            } else if (page && page > 0) {
-                currentPage = page;
-            }
-
-            // 過濾資料
-            filteredData = pointsData.filter(item => {
-                if (!searchQuery) return true;
-                const userName = userNames[item.user_id] || `會員 ${item.user_id}`;
-                return userName.includes(searchQuery) || 
-                       item.user_id.toString().includes(searchQuery) ||
-                       item.reason.includes(searchQuery);
-            });
-
-            // 計算總頁數
-            totalPages = Math.ceil(filteredData.length / pageSize);
-            if (totalPages === 0) totalPages = 1;
-
-            // 分頁
-            const startIndex = (currentPage - 1) * pageSize;
-            const endIndex = startIndex + pageSize;
-            const pageData = filteredData.slice(startIndex, endIndex);
-
-            // 計算餘額
-            const dataWithBalance = pageData.map((item, index) => {
-                const actualIndex = startIndex + index;
-                let balance = 0;
-                for (let i = 0; i <= actualIndex; i++) {
-                    balance += filteredData[i].points_change;
+        // 從資料庫加載點數交易記錄
+        async function loadPoints(page, action = '') {
+            try {
+                if (action === 'prev' && currentPage > 1) {
+                    currentPage--;
+                } else if (action === 'next' && currentPage < totalPages) {
+                    currentPage++;
+                } else if (page && page > 0) {
+                    currentPage = page;
                 }
-                return { ...item, balance };
-            });
 
-            // 渲染表格
+                // 調用 API 獲取資料
+                const searchParam = searchQuery ? `&search=${encodeURIComponent(searchQuery)}` : '';
+                const response = await fetch(`/api/points/history?page=${currentPage}&pageSize=${pageSize}${searchParam}`);
+                const result = await response.json();
+
+                if (!response.ok || !result.success) {
+                    if (response.status === 401) {
+                        // 未登錄，重定向到登入頁面
+                        window.location.href = '/admin_login-page';
+                        return;
+                    }
+                    throw new Error(result.message || '載入資料失敗');
+                }
+
+                allData = result.data || [];
+                totalPages = result.totalPages || 1;
+
+                // 渲染表格
+                renderTable(allData);
+                updatePagination();
+
+            } catch (error) {
+                console.error('載入點數記錄失敗:', error);
+                const tbody = document.getElementById('pointsTableBody');
+                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding: 40px; color: #ef4444;">載入失敗：${error.message}</td></tr>`;
+            }
+        }
+
+        function renderTable(data) {
             const tbody = document.getElementById('pointsTableBody');
             tbody.innerHTML = '';
             
-            if (dataWithBalance.length === 0) {
+            if (data.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 40px; color: #64748b;">沒有找到符合條件的記錄</td></tr>';
-            } else {
-                dataWithBalance.forEach(trans => {
-                    const userName = userNames[trans.user_id] || `會員 ${trans.user_id}`;
-                    const isPositive = trans.points_change > 0;
-                    const typeClass = trans.reason.includes('兌換') ? 'type-spend' : (isPositive ? 'type-earn' : 'type-adjust');
-                    const typeText = trans.reason.includes('兌換') ? '消費' : (isPositive ? '獲得' : '調整');
-                    const changeText = isPositive ? `+${trans.points_change}` : trans.points_change;
-                    const changeColor = isPositive ? 'var(--success)' : 'var(--destructive)';
-
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td><strong>${trans.id}</strong></td>
-                        <td>${userName}</td>
-                        <td><span class="type-badge ${typeClass}">${typeText}</span></td>
-                        <td><strong style="color: ${changeColor}">${changeText}</strong></td>
-                        <td>${trans.balance}</td>
-                        <td>${trans.reason}</td>
-                        <td>${trans.created_at}</td>
-                    `;
-                    tbody.appendChild(row);
-                });
+                return;
             }
-            
-            updatePagination();
+
+            data.forEach(trans => {
+                const isPositive = trans.change.startsWith('+');
+                const typeClass = trans.type === 'spend' ? 'type-spend' : (trans.type === 'earn' ? 'type-earn' : 'type-adjust');
+                const typeText = trans.type === 'spend' ? '消費' : (trans.type === 'earn' ? '獲得' : '調整');
+                const changeColor = isPositive ? 'var(--success)' : 'var(--destructive)';
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><strong>${trans.id}</strong></td>
+                    <td>${trans.member}</td>
+                    <td><span class="type-badge ${typeClass}">${typeText}</span></td>
+                    <td><strong style="color: ${changeColor}">${trans.change}</strong></td>
+                    <td>${trans.balance}</td>
+                    <td>${trans.description}</td>
+                    <td>${trans.date}</td>
+                `;
+                tbody.appendChild(row);
+            });
         }
 
         function searchPoints() {
@@ -805,11 +778,53 @@
             document.getElementById(modalId).classList.remove('show');
         }
 
-        document.getElementById('adjustPointsForm').addEventListener('submit', function(e) {
+        // 表單提交處理
+        document.getElementById('adjustPointsForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            alert('此為靜態展示頁面，無法實際調整點數');
-            closeModal('adjustPointsModal');
-            this.reset();
+
+            const memberId = document.getElementById('memberId').value.trim();
+            const pointsChange = parseInt(document.getElementById('pointsChange').value);
+            const reason = document.getElementById('reason').value.trim();
+
+            if (!memberId || isNaN(pointsChange) || pointsChange === 0 || !reason) {
+                alert('請填寫所有必填欄位');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/points/adjust', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        memberId: memberId,
+                        pointsChange: pointsChange,
+                        reason: reason
+                    })
+                });
+
+                const result = await response.json();
+
+                if (!response.ok || !result.success) {
+                    if (response.status === 401) {
+                        window.location.href = '/admin_login-page';
+                        return;
+                    }
+                    alert('調整失敗: ' + (result.message || '未知錯誤'));
+                    return;
+                }
+
+                alert('點數調整成功');
+                closeModal('adjustPointsModal');
+                this.reset();
+                // 重新加載資料
+                loadPoints(1);
+
+            } catch (error) {
+                console.error('調整點數失敗:', error);
+                alert('調整點數失敗: ' + error.message);
+            }
         });
 
         document.getElementById('menuToggle').addEventListener('click', function() {
@@ -819,8 +834,13 @@
         document.getElementById('logoutBtn').addEventListener('click', function(e) {
             e.preventDefault();
             if (confirm('確定要登出嗎？')) {
-                localStorage.removeItem('loggedIn');
-                window.location.href = '/admin_login-page';
+                fetch('/logout', { method: 'POST' })
+                    .then(() => {
+                        window.location.href = '/admin_login-page';
+                    })
+                    .catch(() => {
+                        window.location.href = '/admin_login-page';
+                    });
             }
         });
 
